@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="vertical">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDocName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:textSize="22sp"
+                    android:text="Документ об оказании услуг № 111 от 20.11.2011"/>
+
+                <TextView
+                    android:id="@+id/tvPositionNumTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Позиция"/>
+                <TextView
+                    android:id="@+id/tvPositionNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="1"/>
+
+                <TextView
+                    android:id="@+id/tvDescriptionTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Описание"/>
+                <TextView
+                    android:id="@+id/tvDescriptionOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Оказание услуг по договру № 1 от 20.10.2018"/>
+
+                <TextView
+                    android:id="@+id/tvUomTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Единица измерения"/>
+                <TextView
+                    android:id="@+id/tvUom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Штука"/>
+
+                <TextView
+                    android:id="@+id/tvQuantityTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Количество"/>
+                <TextView
+                    android:id="@+id/tvQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="12"/>
+
+                <TextView
+                    android:id="@+id/tvPriceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Цена"/>
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="12333.33"/>
+
+                <TextView
+                    android:id="@+id/tvItemAmountWOTaxTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Сумма без НДС"/>
+                <TextView
+                    android:id="@+id/tvItemAmountWOTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="1223.22"/>
+
+                <TextView
+                    android:id="@+id/tvItemTaxTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="НДС"/>
+                <TextView
+                    android:id="@+id/tvItemTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="18%"/>
+
+                <TextView
+                    android:id="@+id/tvItemAmountTaxTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Сумма НДС"/>
+                <TextView
+                    android:id="@+id/tvItemAmountTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="765.11"/>
+
+                <TextView
+                    android:id="@+id/tvItemAmountWTaxTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Сумма с НДС"/>
+                <TextView
+                    android:id="@+id/tvItemAmountWTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="76768.11"/>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnMovePrev"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="10dp"
+                android:layout_weight="1"
+                android:text="Пред">
+            </Button>
+            <Button
+                android:id="@+id/btnMoveNext"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:text="След">
+            </Button>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

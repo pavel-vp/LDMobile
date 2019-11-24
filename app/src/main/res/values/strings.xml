@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">LDMobile</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="rest_server_base_url">http://localhost:8080/api/</string>
+
+    <string name="menu_docs_approve_success">Согласовать</string>
+    <string name="menu_docs_approve_reject">Отказать</string>
+
+    <string name="menu_docs_sign_success">Подписать</string>
+    <string name="menu_docs_sign_reject">Отказать</string>
+
+</resources>

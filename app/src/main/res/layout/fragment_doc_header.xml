@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/constraintLayout"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             tools:context=".ui.DocActivity$PlaceholderFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="vertical">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:orientation="vertical">
+
+
+
+                <TextView
+                    android:id="@+id/tvVendorNameTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Исполнитель"/>
+                <TextView
+                    android:id="@+id/tvVendorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvSupOrgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Поставщик"/>
+                <TextView
+                    android:id="@+id/tvSupOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvShipOrgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Грузопоставщик"/>
+                <TextView
+                    android:id="@+id/tvShipOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvConsOrgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Получатель"/>
+                <TextView
+                    android:id="@+id/tvConsOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvPayerOrgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Плательщик"/>
+                <TextView
+                    android:id="@+id/tvPayerOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvPerfOrgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Организатор"/>
+                <TextView
+                    android:id="@+id/tvPerfOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvCustOrgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Покупатель"/>
+                <TextView
+                    android:id="@+id/tvCustOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvBuyerOrgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Плательщик"/>
+                <TextView
+                    android:id="@+id/tvBuyerOrg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="ООО ЭЛАРА"/>
+
+                <TextView
+                    android:id="@+id/tvReasonTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Основание"/>
+                <TextView
+                    android:id="@+id/tvReason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Покупка программного обепечения"/>
+
+                <TextView
+                    android:id="@+id/tvCFOTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="ЦФО"/>
+                <TextView
+                    android:id="@+id/tvCFO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="7656446"/>
+
+                <TextView
+                    android:id="@+id/tvAmountWOTaxTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Сумма без НДС"/>
+                <TextView
+                    android:id="@+id/tvAmountWOTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="7656446.11"/>
+
+                <TextView
+                    android:id="@+id/tvAmountTaxTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Сумма НДС"/>
+                <TextView
+                    android:id="@+id/tvAmountTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="76566.11"/>
+
+                <TextView
+                    android:id="@+id/tvAmountWTaxTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Сумма с НДС"/>
+                <TextView
+                    android:id="@+id/tvAmountWTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="76768876.11"/>
+
+
+                <ImageView
+                    android:layout_height="1dp"
+                    android:layout_width="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@color/colorPrimary">
+                </ImageView>
+
+                <LinearLayout
+                    android:id="@+id/llAttachment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:src="@mipmap/attache">
+                    </ImageView>
+                    <TextView
+                        android:id="@+id/tvAttacheName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="attachment.pdf"/>
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_height="1dp"
+                    android:layout_width="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@color/colorPrimary">
+                </ImageView>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnDoYes"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="10dp"
+                android:layout_weight="1"
+                android:text="Согласовать">
+            </Button>
+            <Button
+                android:id="@+id/btnDoNo"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:text="Отказать">
+            </Button>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
