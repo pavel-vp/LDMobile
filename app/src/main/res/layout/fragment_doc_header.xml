@@ -5,7 +5,7 @@
                                              android:id="@+id/constraintLayout"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
-                                             tools:context=".ui.DocActivity$PlaceholderFragment">
+                                             tools:context=".ui.DocActivity$DocFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -206,24 +206,10 @@
                     android:background="@color/colorPrimary">
                 </ImageView>
 
-                <LinearLayout
-                    android:id="@+id/llAttachment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:src="@mipmap/attache">
-                    </ImageView>
-                    <TextView
-                        android:id="@+id/tvAttacheName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:text="attachment.pdf"/>
-                </LinearLayout>
+                <ListView
+                        android:id="@+id/lvAttachemnt"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
 
 
                 <ImageView
