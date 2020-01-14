@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#2E72B8</color>
+    <color name="colorPrimaryDark">#1D5D9F</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="tabTextColor">#EEEEEE</color>
+    <color name="theme_semi_transparent">#AA000000</color>
+    <color name="gray_dark">#748AA1</color>
 </resources>

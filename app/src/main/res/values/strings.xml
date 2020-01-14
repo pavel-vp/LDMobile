@@ -1,13 +1,80 @@
 <resources>
     <string name="app_name">LDMobile</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_filter">Фильтр</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="rest_server_base_url">http://localhost:8080/api/</string>
+
+    <string name="docs_activity_title">Электронные документы</string>
+    <string name="docs_activity_no_results">Нет результатов</string>
+    <string name="docs_activity_tab_inbox">Входящие</string>
+    <string name="docs_activity_tab_outbox">Исходящие</string>
+    <string name="docs_activity_date_group">От %s</string>
+
+    <string name="doc_activity_tab_document">Документ</string>
+    <string name="doc_activity_tab_lines">Строки</string>
+    <string name="doc_activity_tab_history">История</string>
+    
+    <string name="fragment_doc_header_succes">Согласовать</string>
+    <string name="fragment_doc_header_reject">Отклонить</string>
+
+    <string name="fragment_doc_packet_header_related">Связанные документы</string>
+    <string name="fragment_doc_packet_header_subscribe">Подписать</string>
+    <string name="fragment_doc_packet_header_refuse">Отказать</string>
 
     <string name="menu_docs_approve_success">Согласовать</string>
     <string name="menu_docs_approve_reject">Отказать</string>
 
     <string name="menu_docs_sign_success">Подписать</string>
     <string name="menu_docs_sign_reject">Отказать</string>
+
+    <string name="drawer_menu_login">Логин:</string>
+    <string name="drawer_menu_role">Роль:</string>
+    <string name="drawir_munu_documents">Документы</string>
+    <string name="drawer_menu_settings">Настройки</string>
+    <string name="drawer_menu_about">О программе</string>
+
+
+    <string name="filter_activity_title">Фильтр</string>
+    <string name="filter_activity_btn_apply">Применить</string>
+    <string name="filter_activity_btn_clear">Сбросить</string>
+
+    <string name="dialog_succes_doc_title">Согласование</string>
+    <string name="dialog_succes_doc_message">Вы уверены, что хотите согласовать документ?</string>
+    <string name="dialog_succes_doc_ok">Согласовать</string>
+    <string name="dialog_succes_doc_cancel">Отмена</string>
+
+    <string name="dialog_reject_doc_title">Отклонить</string>
+    <string name="dialog_reject_doc_reason">Введите причину отказа</string>
+    <string name="dialog_reject_doc_ok">Отклонить</string>
+    <string name="dialog_reject_doc_cancel">Отмена</string>
+
+    <string name="dialog_succes_doc_packet_title">Подписать пакет</string>
+    <string name="dialog_succes_doc_packet_message">Доступные для подписания: %s</string>
+    <string name="dialog_succes_doc_packet_ok">Подписать</string>
+    <string name="dialog_succes_doc_packet_cancel">Отмена</string>
+
+    <string name="dialog_reject_doc_packet_title">Отказать пакет</string>
+    <string name="dialog_reject_doc_packet_message">Доступные для отказа: %s</string>
+    <string name="dialog_reject_doc_packet_reason_head">Введите причину отказа</string>
+    <string name="dialog_reject_doc_packet_ok">Отказать</string>
+    <string name="dialog_reject_doc_packet_cancel">Отмена</string>
+
+    <string name="alert_dialog_ok">Ок</string>
+    <string name="alert_dialog_error">Ошибка</string>
+    <string name="alert_dialog_error_login">Не удалось войти в систему</string>
+    <string name="alert_dialog_error_subscribe_packet">Невозможно выполнить действие по пакету. В пакете документов отсутствуют документы готовые к отправке</string>
+    
+    <string name="error_load_data">Ошибка загрузки данных</string>
+
+    <string name="activity_login_hint_login">Логин</string>
+    <string name="activity_login_hint_password">Пароль</string>
+    <string name="activity_login_btn_login">Войти</string>
+
+    <string name="activity_settings_title">Настройки</string>
+    <string name="activity_settings_hint">Укажите адрес подключения</string>
+    <string name="activity_settings_btn_save">Сохранить</string>
+    <string name="activity_settings_error_empty">Необходимо указать адрес подключения</string>
+
+    <string name="activity_about_title">О программе</string>
 
 </resources>

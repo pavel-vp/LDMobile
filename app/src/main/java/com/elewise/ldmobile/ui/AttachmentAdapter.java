@@ -7,16 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.DocType;
-import com.elewise.ldmobile.model.Document;
 import com.elewise.ldmobile.model.DocumentAttachment;
-import com.elewise.ldmobile.model.DocumentForList;
-
-import java.util.List;
 
 /**
  * Adapter
@@ -24,10 +18,6 @@ import java.util.List;
 public class AttachmentAdapter extends BaseAdapter {
     private Context context;
     private DocumentAttachment[] attachments;
-
-    public AttachmentAdapter() {
-        super();
-    }
 
     public AttachmentAdapter(Context context, DocumentAttachment[] attachments) {
         this.context = context;
@@ -52,20 +42,13 @@ public class AttachmentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.list_attachment, parent, false);
-
+        convertView = inflater.inflate(R.layout.attachment_item, parent, false);
 
         TextView tvAttacheName = convertView.findViewById(R.id.tvAttacheName);
         tvAttacheName.setText(attachments[position].getFile_name());
         tvAttacheName.setTag(attachments[position].getFile_id());
 
-
-        tvAttacheName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAttachment((Integer) view.getTag());
-            }
-        });
+        convertView.setOnClickListener(view -> showAttachment((Integer) view.getTag()));
         return convertView;
     }
 

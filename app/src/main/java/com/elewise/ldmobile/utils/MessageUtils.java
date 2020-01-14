@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.elewise.ldmobile.MainApp;
+import com.elewise.ldmobile.R;
 
 public class MessageUtils {
 
@@ -27,34 +28,21 @@ public class MessageUtils {
         String msg = String.format(msgFormat, objects);
         showToastMessage(msg);
     }
-//////////////////////////////////
-    public static void showModalMessage(final Activity activity, final String title, final String msg) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                // показываем ошибку
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(title)
-                        .setMessage(msg)
-                        .setCancelable(false)
-                        .setNegativeButton("Ок",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-/*                                if (finish) {
-                                    ctx.finish();
-                                }*/
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
+
+    public static AlertDialog createDialog(Activity activity, int title, int msg) {
+        return createDialog(activity, activity.getString(title), activity.getString(msg));
     }
 
-    public static void showModalMessage(final Activity activity, final String title, final String msgFormat, Object... objects ) {
-        String msg = String.format(msgFormat, objects);
-        showModalMessage(activity, title, msg);
+//////////////////////////////////
+    public static AlertDialog createDialog(final Activity activity, final String title, final String msg) {
+        // показываем ошибку
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setCancelable(false)
+                .setNegativeButton(R.string.alert_dialog_ok,
+                        (dialog, id) -> dialog.cancel());
+        return builder.create();
     }
 
 ////////////////////////////

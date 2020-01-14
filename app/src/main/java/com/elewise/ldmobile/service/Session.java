@@ -1,19 +1,19 @@
 package com.elewise.ldmobile.service;
 
-import android.app.Activity;
 import android.content.Context;
 
-import com.elewise.ldmobile.api.ParamGetDocumentDetailsRequest;
-import com.elewise.ldmobile.api.ParamGetDocumentsResponse;
-import com.elewise.ldmobile.model.Document;
-import com.elewise.ldmobile.model.ActionType;
 import com.elewise.ldmobile.MainApp;
 import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.api.ParamAuthorizationResponse;
-import com.elewise.ldmobile.model.DocumentDetail;
+import com.elewise.ldmobile.api.ParamGetDocumentsResponse;
+import com.elewise.ldmobile.model.ProcessType;
+import com.elewise.ldmobile.model.Document;
 import com.elewise.ldmobile.model.DocumentForList;
+import com.elewise.ldmobile.model.DocumentItem;
+import com.elewise.ldmobile.model.FilterData;
+import com.elewise.ldmobile.model.FilterElementList;
+import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
 import com.elewise.ldmobile.rest.RestHelper;
-import com.elewise.ldmobile.ui.DocsFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +34,9 @@ public class Session {
     private Context context;
     private RestHelper restHelper;
     private String token;
-    private DocumentDetail currentDocumentDetail;
+    private ParamRespDocumentDetailsResponse currentDocumentDetail;
+    private DocumentItem currentDocumentItem;
+    private FilterData[] filterData = new FilterData[]{};
 
     private Session(Context context) {
         this.context = context;
@@ -55,38 +57,44 @@ public class Session {
         return false;
     }
 
-    private List<DocumentForList> filterDocsByActionType(ActionType actionType, List<Document> documentList) {
+    private List<DocumentForList> groupDocByDate(List<Document> documentList) {
         List<DocumentForList> result = new ArrayList<>();
         if (documentList != null) {
             String lastDate = null;
             for (Document document : documentList) {
-                if (document.getAction_type().equals(actionType.name())) {
-                    if (lastDate == null || !lastDate.equals(document.getDate())) {
-                        lastDate = document.getDate();
-                        result.add(new DocumentForList(document, true, lastDate));
-                    }
-                    result.add(new DocumentForList(document, false, null));
-
+                if (lastDate == null || !lastDate.equals(document.getDoc_date())) {
+                    lastDate = document.getDoc_date();
+                    result.add(new DocumentForList(document, true, lastDate));
                 }
+                result.add(new DocumentForList(document, false, null));
             }
         }
         return result;
     }
 
 
-    public List<DocumentForList> getDocuments(final ActionType actionType) {
+    public List<DocumentForList> getDocuments(int size, int from, ProcessType processType, String orderBy, String direction, FilterData[] filterData) {
         try {
-            ParamGetDocumentsResponse response = restHelper.getDocumentsSync(token);
-            return filterDocsByActionType(actionType, Arrays.asList(response.getContents()));
+            ParamGetDocumentsResponse response = restHelper.getDocumentsSync(token, size, from, processType, orderBy, direction, filterData);
+            return groupDocByDate(Arrays.asList(response.getContents()));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public DocumentDetail getDocumentDetail(Document document) {
+    public FilterElementList getFilterSettings() {
         try {
-            DocumentDetail response = restHelper.getDocumentDetailsSync(token, document.getDoc_type(), document.getDoc_id());
+            return restHelper.getFilterSettings();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ParamRespDocumentDetailsResponse getDocumentDetail(int docId, String docType) {
+        try {
+            ParamRespDocumentDetailsResponse response = restHelper.getDocumentDetailsSync(token, docType, docId);
             return response;
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,11 +102,27 @@ public class Session {
         return null;
     }
 
-    public void setCurrentDocumentDetail(DocumentDetail currentDocumentDetail) {
+    public void setCurrentDocumentDetail(ParamRespDocumentDetailsResponse currentDocumentDetail) {
         this.currentDocumentDetail = currentDocumentDetail;
     }
 
-    public DocumentDetail getCurrentDocumentDetail() {
+    public ParamRespDocumentDetailsResponse getCurrentDocumentDetail() {
         return currentDocumentDetail;
+    }
+
+    public DocumentItem getCurrentDocumentItem() {
+        return currentDocumentItem;
+    }
+
+    public void setCurrentDocumentItem(DocumentItem currentDocumentItem) {
+        this.currentDocumentItem = currentDocumentItem;
+    }
+
+    public FilterData[] getFilterData() {
+        return filterData;
+    }
+
+    public void setFilterData(FilterData[] filterData) {
+        this.filterData = filterData;
     }
 }

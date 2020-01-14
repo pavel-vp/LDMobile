@@ -11,8 +11,7 @@
             android:name=".MainApp">
         <activity
                 android:name="com.elewise.ldmobile.LoginActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
@@ -22,12 +21,42 @@
         </activity>
 
         <activity android:name=".ui.DocActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.DocPacketActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.DocsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/docs_activity_title"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.FilterActivity"
+            android:label="@string/filter_activity_title"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.DocSuccessActivity"
+            android:theme="@style/AppTheme.TranscluentModal"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".ui.DocRejectActivity"
+            android:theme="@style/AppTheme.TranscluentModal"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".ui.DocPacketSuccessActivity"
+            android:theme="@style/AppTheme.TranscluentModal"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".ui.DocPacketRejectActivity"
+            android:theme="@style/AppTheme.TranscluentModal"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".ui.SettingsActivity"
+            android:label="@string/activity_settings_title"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
 
+        <activity android:name=".ui.AboutActivity"
+            android:label="@string/activity_about_title"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".ui.DocLineDetailActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

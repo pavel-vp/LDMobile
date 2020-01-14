@@ -1,5 +1,6 @@
 package com.elewise.ldmobile;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private EditText etLogin;
     private EditText etPassword;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 boolean result = false;
                 try {
                     //result = Session.getInstance().getAuthToken(userName, password);
-                    TimeUnit.SECONDS.sleep(5);
+                    TimeUnit.SECONDS.sleep(1);
                     result = true;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -71,11 +73,17 @@ public class LoginActivity extends AppCompatActivity {
                     LoginActivity.this.finish();
                 } else {
                     // показать ошибку
-                    MessageUtils.showModalMessage(LoginActivity.this, "Ошибка!", "Не получилось войти в систему!");
+                    dialog = MessageUtils.createDialog(LoginActivity.this, R.string.alert_dialog_error, R.string.alert_dialog_error_login);
+                    dialog.show();
                 }
             }
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (progressDialog != null) progressDialog.dismiss();
+        if (dialog != null) dialog.dismiss();
+    }
 }

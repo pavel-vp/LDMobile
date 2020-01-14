@@ -1,5 +1,5 @@
 package com.elewise.ldmobile.model;
 
 public enum DocType {
-    SF, TORG12, ACTVR, ACTSV, DOG
+    ASV, AVR,  DOG, ISF, IUP, KSF, ND, PD, SF, TG12, UKD, UPD
 }

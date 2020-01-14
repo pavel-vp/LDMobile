@@ -45,7 +45,6 @@ public class HistoryAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.list_hist_item, parent, false);
 
-
         TextView tvHistDate = convertView.findViewById(R.id.tvHistDate);
         tvHistDate.setText(histories[position].getHistory_date());
 

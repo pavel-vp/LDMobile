@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    style="@style/SelectableItem">
+        <TextView
+            android:id="@+id/tvAttacheName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:text="attachment.pdf"/>
+
+        <ImageView
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_attach_file"/>
+</LinearLayout>
