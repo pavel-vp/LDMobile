@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:background="@color/colorPrimary">
 
     <LinearLayout
@@ -16,14 +17,30 @@
             android:background="@android:color/white"
             android:orientation="horizontal">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="26dp"
                 android:layout_marginEnd="46dp"
                 android:layout_marginTop="48dp"
-                android:layout_marginBottom="48dp"
-                android:src="@drawable/ic_logo"/>
+                android:layout_marginBottom="48dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_avatar_background"/>
+
+                <TextView
+                    android:id="@+id/tvAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textColor="@android:color/white"
+                    tools:text="M"
+                    />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
-                    android:text="User123"/>
+                    android:text="mdUser123"/>
 
                 <TextView
                     android:text="@string/drawer_menu_role"
@@ -64,6 +81,7 @@
             android:id="@+id/llDocuments"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginTop="34dp"
             style="@style/SelectableItem"
             android:orientation="horizontal">
 

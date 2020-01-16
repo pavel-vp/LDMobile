@@ -1,8 +1,10 @@
 package com.elewise.ldmobile.ui;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.drm.DrmStore;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.model.ActionType;
 import com.elewise.ldmobile.model.DocHeaderAttributes;
 import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
+import com.elewise.ldmobile.model.DocumentAttachment;
 import com.elewise.ldmobile.service.Session;
 import com.elewise.ldmobile.utils.ImageUtils;
 
@@ -85,15 +88,26 @@ public class DocFragment extends Fragment {
             llDynamicPart.addView(convertView);
         }
 
-        ListView lvAttachemnt = rootView.findViewById(R.id.lvAttachemnt);
         if (detail.getAttachments() != null && detail.getAttachments().length > 0) {
-            lvAttachemnt.setVisibility(View.VISIBLE);
-            lvAttachemnt.setAdapter(new AttachmentAdapter(this.getContext(), detail.getAttachments()));
-        } else {
-            lvAttachemnt.setVisibility(View.GONE);
+            for (DocumentAttachment item: detail.getAttachments()) {
+                View convertView = inflater.inflate(R.layout.attachment_item, container, false);
+                TextView tvAttacheName = convertView.findViewById(R.id.tvAttacheName);
+                tvAttacheName.setText(item.getFile_name());
+                tvAttacheName.setTag(item.getFile_id());
+                convertView.setOnClickListener(view -> showAttachment((Integer) view.getTag()));
+                llDynamicPart.addView(convertView);
+            }
         }
 
         return rootView;
+    }
+
+    private void showAttachment(Integer file_id) {
+        // Вызвать вебстраницу с урлем
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        String url = getResources().getString(R.string.rest_server_base_url) + "";
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     @Override

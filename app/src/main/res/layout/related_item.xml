@@ -18,23 +18,23 @@
             tools:text="Акт выполненных работ №234"/>
 
         <RelativeLayout
-            android:layout_width="18dp"
-            android:layout_height="12dp"
+            android:layout_width="22dp"
+            android:layout_height="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp">
                 <ImageView
                     android:id="@+id/ivDocType"
-                    android:layout_height="12dp"
-                    android:layout_width="12dp"
+                    android:layout_height="16dp"
+                    android:layout_width="16dp"
                     android:layout_alignParentStart="true"
                     android:src="@drawable/ic_doc_type_sf_mini"/>
 
                 <ImageView
                     android:id="@+id/ivActionType"
-                    android:layout_height="12dp"
-                    android:layout_width="12dp"
+                    android:layout_height="16dp"
+                    android:layout_width="16dp"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_state_lock_green"/>
         </RelativeLayout>

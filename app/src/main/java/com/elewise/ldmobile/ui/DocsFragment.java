@@ -197,7 +197,12 @@ public class DocsFragment extends Fragment {
                 }
 
                 ImageUtils.setDocTypeIcon(imgDocType, document.getDoc_icon());
-                ImageUtils.setActionIcon(imgAction, document.getAction_icon());
+                if (document.getDoc_type().equals(DocType.PD.name())) {
+                    imgAction.setVisibility(View.GONE);
+                } else {
+                    imgAction.setVisibility(View.VISIBLE);
+                    ImageUtils.setActionIcon(imgAction, document.getAction_icon());
+                }
 
                 convertView.setOnClickListener(view -> showDocDetail(document));
             }

@@ -11,7 +11,8 @@
         android:id="@+id/checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:checked="false"
         android:textColor="@color/gray_dark"
-        tools:text="Только мои документы"/>
+        tools:text="Только мои документы" />
 
 </LinearLayout>

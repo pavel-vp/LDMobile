@@ -13,14 +13,31 @@
     android:layout_height="wrap_content"
     tools:text="Дата документа с *" />
 
-<android.support.design.button.MaterialButton
-    android:id="@+id/btnDate"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:icon="@drawable/ic_calendar"
-    app:iconGravity="start"
-    app:iconTint="@color/gray_dark"
-    style="@style/AppTheme.Button.Default"
-    android:layout_marginEnd="4dp"
-    tools:text="12.12.2019" />
+    <RelativeLayout
+        android:id="@+id/rlDate"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/round_rect">
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="42dp"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:singleLine="true"
+            tools:text="12.12.2019" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_calendar"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
 </LinearLayout>

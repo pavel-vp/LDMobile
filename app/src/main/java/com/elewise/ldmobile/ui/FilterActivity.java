@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,11 +38,13 @@ public class FilterActivity extends AppCompatActivity {
 
     private TextView tvDateFromName;
     private TextView tvDateToName;
-    private Button btnDateFrom;
-    private Button btnDateTo;
-    private LinearLayout llDynamicPart;
     private Button btnApply;
     private Button btnClear;
+    private LinearLayout llDynamicPart;
+    private RelativeLayout rlDateFrom;
+    private RelativeLayout rlDateTo;
+    private TextView tvDateFrom;
+    private TextView tvDateTo;
     private List<BaseWidget> dynamicViewList = new ArrayList();
 
     private Calendar cldr = Calendar.getInstance();
@@ -54,14 +57,16 @@ public class FilterActivity extends AppCompatActivity {
 
         tvDateFromName = findViewById(R.id.tvDateFromName);
         tvDateToName = findViewById(R.id.tvDateToName);
-        btnDateFrom = findViewById(R.id.btnDateFrom);
-        btnDateTo = findViewById(R.id.btnDateTo);
+        rlDateFrom = findViewById(R.id.rlDateFrom);
+        rlDateTo = findViewById(R.id.rlDateTo);
+        tvDateFrom = findViewById(R.id.tvDateFrom);
+        tvDateTo = findViewById(R.id.tvDateTo);
         llDynamicPart = findViewById(R.id.llDynamicPart);
         btnApply = findViewById(R.id.btnApply);
         btnClear = findViewById(R.id.btnClear);
 
-        btnDateFrom.setOnClickListener(dateClickListener);
-        btnDateTo.setOnClickListener(dateClickListener);
+        rlDateFrom.setOnClickListener(dateClickListener);
+        rlDateTo.setOnClickListener(dateClickListener);
         btnClear.setOnClickListener(view -> {
             Session.getInstance().setFilterData(getFilterData(false));
             finish();
@@ -90,12 +95,12 @@ public class FilterActivity extends AppCompatActivity {
                 if (item.getName().equals("begin_date")) {
                     if (item.getLast_value() != null) {
                         tvDateFromName.setText(item.getDesc());
-                        btnDateFrom.setText(item.getLast_value());
+                        tvDateFrom.setText(item.getLast_value());
                     }
                 } else if (item.getName().equals("end_date")) {
                     if (item.getLast_value() != null) {
                         tvDateToName.setText(item.getDesc());
-                        btnDateTo.setText(item.getLast_value());
+                        tvDateTo.setText(item.getLast_value());
                     }
                 } else {
                     DateWidget view = new DateWidget(this, item);
@@ -121,16 +126,18 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private View.OnClickListener dateClickListener = view -> {
-        Button btnDate = (Button) view;
+        TextView date = view.findViewById(R.id.tvDateFrom);
+        TextView tvDate = (date == null)?view.findViewById(R.id.tvDateTo):date;
+
         try {
-            cldr.setTime(sdf.parse(btnDate.getText().toString()));
+            cldr.setTime(sdf.parse(tvDate.getText().toString()));
         } catch (Exception e) {
             Log.e("error parse date", e.toString());
         }
         // date picker dialog
         new DatePickerDialog(FilterActivity.this,
                 (v, year1, monthOfYear, dayOfMonth) ->
-                        btnDate.setText(((dayOfMonth<10)?"0"+dayOfMonth:dayOfMonth) + "." + (monthOfYear + 1) + "." + year1)
+                        tvDate.setText(((dayOfMonth<10)?"0"+dayOfMonth:dayOfMonth) + "." + (monthOfYear + 1) + "." + year1)
                 , cldr.get(Calendar.YEAR), cldr.get(Calendar.MONTH), cldr.get(Calendar.DAY_OF_MONTH))
                 .show();
     };
@@ -148,8 +155,8 @@ public class FilterActivity extends AppCompatActivity {
     public FilterData[] getFilterData(Boolean withDynamicPart) {
         ArrayList<FilterData> arrayList = new ArrayList();
 
-        arrayList.add(new FilterData("begin_date", btnDateFrom.getText().toString()));
-        arrayList.add(new FilterData("end_date", btnDateTo.getText().toString()));
+        arrayList.add(new FilterData("begin_date", tvDateFrom.getText().toString()));
+        arrayList.add(new FilterData("end_date", tvDateTo.getText().toString()));
 
         if (withDynamicPart) {
             for (BaseWidget item : dynamicViewList) {

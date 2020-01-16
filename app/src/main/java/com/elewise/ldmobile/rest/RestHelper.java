@@ -234,12 +234,12 @@ public class RestHelper {
                 "                     , \"last_value\":\"01.12.2019\"\n" +
                 "                     , \"disabled\":\"false\"\n" +
                 "                     , \"required\":\"false\"}\n" +
-                "                   ,{ \"name\":\"date\"\n" +
-                "                     , \"desc\":\"Дата(дополнительно)\"\n" +
-                "                     , \"type\":\"date\"\n" +
-                "                     , \"last_value\":\"07.12.2019\"\n" +
-                "                     , \"disabled\":\"false\"\n" +
-                "                     , \"required\":\"false\"}\n" +
+//                "                   ,{ \"name\":\"date\"\n" +
+//                "                     , \"desc\":\"Дата(дополнительно)\"\n" +
+//                "                     , \"type\":\"date\"\n" +
+//                "                     , \"last_value\":\"07.12.2019\"\n" +
+//                "                     , \"disabled\":\"false\"\n" +
+//                "                     , \"required\":\"false\"}\n" +
                 "                   ,{ \"name\":\"document_number\"\n" +
                 "                     , \"desc\":\"Номер документа\"\n" +
                 "                     , \"type\":\"string\"\n" +

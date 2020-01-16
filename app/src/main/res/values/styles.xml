@@ -11,6 +11,7 @@
         <item name="actionBarStyle">@style/MyApp.ActionBar</item>
         <item name="editTextStyle">@style/AppTheme.EditText</item>
         <item name="spinnerStyle">@style/AppTheme.Spinner</item>
+        <item name="checkboxStyle">@style/AppTheme.CheckBox</item>
     </style>
 
     <style name="AppTheme.EditText" parent="Widget.AppCompat.EditText">
@@ -20,11 +21,15 @@
 
     <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner">
         <item name="android:background">@drawable/round_rect</item>
+        <item name="android:popupBackground">@drawable/round_rect</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:dropDownVerticalOffset">42dp</item>
     </style>
 
     <style name="MyApp.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <!-- remove shadow below action bar -->
         <item name="elevation">0dp</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="AppTheme.NoActionBar"  parent="AppTheme">
@@ -44,6 +49,7 @@
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabTextColor">@color/tabTextColor</item>
         <item name="android:background">@color/colorPrimary</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme.TranscluentModal" parent="AppTheme.NoActionBar">
@@ -54,6 +60,7 @@
     <style name="AppTheme.Button.Accent" parent="Widget.AppCompat.Button">
         <item name="android:backgroundTint">@color/colorPrimary</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
     <style name="AppTheme.Button.Default" parent="Widget.AppCompat.Button">
@@ -61,6 +68,11 @@
         <item name="backgroundTint">@android:color/white</item>
         <item name="strokeColor">@color/gray_dark</item>
         <item name="strokeWidth">1dp</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
+    <style name="AppTheme.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
+        <item name="android:paddingStart">8dp</item>
+    </style>
 </resources>

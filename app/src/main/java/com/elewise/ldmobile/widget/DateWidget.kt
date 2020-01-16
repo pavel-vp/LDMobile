@@ -20,9 +20,9 @@ class DateWidget(context: Context, val descrView: FilterElement): BaseWidget(con
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.date_widget, this)
         tvDateName.text = descrView.desc
-        btnDate.setOnClickListener{ view ->
+        rlDate.setOnClickListener{ view ->
             try {
-                cldr.setTime(sdf.parse(btnDate.text.toString()))
+                cldr.setTime(sdf.parse(tvDate.text.toString()))
             } catch (e: Exception) {
                 Log.e("error parse date", e.toString())
             }
@@ -30,7 +30,7 @@ class DateWidget(context: Context, val descrView: FilterElement): BaseWidget(con
             // date picker dialog
             DatePickerDialog(context,
                     { v, year1, monthOfYear, dayOfMonth ->
-                        btnDate.text = (if(dayOfMonth<10) "0"+dayOfMonth.toString() else dayOfMonth.toString()) + "." + (monthOfYear + 1) + "." + year1 },
+                        tvDate.text = (if(dayOfMonth<10) "0"+dayOfMonth.toString() else dayOfMonth.toString()) + "." + (monthOfYear + 1) + "." + year1 },
                     cldr.get(Calendar.YEAR), cldr.get(Calendar.MONTH), cldr.get(Calendar.DAY_OF_MONTH)).show()
         }
         descrView.last_value?.let {
@@ -40,11 +40,11 @@ class DateWidget(context: Context, val descrView: FilterElement): BaseWidget(con
     }
 
     override fun setData(data: String) {
-        btnDate.text = data
+        tvDate.text = data
     }
 
     override fun getData(): String {
-        return btnDate.text.toString()
+        return tvDate.text.toString()
     }
 
     override fun getName(): String {

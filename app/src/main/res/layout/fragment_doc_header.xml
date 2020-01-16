@@ -18,47 +18,35 @@
         </LinearLayout>
     </ScrollView>
 
+
     <LinearLayout
+        android:id="@+id/llButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:orientation="vertical">
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/llButtons"
-            android:layout_width="match_parent"
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btnSuccess"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:orientation="horizontal">
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            style="@style/AppTheme.Button.Accent"
+            android:text="@string/fragment_doc_header_succes"/>
 
-            <android.support.design.button.MaterialButton
-                android:id="@+id/btnSuccess"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                style="@style/AppTheme.Button.Accent"
-                android:text="@string/fragment_doc_header_succes"/>
-
-            <android.support.design.button.MaterialButton
-                android:id="@+id/btnReject"
-                style="@style/AppTheme.Button.Default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:text="@string/fragment_doc_header_reject"
-                />
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/lvAttachemnt"
-            android:layout_width="fill_parent"
-            android:layout_marginBottom="8dp"
-            tools:layout_height="70dp"
-            android:layout_height="wrap_content" />
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btnReject"
+            style="@style/AppTheme.Button.Default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:text="@string/fragment_doc_header_reject"
+            />
     </LinearLayout>
 
 </LinearLayout>

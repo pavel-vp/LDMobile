@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:textColor="@android:color/black"
             android:gravity="end"
+            android:textStyle="bold"
             android:text="Иванов В.В." />
     </LinearLayout>
     <TextView

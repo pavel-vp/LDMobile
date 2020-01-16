@@ -30,16 +30,15 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Вход в систему...");
 
-        Button login = (Button) findViewById(R.id.btnLogin);
-        etLogin = (EditText)findViewById(R.id.etLogin);
-        etPassword = (EditText)findViewById(R.id.etPassword);
+        Button login = findViewById(R.id.btnLogin);
+        etLogin = findViewById(R.id.etLogin);
+        etPassword = findViewById(R.id.etPassword);
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                runLogin(etLogin.getText().toString(), etPassword.getText().toString());
-            }
+        login.setOnClickListener(view -> {
+            runLogin(etLogin.getText().toString(), etPassword.getText().toString());
         });
+
+        getSupportActionBar().hide();
     }
 
     private void runLogin(final String userName, final String password) {

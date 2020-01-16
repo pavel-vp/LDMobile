@@ -16,10 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.model.ProcessType;
 import com.elewise.ldmobile.service.Session;
+
+import org.w3c.dom.Text;
 
 public class DocsActivity extends AppCompatActivity {
 
@@ -44,6 +47,10 @@ public class DocsActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         addClickListener();
+
+        TextView tvLogin = findViewById(R.id.tvLogin);
+        TextView tvAvatar = findViewById(R.id.tvAvatar);
+        tvAvatar.setText(tvLogin.getText().toString().toUpperCase().substring(0, 1));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
