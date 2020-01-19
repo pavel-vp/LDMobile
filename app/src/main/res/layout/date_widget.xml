@@ -11,20 +11,21 @@
     android:id="@+id/tvDateName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
     tools:text="Дата документа с *" />
 
     <RelativeLayout
         android:id="@+id/rlDate"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="@drawable/round_rect">
+        android:background="@drawable/round_rect"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/tvDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="42dp"
             android:textColor="@android:color/black"
             android:textSize="16sp"
@@ -33,10 +34,9 @@
 
         <ImageView
             android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_height="21dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="6dp"
+            android:layout_marginTop="1dp"
             android:src="@drawable/ic_calendar"
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>

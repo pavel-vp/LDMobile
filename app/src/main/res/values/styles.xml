@@ -17,6 +17,7 @@
     <style name="AppTheme.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:background">@drawable/round_rect</item>
         <item name="android:paddingStart">8dp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner">

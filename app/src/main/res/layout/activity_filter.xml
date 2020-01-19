@@ -26,86 +26,84 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvDateFromName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
                         tools:text="Дата документа с *" />
 
                     <RelativeLayout
                         android:id="@+id/rlDateFrom"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
-                        style="@style/SelectableItem"
-                        android:background="@drawable/round_rect">
+                        android:background="@drawable/round_rect"
+                        android:gravity="center_vertical">
 
                         <TextView
                             android:id="@+id/tvDateFrom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="4dp"
                             android:layout_marginEnd="42dp"
+                            android:singleLine="true"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:singleLine="true"
                             tools:text="12.12.2019" />
 
                         <ImageView
                             android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_height="21dp"
+                            android:layout_alignParentEnd="true"
                             android:layout_marginEnd="16dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="6dp"
-                            android:src="@drawable/ic_calendar"
-                            android:layout_alignParentEnd="true"/>
+                            android:layout_marginTop="1dp"
+                            android:src="@drawable/ic_calendar" />
                     </RelativeLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="4dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvDateToName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="Дата документа по *"
-                        />
+                        android:layout_marginBottom="4dp"
+                        tools:text="Дата документа по *" />
 
                     <RelativeLayout
                         android:id="@+id/rlDateTo"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
-                        android:background="@drawable/round_rect">
+                        android:background="@drawable/round_rect"
+                        android:gravity="center_vertical">
 
                         <TextView
                             android:id="@+id/tvDateTo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="4dp"
                             android:layout_marginEnd="42dp"
+                            android:singleLine="true"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:singleLine="true"
                             tools:text="17.12.2019" />
 
                         <ImageView
                             android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_height="21dp"
+                            android:layout_alignParentEnd="true"
                             android:layout_marginEnd="16dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="6dp"
-                            android:src="@drawable/ic_calendar"
-                            android:layout_alignParentEnd="true"/>
+                            android:layout_marginTop="1dp"
+                            android:src="@drawable/ic_calendar" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -115,8 +113,7 @@
                 android:id="@+id/llDynamicPart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:orientation="vertical"></LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -131,21 +128,21 @@
 
         <android.support.design.button.MaterialButton
             android:id="@+id/btnApply"
+            style="@style/AppTheme.Button.Accent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="@style/AppTheme.Button.Accent"
             android:layout_marginEnd="4dp"
+            android:layout_weight="1"
             android:text="@string/filter_activity_btn_apply" />
 
         <android.support.design.button.MaterialButton
             android:id="@+id/btnClear"
+            style="@style/AppTheme.Button.Default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="@style/AppTheme.Button.Default"
             android:layout_marginStart="4dp"
-            android:text="@string/filter_activity_btn_clear"/>
+            android:layout_weight="1"
+            android:text="@string/filter_activity_btn_clear" />
 
     </LinearLayout>
 </LinearLayout>
