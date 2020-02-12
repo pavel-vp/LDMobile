@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
+import com.elewise.ldmobile.api.ParamDocumentDetailsResponse;
 import com.elewise.ldmobile.service.Session;
 
 public class HistoryFragment extends Fragment {
@@ -21,7 +21,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ParamRespDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
+        ParamDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
         View rootView = inflater.inflate(R.layout.fragment_doc_history, container, false);
 
         ListView lvHist = rootView.findViewById(R.id.lvHist);

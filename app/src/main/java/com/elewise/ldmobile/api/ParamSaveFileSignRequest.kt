@@ -3,13 +3,13 @@ package com.elewise.ldmobile.api
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ParamGenerateDocumentRequest (
+data class ParamSaveFileSignRequest(
         val access_token: String,
-        val data: ParametersGenerateDocument
+        val signs: Array<FileSign>
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ParametersGenerateDocument(
-        val doc_id: String,
-        val doc_type: String
+data class FileSign (
+        val file_id: Int,
+        val data: String
 )

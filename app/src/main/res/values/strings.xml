@@ -2,7 +2,7 @@
     <string name="app_name">LDMobile</string>
     <string name="action_filter">Фильтр</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="rest_server_base_url">http://localhost:8080/api/</string>
+    <string name="rest_server_base_url">http://elasticsearch.prj.elewise.com:8080/LdMobileService/</string>
 
     <string name="docs_activity_title">Электронные документы</string>
     <string name="docs_activity_no_results">Нет результатов</string>

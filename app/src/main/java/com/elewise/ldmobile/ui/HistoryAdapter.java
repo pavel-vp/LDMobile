@@ -9,8 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.DocumentAttachment;
-import com.elewise.ldmobile.model.DocumentHistory;
+import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.data.*;
+import com.elewise.ldmobile.model.*;
 
 public class HistoryAdapter extends BaseAdapter {
     private Context context;

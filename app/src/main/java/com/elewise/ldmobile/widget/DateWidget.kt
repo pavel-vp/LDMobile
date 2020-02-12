@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.OnClickListener
 import com.elewise.ldmobile.R
-import com.elewise.ldmobile.model.FilterElement
+import com.elewise.ldmobile.api.FilterElement
 import kotlinx.android.synthetic.main.date_widget.view.*
 import java.text.SimpleDateFormat
 import java.util.*

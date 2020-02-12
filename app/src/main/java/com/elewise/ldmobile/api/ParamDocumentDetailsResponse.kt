@@ -1,10 +1,12 @@
 package com.elewise.ldmobile.api
 
-import com.elewise.ldmobile.model.*
+import com.elewise.ldmobile.api.data.*
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ParamRespDocumentDetailsResponse (
+data class ParamDocumentDetailsResponse (
+        val status: String,
+        val message: String?,
         val doc_type: String,
         val doc_id: Int,
         val doc_title: String,
@@ -14,6 +16,7 @@ data class ParamRespDocumentDetailsResponse (
         val history: Array<DocumentHistory>?,
         val attachments: Array<DocumentAttachment>?,
         val related_docs: Array<RelatedDoc>?,
+        val buttons: Array<ButtonDesc>,
         val user_action: String?
 )
 

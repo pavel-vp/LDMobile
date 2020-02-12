@@ -3,7 +3,6 @@ package com.elewise.ldmobile.ui;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,11 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.ActionType;
-import com.elewise.ldmobile.model.DocHeaderAttributes;
-import com.elewise.ldmobile.model.DocType;
-import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
-import com.elewise.ldmobile.model.RelatedDoc;
+import com.elewise.ldmobile.model.*;
+import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.service.Session;
 import com.elewise.ldmobile.utils.ImageUtils;
 import com.elewise.ldmobile.utils.MessageUtils;
@@ -49,7 +46,7 @@ public class DocPacketFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_doc_packet_header, container, false);
         progressDialog = new ProgressDialog(getActivity());
 
-        ParamRespDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
+        ParamDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
 
         LinearLayout llDynamicPart = rootView.findViewById(R.id.llDynamicPart);
         LinearLayout llButtons = rootView.findViewById(R.id.llButtons);
@@ -87,7 +84,7 @@ public class DocPacketFragment extends Fragment {
         return rootView;
     }
 
-    private void addAttachments(LayoutInflater inflater, View rootView, ParamRespDocumentDetailsResponse detail) {
+    private void addAttachments(LayoutInflater inflater, View rootView, ParamDocumentDetailsResponse detail) {
         LinearLayout lvAttachemnt = rootView.findViewById(R.id.lvRelated);
         TextView tvRelatedHeader = rootView.findViewById(R.id.tvRelatedHeader);
         if (detail.getRelated_docs() != null) {
@@ -118,7 +115,7 @@ public class DocPacketFragment extends Fragment {
         }
     }
 
-    private void addDynamicPart(LayoutInflater inflater, ParamRespDocumentDetailsResponse detail, LinearLayout llDynamicPart) {
+    private void addDynamicPart(LayoutInflater inflater, ParamDocumentDetailsResponse detail, LinearLayout llDynamicPart) {
         boolean isFirst = true;
         for (DocHeaderAttributes item: detail.getHeader_attributes()) {
             View convertView = inflater.inflate(R.layout.doc_header_item, llDynamicPart, false);
@@ -142,7 +139,7 @@ public class DocPacketFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ParamRespDocumentDetailsResponse result = null;
+                ParamDocumentDetailsResponse result = null;
                 try {
                     result = Session.getInstance().getDocumentDetail(relatedDoc.getDoc_id(), relatedDoc.getDoc_type());
                     Session.getInstance().setCurrentDocumentDetail(result);
@@ -154,7 +151,7 @@ public class DocPacketFragment extends Fragment {
         }).start();
     }
 
-    private void handleDocumentDetailsResponse(final ParamRespDocumentDetailsResponse documentDetail) {
+    private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse documentDetail) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

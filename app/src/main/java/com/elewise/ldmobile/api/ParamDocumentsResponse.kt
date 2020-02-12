@@ -1,6 +1,14 @@
-package com.elewise.ldmobile.model
+package com.elewise.ldmobile.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class ParamDocumentsResponse (
+        val status: String,
+        val message: String?,
+        val returned_quantity: Int?,
+        val contents: Array<Document>?
+)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Document(

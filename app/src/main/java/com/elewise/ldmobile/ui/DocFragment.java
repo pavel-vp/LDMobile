@@ -1,9 +1,7 @@
 package com.elewise.ldmobile.ui;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,17 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.ActionType;
-import com.elewise.ldmobile.model.DocHeaderAttributes;
-import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
-import com.elewise.ldmobile.model.DocumentAttachment;
+import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.service.Session;
 import com.elewise.ldmobile.utils.ImageUtils;
+import com.elewise.ldmobile.model.*;
 
 public class DocFragment extends Fragment {
 
@@ -49,7 +45,7 @@ public class DocFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_doc_header, container, false);
 
-        ParamRespDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
+        ParamDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
 
         LinearLayout llButtons = rootView.findViewById(R.id.llButtons);
         LinearLayout llDynamicPart = rootView.findViewById(R.id.llDynamicPart);

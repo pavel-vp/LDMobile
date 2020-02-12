@@ -1,6 +1,6 @@
-package com.elewise.ldmobile.model
+package com.elewise.ldmobile.api.data
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class DocHeaderAttributes(val desc: String, val value: String)
+data class DocLineDetail(val desc: String, val value: String)

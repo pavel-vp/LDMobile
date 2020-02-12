@@ -14,9 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.FilterData;
-import com.elewise.ldmobile.model.FilterElement;
-import com.elewise.ldmobile.model.FilterElementList;
+import com.elewise.ldmobile.model.*;
+import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.service.Session;
 import com.elewise.ldmobile.widget.BaseWidget;
 import com.elewise.ldmobile.widget.CheckboxWidget;
@@ -84,7 +84,7 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private void initDisplay() {
-        FilterElementList listElement = Session.getInstance().getFilterSettings();
+        ParamFilterSettingsResponse listElement = Session.getInstance().getFilterSettings();
         if (listElement == null) {
             Toast.makeText(this, R.string.error_load_data, Toast.LENGTH_LONG).show();
             return;
@@ -92,20 +92,13 @@ public class FilterActivity extends AppCompatActivity {
 
         for (FilterElement item:  listElement.getFilters()) {
             if (item.getType().equals("date")) {
-                if (item.getName().equals("begin_date")) {
-                    if (item.getLast_value() != null) {
-                        tvDateFromName.setText(item.getDesc());
-                        tvDateFrom.setText(item.getLast_value());
-                    }
-                } else if (item.getName().equals("end_date")) {
-                    if (item.getLast_value() != null) {
-                        tvDateToName.setText(item.getDesc());
-                        tvDateTo.setText(item.getLast_value());
-                    }
-                } else {
-                    DateWidget view = new DateWidget(this, item);
-                    dynamicViewList.add(view);
-                    llDynamicPart.addView(view);
+                if (item.getLast_value() != null) {
+                    tvDateFromName.setText(item.getDesc());
+                    tvDateFrom.setText(item.getLast_value());
+                }
+                if (item.getLast_value2() != null) {
+                    tvDateToName.setText(item.getDesc());
+                    tvDateTo.setText(item.getLast_value());
                 }
             } else if (item.getType().equals("string")) {
                 InputWidget view = new InputWidget(this, item);
@@ -154,14 +147,14 @@ public class FilterActivity extends AppCompatActivity {
 
     public FilterData[] getFilterData(Boolean withDynamicPart) {
         ArrayList<FilterData> arrayList = new ArrayList();
-
-        arrayList.add(new FilterData("begin_date", tvDateFrom.getText().toString()));
-        arrayList.add(new FilterData("end_date", tvDateTo.getText().toString()));
+        // FIXME: переделать на новые форматы передачи дат
+        //arrayList.add(new FilterData("begin_date", tvDateFrom.getText().toString()));
+        //arrayList.add(new FilterData("end_date", tvDateTo.getText().toString()));
 
         if (withDynamicPart) {
             for (BaseWidget item : dynamicViewList) {
                 if (!TextUtils.isEmpty(item.getData())) {
-                    arrayList.add(new FilterData(item.getName(), item.getData()));
+                    arrayList.add(new FilterData(item.getName(), item.getData(), null));
                 }
             }
         }

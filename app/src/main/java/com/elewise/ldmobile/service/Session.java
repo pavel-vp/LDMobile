@@ -1,18 +1,11 @@
 package com.elewise.ldmobile.service;
 
 import android.content.Context;
-
 import com.elewise.ldmobile.MainApp;
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.api.ParamAuthorizationResponse;
-import com.elewise.ldmobile.api.ParamGetDocumentsResponse;
-import com.elewise.ldmobile.model.ProcessType;
-import com.elewise.ldmobile.model.Document;
-import com.elewise.ldmobile.model.DocumentForList;
-import com.elewise.ldmobile.model.DocumentItem;
-import com.elewise.ldmobile.model.FilterData;
-import com.elewise.ldmobile.model.FilterElementList;
-import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
+import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.data.*;
+import com.elewise.ldmobile.model.*;
 import com.elewise.ldmobile.rest.RestHelper;
 
 import java.io.IOException;
@@ -34,7 +27,7 @@ public class Session {
     private Context context;
     private RestHelper restHelper;
     private String token;
-    private ParamRespDocumentDetailsResponse currentDocumentDetail;
+    private ParamDocumentDetailsResponse currentDocumentDetail;
     private DocumentItem currentDocumentItem;
     private FilterData[] filterData = new FilterData[]{};
 
@@ -48,7 +41,7 @@ public class Session {
         try {
             ParamAuthorizationResponse response = restHelper.getAuthorizationTokenSync(userName, password);
             token = response.getAccess_token();
-            if (token != null && "".equals(token)) {
+            if (!"".equals(token)) {
                 return true;
             }
         } catch (Exception e) {
@@ -75,7 +68,7 @@ public class Session {
 
     public List<DocumentForList> getDocuments(int size, int from, ProcessType processType, String orderBy, String direction, FilterData[] filterData) {
         try {
-            ParamGetDocumentsResponse response = restHelper.getDocumentsSync(token, size, from, processType, orderBy, direction, filterData);
+            ParamDocumentsResponse response = restHelper.getDocumentsSync(token, size, from, processType, orderBy, direction, filterData);
             return groupDocByDate(Arrays.asList(response.getContents()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,18 +76,18 @@ public class Session {
         return null;
     }
 
-    public FilterElementList getFilterSettings() {
+    public ParamFilterSettingsResponse getFilterSettings() {
         try {
-            return restHelper.getFilterSettings();
+            return restHelper.getFilterSettings(token);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public ParamRespDocumentDetailsResponse getDocumentDetail(int docId, String docType) {
+    public ParamDocumentDetailsResponse getDocumentDetail(int docId, String docType) {
         try {
-            ParamRespDocumentDetailsResponse response = restHelper.getDocumentDetailsSync(token, docType, docId);
+            ParamDocumentDetailsResponse response = restHelper.getDocumentDetailsSync(token, docType, docId);
             return response;
         } catch (IOException e) {
             e.printStackTrace();
@@ -102,11 +95,11 @@ public class Session {
         return null;
     }
 
-    public void setCurrentDocumentDetail(ParamRespDocumentDetailsResponse currentDocumentDetail) {
+    public void setCurrentDocumentDetail(ParamDocumentDetailsResponse currentDocumentDetail) {
         this.currentDocumentDetail = currentDocumentDetail;
     }
 
-    public ParamRespDocumentDetailsResponse getCurrentDocumentDetail() {
+    public ParamDocumentDetailsResponse getCurrentDocumentDetail() {
         return currentDocumentDetail;
     }
 

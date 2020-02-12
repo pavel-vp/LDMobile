@@ -1,20 +1,17 @@
 package com.elewise.ldmobile.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.DocLineDetail;
-import com.elewise.ldmobile.model.DocumentItem;
+import com.elewise.ldmobile.model.*;
+import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.service.Session;
 
 public class DocLineDetailActivity extends AppCompatActivity {

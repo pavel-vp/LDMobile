@@ -10,8 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
-import com.elewise.ldmobile.model.DocumentItem;
+import com.elewise.ldmobile.api.ParamDocumentDetailsResponse;
+import com.elewise.ldmobile.api.data.DocumentItem;
 import com.elewise.ldmobile.service.Session;
 
 public class ItemsFragment extends Fragment {
@@ -25,7 +25,7 @@ public class ItemsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final ParamRespDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
+        final ParamDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
         final View rootView = inflater.inflate(R.layout.fragment_doc_items, container, false);
         LinearLayout llDynamicPart = rootView.findViewById(R.id.llDynamicPart);
 

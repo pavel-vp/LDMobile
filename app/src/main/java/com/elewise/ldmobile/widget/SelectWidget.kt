@@ -10,7 +10,7 @@ import android.widget.AdapterView
 import android.widget.SimpleAdapter
 import android.widget.TextView
 import com.elewise.ldmobile.R
-import com.elewise.ldmobile.model.FilterElement
+import com.elewise.ldmobile.api.FilterElement
 import kotlinx.android.synthetic.main.select_widget.view.*
 
 

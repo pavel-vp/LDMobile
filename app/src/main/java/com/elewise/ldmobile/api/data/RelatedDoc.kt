@@ -1,4 +1,4 @@
-package com.elewise.ldmobile.model
+package com.elewise.ldmobile.api.data
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

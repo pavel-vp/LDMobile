@@ -4,7 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import android.view.LayoutInflater
 import com.elewise.ldmobile.R
-import com.elewise.ldmobile.model.FilterElement
+import com.elewise.ldmobile.api.FilterElement
 import kotlinx.android.synthetic.main.input_widget.view.*
 
 class InputWidget(context: Context, val descrView: FilterElement): BaseWidget(context) {

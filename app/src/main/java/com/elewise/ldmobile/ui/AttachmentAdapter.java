@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.DocumentAttachment;
+import com.elewise.ldmobile.api.data.DocumentAttachment;
 
 /**
  * Adapter

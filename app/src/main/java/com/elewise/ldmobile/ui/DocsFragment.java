@@ -16,12 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.ProcessType;
-import com.elewise.ldmobile.model.DocType;
-import com.elewise.ldmobile.model.Document;
-import com.elewise.ldmobile.model.FilterData;
-import com.elewise.ldmobile.api.ParamRespDocumentDetailsResponse;
-import com.elewise.ldmobile.model.DocumentForList;
+import com.elewise.ldmobile.model.*;
+import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.service.Session;
 import com.elewise.ldmobile.utils.ImageUtils;
 import com.elewise.ldmobile.utils.MessageUtils;
@@ -95,7 +92,7 @@ public class DocsFragment extends Fragment {
     private void showDocDetail(final Document document) {
         progressDialog.show();
         new Thread(() -> {
-            ParamRespDocumentDetailsResponse result = null;
+            ParamDocumentDetailsResponse result = null;
             try {
                 result = Session.getInstance().getDocumentDetail(document.getDoc_id(), document.getDoc_type());
                 Session.getInstance().setCurrentDocumentDetail(result);
@@ -106,7 +103,7 @@ public class DocsFragment extends Fragment {
         }).start();
     }
 
-    private void handleDocumentDetailsResponse(final ParamRespDocumentDetailsResponse documentDetail) {
+    private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse documentDetail) {
         getActivity().runOnUiThread(() -> {
             progressDialog.hide();
             if (documentDetail != null) {
