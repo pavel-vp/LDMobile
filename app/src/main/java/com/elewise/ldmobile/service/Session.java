@@ -1,6 +1,9 @@
 package com.elewise.ldmobile.service;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.widget.Toast;
+
 import com.elewise.ldmobile.MainApp;
 import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.api.*;
@@ -37,17 +40,28 @@ public class Session {
     }
 
 
-    public boolean getAuthToken(String userName, String password) {
+    public String getAuthToken(String userName, String password) {
+        String errorMessage = context.getString(R.string.error_load_data);
         try {
             ParamAuthorizationResponse response = restHelper.getAuthorizationTokenSync(userName, password);
-            token = response.getAccess_token();
-            if (!"".equals(token)) {
-                return true;
+            if (response.getStatus().equals(AuthStatusType.E.name())) {
+                // выполнено с ошибками
+                if (!TextUtils.isEmpty(response.getMessage()))
+                    errorMessage = response.getMessage();
+            } else if (response.getStatus().equals(AuthStatusType.A.name())) {
+                // успешно
+                token = response.getAccess_token();
+                if (!"".equals(token)) {
+                    errorMessage = "";
+                }
+            } else if (response.getStatus().equals(AuthStatusType.S.name())) {
+                // ошибка аутентификации
+                errorMessage = context.getString(R.string.authentication_error);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return errorMessage;
     }
 
     private List<DocumentForList> groupDocByDate(List<Document> documentList) {

@@ -9,31 +9,31 @@ import retrofit2.http.POST;
 public interface RestApi {
 
     // Авторизация
-    @POST("ldmobile/Authorization")
+    @POST("Authorization")
     Call<ParamAuthorizationResponse> getAuthorizationToken(@Body ParamAuthorizationRequest request);
 
     // Загрузить список фильтров
-    @POST("ldmobile/GetFilterSettings")
+    @POST("GetFilterSettings")
     Call<ParamFilterSettingsResponse> getFilterSettings(@Body ParamFilterSettingsRequest request);
 
     // Загрузить список документов
-    @POST("ldmobile/GetDocuments")
+    @POST("GetDocuments")
     Call<ParamDocumentsResponse> getDocuments(@Body ParamDocumentsRequest request);
 
     // Загрузить детализацию по документу
-    @POST("ldmobile/GetDocumentDetails")
+    @POST("GetDocumentDetails")
     Call<ParamDocumentDetailsResponse> getDocumentDetails(@Body ParamDocumentDetailsRequest request);
 
     // Загрузить файл
-    @POST("ldmobile/GetFile")
+    @POST("GetFile")
     Call<byte[]> getFile(@Body ParamGetFileRequest request);
 
     // Сохранеие файла подписи
-    @POST("ldmobile/SaveFileSign")
+    @POST("SaveFileSign")
     Call<ParamSaveFileSignResponse> saveFileSign(@Body ParamSaveFileSignRequest request);
 
     // Сохранеие файла подписи
-    @POST("ldmobile/ExecDocument")
+    @POST("ExecDocument")
     Call<ParamExecDocumentResponse> execDocument(@Body ParamExecDocumentRequest request);
 
 }

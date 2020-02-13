@@ -65,6 +65,7 @@
     <string name="alert_dialog_error_subscribe_packet">Невозможно выполнить действие по пакету. В пакете документов отсутствуют документы готовые к отправке</string>
     
     <string name="error_load_data">Ошибка загрузки данных</string>
+    <string name="authentication_error">Ошибка аутентификации</string>
 
     <string name="activity_login_hint_login">Логин</string>
     <string name="activity_login_hint_password">Пароль</string>

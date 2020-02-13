@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -44,25 +45,25 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean result = false;
+                String errorMessage = "";
                 try {
-                    result = Session.getInstance().getAuthToken(userName, password);
+                    errorMessage = Session.getInstance().getAuthToken(userName, password);
                     //TimeUnit.SECONDS.sleep(1);
                     //result = true;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                handleLoginResponse(result);
+                handleLoginResponse(errorMessage);
             }
         }).start();
     }
 
-    private void handleLoginResponse(final boolean result) {
+    private void handleLoginResponse(final String errorMessage) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 progressDialog.hide();
-                if (result) {
+                if (TextUtils.isEmpty(errorMessage)) {
                     Intent intent = new Intent();
                     intent.setClass(LoginActivity.this, DocsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                     LoginActivity.this.finish();
                 } else {
                     // показать ошибку
-                    dialog = MessageUtils.createDialog(LoginActivity.this, R.string.alert_dialog_error, R.string.alert_dialog_error_login);
+                    dialog = MessageUtils.createDialog(LoginActivity.this, getString(R.string.alert_dialog_error), errorMessage);
                     dialog.show();
                 }
             }

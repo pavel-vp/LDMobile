@@ -10,3 +10,5 @@ data class ParamAuthorizationResponse (
         val role: String?,
         val certificate_status: String?
 )
+
+enum class AuthStatusType {S, E, A}
