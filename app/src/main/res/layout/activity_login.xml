@@ -16,30 +16,32 @@
             android:layout_gravity="bottom"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="60dp"
-                android:drawableStart="@drawable/ic_user"
-                android:drawablePadding="8dip"
-                android:paddingStart="8dp"
-                android:inputType="text"
-                android:hint="@string/activity_login_hint_login" />
+        <EditText
+            android:id="@+id/etLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="8dip"
+            android:hint="@string/activity_login_hint_login"
+            android:inputType="text"
+            android:paddingStart="8dp"
+            android:text="TESTOV" />
 
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="60dp"
-                android:drawableStart="@drawable/ic_lock"
-                android:drawablePadding="8dip"
-                android:paddingStart="8dp"
-                android:hint="@string/activity_login_hint_password"
-                android:inputType="textPassword" />
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="60dp"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="8dip"
+            android:hint="@string/activity_login_hint_password"
+            android:inputType="textPassword"
+            android:paddingStart="8dp"
+            android:text="qaw3e4r5" />
 
             <Button
                 android:id="@+id/btnLogin"

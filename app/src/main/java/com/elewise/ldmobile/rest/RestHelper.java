@@ -1,8 +1,12 @@
 package com.elewise.ldmobile.rest;
 
+import android.util.Log;
+
+import com.elewise.ldmobile.BuildConfig;
 import com.elewise.ldmobile.api.*;
 import com.elewise.ldmobile.model.ProcessType;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -22,12 +26,36 @@ public class RestHelper {
         return restHelper;
     }
 
+    private OkHttpClient createOkHttpClient() {
+        if (BuildConfig.DEBUG) {
+            return new OkHttpClient().newBuilder()
+                    .connectTimeout(20, TimeUnit.SECONDS)
+                    .writeTimeout(20, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+//                    .addInterceptor(authInterceptor())
+                    .addInterceptor(createHttpLoggingInterceptor())
+                    .build();
+        } else {
+            return new OkHttpClient().newBuilder()
+                    .connectTimeout(20, TimeUnit.SECONDS)
+                    .writeTimeout(20, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .addInterceptor(createHttpLoggingInterceptor())
+//                    .addInterceptor(authInterceptor())
+                    .build();
+        }
+    }
+
+    private HttpLoggingInterceptor createHttpLoggingInterceptor() {
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(message -> {
+            Log.e("httpLog", message);
+        });
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return httpLoggingInterceptor;
+    }
+
     public RestHelper(String baseUrl) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .build();
+        OkHttpClient client = createOkHttpClient();
 
 
         Retrofit retrofit = new Retrofit.Builder()
