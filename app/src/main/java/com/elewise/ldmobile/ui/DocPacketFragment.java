@@ -45,6 +45,8 @@ public class DocPacketFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_doc_packet_header, container, false);
         progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.progress_dialog_load));
 
         ParamDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
 
@@ -98,8 +100,8 @@ public class DocPacketFragment extends Fragment {
                 ImageView ivActionType = convertView.findViewById(R.id.ivActionType);
                 TextView tvName = convertView.findViewById(R.id.tvName);
 
-                ImageUtils.setDocTypeIconMini(ivDocType, item.getDoc_icon());
-                ImageUtils.setActionIcon(ivActionType, item.getAction_icon());
+                ImageUtils.INSTANCE.setIcon(getResources(), ivDocType, item.getDoc_icon());
+                ImageUtils.INSTANCE.setIcon(getResources(), ivActionType, item.getAction_icon());
                 tvName.setText(item.getDoc_name());
                 convertView.setTag(item);
 
@@ -124,7 +126,7 @@ public class DocPacketFragment extends Fragment {
             if (isFirst) {
                 ImageView ivDocType = convertView.findViewById(R.id.ivDocType);
                 ivDocType.setVisibility(View.VISIBLE);
-                ImageUtils.setDocTypeIconMini(ivDocType, Session.getInstance().getCurrentDocumentDetail().getDoc_icon());
+                ImageUtils.INSTANCE.setIcon(getResources(), ivDocType, Session.getInstance().getCurrentDocumentDetail().getDoc_icon());
                 isFirst = false;
             }
             tvDesc.setText(item.getDesc());
@@ -155,7 +157,8 @@ public class DocPacketFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog.hide();
+                progressDialog.cancel();
+
                 if (documentDetail != null) {
                     if (documentDetail.getDoc_type().equals(DocType.PD.name())) {
                         Intent intent = new Intent();

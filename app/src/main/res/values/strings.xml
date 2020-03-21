@@ -64,8 +64,9 @@
     <string name="alert_dialog_error_login">Не удалось войти в систему</string>
     <string name="alert_dialog_error_subscribe_packet">Невозможно выполнить действие по пакету. В пакете документов отсутствуют документы готовые к отправке</string>
     
+    <string name="error_unknown">Произошла непредвиденная ошибка</string>
     <string name="error_load_data">Ошибка загрузки данных</string>
-    <string name="authentication_error">Ошибка аутентификации</string>
+    <string name="error_authentication">Ошибка аутентификации</string>
 
     <string name="activity_login_hint_login">Логин</string>
     <string name="activity_login_hint_password">Пароль</string>
@@ -75,6 +76,8 @@
     <string name="activity_settings_hint">Укажите адрес подключения</string>
     <string name="activity_settings_btn_save">Сохранить</string>
     <string name="activity_settings_error_empty">Необходимо указать адрес подключения</string>
+
+    <string name="progress_dialog_load">Пожалуйста подождите..</string>
 
     <string name="activity_about_title">О программе</string>
 

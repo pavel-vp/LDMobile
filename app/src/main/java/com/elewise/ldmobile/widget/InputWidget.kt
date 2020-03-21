@@ -14,15 +14,15 @@ class InputWidget(context: Context, val descrView: FilterElement): BaseWidget(co
         inflater.inflate(R.layout.input_widget, this)
         tvName.text = descrView.desc
         descrView.last_value?.let {
-            setData(it)
+            setValue1(it)
         }
     }
 
-    override fun setData(data: String) {
+    override fun setValue1(data: String) {
         edInput.setText(data)
     }
 
-    override fun getData(): String {
+    override fun getValue1(): String {
         return edInput.text.toString()
     }
 
@@ -36,4 +36,8 @@ class InputWidget(context: Context, val descrView: FilterElement): BaseWidget(co
         }
         return ""
     }
+
+    override fun setValue2(data: String) = Unit
+
+    override fun getValue2(): String = ""
 }

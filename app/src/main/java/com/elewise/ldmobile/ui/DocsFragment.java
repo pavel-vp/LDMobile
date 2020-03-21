@@ -34,7 +34,6 @@ public class DocsFragment extends Fragment {
     private ProgressDialog progressDialog;
     AlertDialog dialog;
 
-
     public static DocsFragment newInstance(ProcessType processType) {
         Bundle args = new Bundle();
         args.putString(ARG_PAGE, processType.name());
@@ -50,6 +49,8 @@ public class DocsFragment extends Fragment {
             processType = ProcessType.valueOf(getArguments().getString(ARG_PAGE));
         }
         progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.progress_dialog_load));
     }
 
     @Override
@@ -74,19 +75,29 @@ public class DocsFragment extends Fragment {
     }
 
     private void getDocuments() {
-        FilterData[] filterData = Session.getInstance().getFilterData();
-        // todo defaultValue?? В апи есть такие параметры как size, from, orderBy, direction. Как и откуда их брать
-        List<DocumentForList> docsList = Session.getInstance().getDocuments(10, 0,
-                processType, "doc_date",
-                "asc", filterData);
-        if (docsList != null && !docsList.isEmpty()) {
-            ((DocsAdapter) lvDocs.getAdapter()).setList(docsList);
-            lvDocs.setVisibility(View.VISIBLE);
-            tvNoResults.setVisibility(View.GONE);
-        } else {
-            lvDocs.setVisibility(View.GONE);
-            tvNoResults.setVisibility(View.VISIBLE);
-        }
+        progressDialog.show();
+        new Thread(() -> {
+            FilterData[] filterData = Session.getInstance().getFilterData();
+            List<DocumentForList> docsList = Session.getInstance().getDocuments(10, 0,
+                    processType, filterData);
+
+            handleDocumentsResponse(docsList);
+        }).start();
+    }
+
+    private void handleDocumentsResponse(List<DocumentForList> docsList) {
+        getActivity().runOnUiThread(() -> {
+            progressDialog.cancel();
+
+            if (docsList != null && !docsList.isEmpty()) {
+                ((DocsAdapter) lvDocs.getAdapter()).setList(docsList);
+                lvDocs.setVisibility(View.VISIBLE);
+                tvNoResults.setVisibility(View.GONE);
+            } else {
+                lvDocs.setVisibility(View.GONE);
+                tvNoResults.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void showDocDetail(final Document document) {
@@ -105,7 +116,8 @@ public class DocsFragment extends Fragment {
 
     private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse documentDetail) {
         getActivity().runOnUiThread(() -> {
-            progressDialog.hide();
+            progressDialog.cancel();
+
             if (documentDetail != null) {
                 if (documentDetail.getDoc_type().equals(DocType.PD.name())) {
                     Intent intent = new Intent();
@@ -129,10 +141,10 @@ public class DocsFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         if (progressDialog!= null) progressDialog.dismiss();
         if (dialog != null) dialog.dismiss();
+
+        super.onDestroy();
     }
 
     /**
@@ -193,12 +205,13 @@ public class DocsFragment extends Fragment {
                     imgAttache.setVisibility(View.INVISIBLE);
                 }
 
-                ImageUtils.setDocTypeIcon(imgDocType, document.getDoc_icon());
+                ImageUtils.INSTANCE.setIcon(getResources(), imgDocType, document.getDoc_icon());
+
                 if (document.getDoc_type().equals(DocType.PD.name())) {
                     imgAction.setVisibility(View.GONE);
                 } else {
                     imgAction.setVisibility(View.VISIBLE);
-                    ImageUtils.setActionIcon(imgAction, document.getAction_icon());
+                    ImageUtils.INSTANCE.setIcon(getResources(), imgAction, document.getAction_icon());
                 }
 
                 convertView.setOnClickListener(view -> showDocDetail(document));

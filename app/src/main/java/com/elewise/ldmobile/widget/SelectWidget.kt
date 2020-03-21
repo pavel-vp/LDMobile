@@ -1,8 +1,6 @@
 package com.elewise.ldmobile.widget
 
 import android.content.Context
-import android.graphics.Typeface
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,11 +43,11 @@ class SelectWidget(context: Context, val descrView: FilterElement): BaseWidget(c
         }
 
         descrView.last_value?.let {
-            setData(it)
+            setValue1(it)
         }
     }
 
-    override fun setData(data: String) {
+    override fun setValue1(data: String) {
         var position = 0
         descrView.list?.forEach { item ->
             if (item.code == data) {
@@ -60,7 +58,7 @@ class SelectWidget(context: Context, val descrView: FilterElement): BaseWidget(c
         spinner.setSelection(position)
     }
 
-    override fun getData(): String {
+    override fun getValue1(): String {
         val selectedItem = spinner.adapter.getItem(spinner.selectedItemPosition) as Map<String, String>
         val id = selectedItem.get("id").toString()
         return id
@@ -93,4 +91,8 @@ class SelectWidget(context: Context, val descrView: FilterElement): BaseWidget(c
             return v
         }
     }
+
+    override fun setValue2(data: String) = Unit
+
+    override fun getValue2(): String = ""
 }

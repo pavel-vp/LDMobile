@@ -28,7 +28,6 @@ public class DocFragment extends Fragment {
 
     private Button btnSuccess;
     private Button btnReject;
-    private AlertDialog dialog;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -76,7 +75,7 @@ public class DocFragment extends Fragment {
             if (isFirst) {
                 ImageView ivDocType = convertView.findViewById(R.id.ivDocType);
                 ivDocType.setVisibility(View.VISIBLE);
-                ImageUtils.setDocTypeIconMini(ivDocType, Session.getInstance().getCurrentDocumentDetail().getDoc_icon());
+                ImageUtils.INSTANCE.setIcon(getResources(), ivDocType, Session.getInstance().getCurrentDocumentDetail().getDoc_icon());
                 isFirst = false;
             }
             tvDesc.setText(item.getDesc());
@@ -120,15 +119,6 @@ public class DocFragment extends Fragment {
                     Toast.makeText(getContext(), "Отклонено по причине "+reason, Toast.LENGTH_LONG).show();
                 }
             }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (dialog != null) {
-            dialog.dismiss();
         }
     }
  }

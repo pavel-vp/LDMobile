@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +73,7 @@ public class RestHelper {
     }
 
 
-    public ParamDocumentsResponse getDocumentsSync(String token, int size, int from, ProcessType processType, String orderBy, String direction, FilterData[] filterData) throws IOException {
+    public ParamDocumentsResponse getDocumentsSync(String token, int size, int from, ProcessType processType, FilterData[] filterData) throws IOException {
         Call<ParamDocumentsResponse> callRes = service.getDocuments(new ParamDocumentsRequest(token, size, from, processType.getType(), filterData));
         return callRes.execute().body();
     }
@@ -84,6 +85,21 @@ public class RestHelper {
 
     public ParamFilterSettingsResponse getFilterSettings(String token) throws IOException {
         Call<ParamFilterSettingsResponse> callRes = service.getFilterSettings(new ParamFilterSettingsRequest(token));
+        return callRes.execute().body();
+    }
+
+    public byte[] getFile(ParamGetFileRequest request) throws IOException {
+        Call<byte[]> callRes = service.getFile(request);
+        return callRes.execute().body();
+    }
+
+    public ParamSaveFileSignResponse saveFileSign(ParamSaveFileSignRequest request) throws IOException {
+        Call<ParamSaveFileSignResponse> callRes = service.saveFileSign(request);
+        return callRes.execute().body();
+    }
+
+    public ParamExecDocumentResponse execDocument(ParamExecDocumentRequest request) throws IOException {
+        Call<ParamExecDocumentResponse> callRes = service.execDocument(request);
         return callRes.execute().body();
     }
 }

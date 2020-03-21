@@ -1,7 +1,7 @@
 package com.elewise.ldmobile.model;
 
 public enum ProcessType {
-    INBOX("IMP"), OUTBOX("OUT");
+    INBOX("IMP"), OUTBOX("EXP");
 
     public String getType() {
         return type;

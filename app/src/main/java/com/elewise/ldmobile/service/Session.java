@@ -40,28 +40,13 @@ public class Session {
     }
 
 
-    public String getAuthToken(String userName, String password) {
-        String errorMessage = context.getString(R.string.error_load_data);
+    public ParamAuthorizationResponse getAuthToken(String userName, String password) {
         try {
-            ParamAuthorizationResponse response = restHelper.getAuthorizationTokenSync(userName, password);
-            if (response.getStatus().equals(AuthStatusType.E.name())) {
-                // выполнено с ошибками
-                if (!TextUtils.isEmpty(response.getMessage()))
-                    errorMessage = response.getMessage();
-            } else if (response.getStatus().equals(AuthStatusType.A.name())) {
-                // успешно
-                token = response.getAccess_token();
-                if (!"".equals(token)) {
-                    errorMessage = "";
-                }
-            } else if (response.getStatus().equals(AuthStatusType.S.name())) {
-                // ошибка аутентификации
-                errorMessage = context.getString(R.string.authentication_error);
-            }
+            return restHelper.getAuthorizationTokenSync(userName, password);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return errorMessage;
+        return null;
     }
 
     private List<DocumentForList> groupDocByDate(List<Document> documentList) {
@@ -80,9 +65,9 @@ public class Session {
     }
 
 
-    public List<DocumentForList> getDocuments(int size, int from, ProcessType processType, String orderBy, String direction, FilterData[] filterData) {
+    public List<DocumentForList> getDocuments(int size, int from, ProcessType processType, FilterData[] filterData) {
         try {
-            ParamDocumentsResponse response = restHelper.getDocumentsSync(token, size, from, processType, orderBy, direction, filterData);
+            ParamDocumentsResponse response = restHelper.getDocumentsSync(token, size, from, processType, filterData);
             return groupDocByDate(Arrays.asList(response.getContents()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -109,6 +94,37 @@ public class Session {
         return null;
     }
 
+    public byte[] getFile(int fileId) {
+        try {
+            ParamGetFileRequest request = new ParamGetFileRequest(token, fileId);
+            return restHelper.getFile(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ParamSaveFileSignResponse saveFileSign(FileSign[] signs) {
+        try {
+            ParamSaveFileSignRequest request = new ParamSaveFileSignRequest(token, signs);
+            return restHelper.saveFileSign(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ParamExecDocumentResponse execDocument(String docId, String docType, String action, String comment) {
+        try {
+            ParamExecDocumentRequest request = new ParamExecDocumentRequest(token, docId, docType, action, comment);
+            return restHelper.execDocument(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public void setCurrentDocumentDetail(ParamDocumentDetailsResponse currentDocumentDetail) {
         this.currentDocumentDetail = currentDocumentDetail;
     }
@@ -131,5 +147,9 @@ public class Session {
 
     public void setFilterData(FilterData[] filterData) {
         this.filterData = filterData;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

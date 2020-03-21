@@ -13,15 +13,15 @@ class CheckboxWidget(context: Context, val descrView: FilterElement): BaseWidget
         inflater.inflate(R.layout.checkbox_widget, this)
         checkbox.text = descrView.desc
         descrView.last_value?.let {
-            setData(it)
+            setValue1(it)
         }
     }
 
-    override fun setData(data: String) {
+    override fun setValue1(data: String) {
         checkbox.isChecked = data.toBoolean()
     }
 
-    override fun getData(): String {
+    override fun getValue1(): String {
         return checkbox.isChecked.toString()
     }
 
@@ -35,4 +35,8 @@ class CheckboxWidget(context: Context, val descrView: FilterElement): BaseWidget
         }
         return ""
     }
+
+    override fun setValue2(data: String) = Unit
+
+    override fun getValue2(): String = ""
 }

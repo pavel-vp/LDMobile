@@ -9,6 +9,9 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.elewise.ldmobile.api.AuthStatusType;
+import com.elewise.ldmobile.api.ParamAuthorizationRequest;
+import com.elewise.ldmobile.api.ParamAuthorizationResponse;
 import com.elewise.ldmobile.service.Session;
 import com.elewise.ldmobile.ui.DocsActivity;
 import com.elewise.ldmobile.utils.MessageUtils;
@@ -42,27 +45,31 @@ public class LoginActivity extends AppCompatActivity {
 
     private void runLogin(final String userName, final String password) {
         progressDialog.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String errorMessage = "";
-                try {
-                    errorMessage = Session.getInstance().getAuthToken(userName, password);
-                    //TimeUnit.SECONDS.sleep(1);
-                    //result = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                handleLoginResponse(errorMessage);
-            }
+        new Thread(() -> {
+            ParamAuthorizationResponse response = Session.getInstance().getAuthToken(userName, password);
+            handleLoginResponse(response);
         }).start();
     }
 
-    private void handleLoginResponse(final String errorMessage) {
+    private void handleLoginResponse(final ParamAuthorizationResponse response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog.hide();
+                progressDialog.cancel();
+
+                String errorMessage = getString(R.string.error_load_data);
+                if (response != null) {
+                    if (response.getStatus().equals(AuthStatusType.S.name())) {
+                        // успешно
+                        Session.getInstance().setToken(response.getAccess_token());
+                        errorMessage = "";
+                    } else {
+                        // выполнено с ошибками
+                        if (!TextUtils.isEmpty(response.getMessage()))
+                            errorMessage = response.getMessage();
+                    }
+                }
+
                 if (TextUtils.isEmpty(errorMessage)) {
                     Intent intent = new Intent();
                     intent.setClass(LoginActivity.this, DocsActivity.class);

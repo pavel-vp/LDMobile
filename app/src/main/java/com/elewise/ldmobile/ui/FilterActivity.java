@@ -1,6 +1,9 @@
 package com.elewise.ldmobile.ui;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -14,126 +17,144 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.*;
 import com.elewise.ldmobile.api.*;
-import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.service.Session;
+import com.elewise.ldmobile.utils.MessageUtils;
 import com.elewise.ldmobile.widget.BaseWidget;
 import com.elewise.ldmobile.widget.CheckboxWidget;
 import com.elewise.ldmobile.widget.DateWidget;
 import com.elewise.ldmobile.widget.InputWidget;
 import com.elewise.ldmobile.widget.SelectWidget;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.kotlin.KotlinModule;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import kotlin.reflect.jvm.internal.impl.util.Check;
-
 public class FilterActivity extends AppCompatActivity {
-
-    private TextView tvDateFromName;
-    private TextView tvDateToName;
     private Button btnApply;
     private Button btnClear;
     private LinearLayout llDynamicPart;
-    private RelativeLayout rlDateFrom;
-    private RelativeLayout rlDateTo;
-    private TextView tvDateFrom;
-    private TextView tvDateTo;
     private List<BaseWidget> dynamicViewList = new ArrayList();
 
-    private Calendar cldr = Calendar.getInstance();
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    private ProgressDialog progressDialog;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        tvDateFromName = findViewById(R.id.tvDateFromName);
-        tvDateToName = findViewById(R.id.tvDateToName);
-        rlDateFrom = findViewById(R.id.rlDateFrom);
-        rlDateTo = findViewById(R.id.rlDateTo);
-        tvDateFrom = findViewById(R.id.tvDateFrom);
-        tvDateTo = findViewById(R.id.tvDateTo);
         llDynamicPart = findViewById(R.id.llDynamicPart);
         btnApply = findViewById(R.id.btnApply);
         btnClear = findViewById(R.id.btnClear);
 
-        rlDateFrom.setOnClickListener(dateClickListener);
-        rlDateTo.setOnClickListener(dateClickListener);
         btnClear.setOnClickListener(view -> {
-            Session.getInstance().setFilterData(getFilterData(false));
+            Session.getInstance().setFilterData(new FilterData[0]);
             finish();
         });
 
         btnApply.setOnClickListener(view -> {
             // todo validate обсудить как, и нужно ли (required param)
-            Session.getInstance().setFilterData(getFilterData(true));
+            Session.getInstance().setFilterData(getFilterData());
             finish();
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initDisplay();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.progress_dialog_load));
     }
 
-    private void initDisplay() {
-        ParamFilterSettingsResponse listElement = Session.getInstance().getFilterSettings();
-        if (listElement == null) {
-            Toast.makeText(this, R.string.error_load_data, Toast.LENGTH_LONG).show();
-            return;
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+    }
 
-        for (FilterElement item:  listElement.getFilters()) {
-            if (item.getType().equals("date")) {
-                if (item.getLast_value() != null) {
-                    tvDateFromName.setText(item.getDesc());
-                    tvDateFrom.setText(item.getLast_value());
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+    }
+
+    private void loadData() {
+        progressDialog.show();
+        new Thread(() -> {
+                    ParamFilterSettingsResponse
+            response = Session.getInstance().getFilterSettings();
+            handleFilterSettingsResponse(response);
+        }).start();
+    }
+
+    private void handleFilterSettingsResponse(final ParamFilterSettingsResponse response) {
+        runOnUiThread(() -> {
+            progressDialog.cancel();
+
+            String errorMessage = getString(R.string.error_load_data);
+
+            if (response != null) {
+                if (response.getStatus().equals(FilterStatusType.S.name())) {
+                    errorMessage = "";
+
+                    for (FilterElement item : response.getFilters()) {
+                        if (item.getType().equals("date")) {
+                            DateWidget view = new DateWidget(this, item);
+                            dynamicViewList.add(view);
+                            llDynamicPart.addView(view);
+                        } else if (item.getType().equals("string")) {
+                            InputWidget view = new InputWidget(this, item);
+                            dynamicViewList.add(view);
+                            llDynamicPart.addView(view);
+                        } else if (item.getType().equals("list")) {
+                            SelectWidget view = new SelectWidget(this, item);
+                            dynamicViewList.add(view);
+                            llDynamicPart.addView(view);
+                        } else if (item.getType().equals("checkbox")) {
+                            CheckboxWidget view = new CheckboxWidget(this, item);
+                            dynamicViewList.add(view);
+                            llDynamicPart.addView(view);
+                        } else {
+                            Log.e("loadData", "uncnown filter type");
+                        }
+                    }
+                } else if (response.getStatus().equals(FilterStatusType.E.name())) {
+                    if (!TextUtils.isEmpty(response.getMessage())) {
+                        errorMessage = response.getMessage();
+                    }
+                } else if (response.getStatus().equals(FilterStatusType.A.name())) {
+                    errorMessage = getString(R.string.error_authentication);
+                } else {
+                    errorMessage = getString(R.string.error_unknown);
+                    Log.e("getFilterSettings", "Unknown Status Type");
                 }
-                if (item.getLast_value2() != null) {
-                    tvDateToName.setText(item.getDesc());
-                    tvDateTo.setText(item.getLast_value());
-                }
-            } else if (item.getType().equals("string")) {
-                InputWidget view = new InputWidget(this, item);
-                dynamicViewList.add(view);
-                llDynamicPart.addView(view);
-            } else if (item.getType().equals("list")) {
-                SelectWidget view = new SelectWidget(this, item);
-                dynamicViewList.add(view);
-                llDynamicPart.addView(view);
-            } else if (item.getType().equals("checkbox")) {
-                CheckboxWidget view = new CheckboxWidget(this, item);
-                dynamicViewList.add(view);
-                llDynamicPart.addView(view);
-            } else {
-                Log.e("initDisplay", "uncnown filter type");
             }
-        }
+
+            if (!TextUtils.isEmpty(errorMessage)) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                builder.setTitle(R.string.alert_dialog_error)
+//                        .setMessage(errorMessage)
+//                        .setCancelable(false)
+//                        .setNegativeButton(R.string.alert_dialog_ok,
+//                                (dialog, id) -> {
+////                            FilterActivity.this.finish();
+//                            dialog.cancel();
+//                        });
+//                dialog = builder.create();
+//                dialog.show();
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    private View.OnClickListener dateClickListener = view -> {
-        TextView date = view.findViewById(R.id.tvDateFrom);
-        TextView tvDate = (date == null)?view.findViewById(R.id.tvDateTo):date;
+    @Override
+    protected void onDestroy() {
+        if (progressDialog != null) progressDialog.dismiss();
+        if (dialog != null) dialog.dismiss();
 
-        try {
-            cldr.setTime(sdf.parse(tvDate.getText().toString()));
-        } catch (Exception e) {
-            Log.e("error parse date", e.toString());
-        }
-        // date picker dialog
-        new DatePickerDialog(FilterActivity.this,
-                (v, year1, monthOfYear, dayOfMonth) ->
-                        tvDate.setText(((dayOfMonth<10)?"0"+dayOfMonth:dayOfMonth) + "." + (monthOfYear + 1) + "." + year1)
-                , cldr.get(Calendar.YEAR), cldr.get(Calendar.MONTH), cldr.get(Calendar.DAY_OF_MONTH))
-                .show();
-    };
+        super.onDestroy();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -145,17 +166,11 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
-    public FilterData[] getFilterData(Boolean withDynamicPart) {
+    public FilterData[] getFilterData() {
         ArrayList<FilterData> arrayList = new ArrayList();
-        // FIXME: переделать на новые форматы передачи дат
-        //arrayList.add(new FilterData("begin_date", tvDateFrom.getText().toString()));
-        //arrayList.add(new FilterData("end_date", tvDateTo.getText().toString()));
-
-        if (withDynamicPart) {
-            for (BaseWidget item : dynamicViewList) {
-                if (!TextUtils.isEmpty(item.getData())) {
-                    arrayList.add(new FilterData(item.getName(), item.getData(), null));
-                }
+        for (BaseWidget item : dynamicViewList) {
+            if (!TextUtils.isEmpty(item.getValue1())) {
+                arrayList.add(new FilterData(item.getName(), item.getValue1(), item.getValue2()));
             }
         }
 

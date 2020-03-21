@@ -33,6 +33,7 @@
         <activity android:name=".ui.FilterActivity"
             android:label="@string/filter_activity_title"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".ui.DocSuccessActivity"

@@ -26,7 +26,6 @@ import org.w3c.dom.Text;
 
 public class DocsActivity extends AppCompatActivity {
 
-    public static final int REQUEST_FILTER_CODE = 101;
     DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -108,7 +107,7 @@ public class DocsActivity extends AppCompatActivity {
         } else {
             if(item.getItemId() == R.id.action_filter) {
                 Intent intent = new Intent(this, FilterActivity.class);
-                startActivityForResult(intent, REQUEST_FILTER_CODE);
+                startActivity(intent);
                 return true;
             } else {
                 return super.onOptionsItemSelected(item);
@@ -119,7 +118,7 @@ public class DocsActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem settingsItem = menu.findItem(R.id.action_filter);
-        if (Session.getInstance().getFilterData().length > 2) {
+        if (Session.getInstance().getFilterData().length > 0) {
             settingsItem.setIcon(getDrawable(R.drawable.ic_filter_active));
         } else {
             settingsItem.setIcon(getDrawable(R.drawable.ic_filter));

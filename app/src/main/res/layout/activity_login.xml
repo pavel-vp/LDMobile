@@ -26,8 +26,7 @@
             android:drawablePadding="8dip"
             android:hint="@string/activity_login_hint_login"
             android:inputType="text"
-            android:paddingStart="8dp"
-            android:text="TESTOV" />
+            android:paddingStart="8dp"/>
 
         <EditText
             android:id="@+id/etPassword"
@@ -40,8 +39,7 @@
             android:drawablePadding="8dip"
             android:hint="@string/activity_login_hint_password"
             android:inputType="textPassword"
-            android:paddingStart="8dp"
-            android:text="qaw3e4r5" />
+            android:paddingStart="8dp"/>
 
             <Button
                 android:id="@+id/btnLogin"
