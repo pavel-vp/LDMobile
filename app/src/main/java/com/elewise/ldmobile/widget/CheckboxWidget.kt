@@ -31,7 +31,7 @@ class CheckboxWidget(context: Context, val descrView: FilterElement): BaseWidget
 
     override fun validate(): String {
         if (descrView.required && !checkbox.isChecked) {
-            return descrView.desc + ", "
+            return descrView.desc
         }
         return ""
     }

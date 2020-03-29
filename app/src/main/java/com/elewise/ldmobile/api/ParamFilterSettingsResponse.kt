@@ -9,8 +9,6 @@ data class ParamFilterSettingsResponse(
         val filters: List<FilterElement>
 )
 
-enum class FilterStatusType {S, A, E}
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FilterElement(val name: String,
                          val desc: String,

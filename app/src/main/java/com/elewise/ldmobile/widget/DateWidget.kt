@@ -2,12 +2,14 @@ package com.elewise.ldmobile.widget
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.elewise.ldmobile.R
 import com.elewise.ldmobile.api.FilterElement
+import kotlinx.android.synthetic.main.checkbox_widget.view.*
 import kotlinx.android.synthetic.main.date_widget.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -72,6 +74,12 @@ class DateWidget(context: Context, val descrView: FilterElement): BaseWidget(con
     }
 
     override fun validate(): String {
+        if (descrView.required && TextUtils.isEmpty(tvDateFrom.text.toString())) {
+            return descrView.desc
+        }
+        if (descrView.required && TextUtils.isEmpty(tvDateTo.text.toString())) {
+            return descrView.desc2
+        }
         return ""
     }
 }

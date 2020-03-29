@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +16,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.model.*;
 import com.elewise.ldmobile.api.*;
-import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.service.Session;
 import com.elewise.ldmobile.utils.ImageUtils;
 import com.elewise.ldmobile.utils.MessageUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DocsFragment extends Fragment {
@@ -103,37 +107,50 @@ public class DocsFragment extends Fragment {
     private void showDocDetail(final Document document) {
         progressDialog.show();
         new Thread(() -> {
-            ParamDocumentDetailsResponse result = null;
             try {
-                result = Session.getInstance().getDocumentDetail(document.getDoc_id(), document.getDoc_type());
-                Session.getInstance().setCurrentDocumentDetail(result);
+                ParamDocumentDetailsResponse result = Session.getInstance().getDocumentDetail(document.getDoc_id(), document.getDoc_type());
+                if (result == null) {
+                    showError(getString(R.string.error_unknown));
+                } else {
+                    if (result.getStatus().equals(ResponseStatusType.E.name())) {
+                        String message = result.getMessage();
+                        if (TextUtils.isEmpty(message)) showError(getString(R.string.error_unknown));
+                        else showError(message);
+                    } else if (result.getStatus().equals(ResponseStatusType.A.name())) {
+                        showError(getString(R.string.error_authentication));
+                    } else {
+                        Session.getInstance().setCurrentDocumentDetail(result);
+                        handleDocumentDetailsResponse(result);
+                    }
+                }
             } catch (Exception e) {
+                showError(getString(R.string.error_unknown));
                 e.printStackTrace();
             }
-            handleDocumentDetailsResponse(result);
         }).start();
+    }
+
+    private void showError(String message) {
+        getActivity().runOnUiThread(() -> {
+            progressDialog.cancel();
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        });
     }
 
     private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse documentDetail) {
         getActivity().runOnUiThread(() -> {
             progressDialog.cancel();
 
-            if (documentDetail != null) {
-                if (documentDetail.getDoc_type().equals(DocType.PD.name())) {
-                    Intent intent = new Intent();
-                    intent.setClass(DocsFragment.this.getActivity(), DocPacketActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    DocsFragment.this.getActivity().startActivity(intent);
-                } else {
-                    Intent intent = new Intent();
-                    intent.setClass(DocsFragment.this.getActivity(), DocActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    DocsFragment.this.getActivity().startActivity(intent);
-                }
+            if (documentDetail.getDoc_type().equals(DocType.PD.name())) {
+                Intent intent = new Intent();
+                intent.setClass(DocsFragment.this.getActivity(), DocPacketActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                DocsFragment.this.getActivity().startActivity(intent);
             } else {
-                // показать ошибку
-                dialog = MessageUtils.createDialog(DocsFragment.this.getActivity(), R.string.alert_dialog_error, R.string.error_load_data);
-                dialog.show();
+                Intent intent = new Intent();
+                intent.setClass(DocsFragment.this.getActivity(), DocActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                DocsFragment.this.getActivity().startActivity(intent);
             }
         });
     }
@@ -153,6 +170,7 @@ public class DocsFragment extends Fragment {
     public class DocsAdapter extends BaseAdapter {
         private Context context;
         private List<DocumentForList> list;
+        private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
         public DocsAdapter(Context context, List<DocumentForList> item) {
             this.context = context;
@@ -187,6 +205,13 @@ public class DocsFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.list_group_date, parent, false);
                 TextView tvSectionTitle = convertView.findViewById(R.id.tvSectionTitle);
                 tvSectionTitle.setText(String.format(getString(R.string.docs_activity_date_group), list.get(position).getSectionTitle()));
+                if (sdf.format(new Date()).equals(list.get(position).getSectionTitle())) {
+                    tvSectionTitle.setTypeface(null, Typeface.BOLD);
+                    tvSectionTitle.setTextColor(getResources().getColor(R.color.colorPrimary));
+                } else {
+                    tvSectionTitle.setTypeface(null, Typeface.NORMAL);
+                    tvSectionTitle.setTextColor(getResources().getColor(R.color.colorAccent));
+                }
             } else {
                 // if list
                 convertView = inflater.inflate(R.layout.list_doc_item, parent, false);

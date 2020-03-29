@@ -32,7 +32,7 @@ class InputWidget(context: Context, val descrView: FilterElement): BaseWidget(co
 
     override fun validate(): String {
         if (descrView.required && TextUtils.isEmpty(edInput.text.toString())) {
-            return descrView.desc + ", "
+            return descrView.desc
         }
         return ""
     }

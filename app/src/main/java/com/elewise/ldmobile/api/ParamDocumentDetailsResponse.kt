@@ -12,7 +12,7 @@ data class ParamDocumentDetailsResponse (
         val doc_title: String,
         val doc_icon: String,
         val header_attributes: Array<DocHeaderAttributes>,
-        val items: Array<DocumentItem>?,
+        val lines: Array<DocumentItem>?,
         val history: Array<DocumentHistory>?,
         val attachments: Array<DocumentAttachment>?,
         val related_docs: Array<RelatedDoc>?,

@@ -1,7 +1,6 @@
 package com.elewise.ldmobile.ui;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elewise.ldmobile.R;
@@ -26,9 +22,7 @@ import com.elewise.ldmobile.widget.DateWidget;
 import com.elewise.ldmobile.widget.InputWidget;
 import com.elewise.ldmobile.widget.SelectWidget;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class FilterActivity extends AppCompatActivity {
@@ -55,9 +49,10 @@ public class FilterActivity extends AppCompatActivity {
         });
 
         btnApply.setOnClickListener(view -> {
-            // todo validate обсудить как, и нужно ли (required param)
-            Session.getInstance().setFilterData(getFilterData());
-            finish();
+            if (validateFilterData()) {
+                Session.getInstance().setFilterData(getFilterData());
+                finish();
+            }
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,7 +90,7 @@ public class FilterActivity extends AppCompatActivity {
             String errorMessage = getString(R.string.error_load_data);
 
             if (response != null) {
-                if (response.getStatus().equals(FilterStatusType.S.name())) {
+                if (response.getStatus().equals(ResponseStatusType.S.name())) {
                     errorMessage = "";
 
                     for (FilterElement item : response.getFilters()) {
@@ -119,11 +114,11 @@ public class FilterActivity extends AppCompatActivity {
                             Log.e("loadData", "uncnown filter type");
                         }
                     }
-                } else if (response.getStatus().equals(FilterStatusType.E.name())) {
+                } else if (response.getStatus().equals(ResponseStatusType.E.name())) {
                     if (!TextUtils.isEmpty(response.getMessage())) {
                         errorMessage = response.getMessage();
                     }
-                } else if (response.getStatus().equals(FilterStatusType.A.name())) {
+                } else if (response.getStatus().equals(ResponseStatusType.A.name())) {
                     errorMessage = getString(R.string.error_authentication);
                 } else {
                     errorMessage = getString(R.string.error_unknown);
@@ -132,17 +127,6 @@ public class FilterActivity extends AppCompatActivity {
             }
 
             if (!TextUtils.isEmpty(errorMessage)) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setTitle(R.string.alert_dialog_error)
-//                        .setMessage(errorMessage)
-//                        .setCancelable(false)
-//                        .setNegativeButton(R.string.alert_dialog_ok,
-//                                (dialog, id) -> {
-////                            FilterActivity.this.finish();
-//                            dialog.cancel();
-//                        });
-//                dialog = builder.create();
-//                dialog.show();
                 Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
             }
         });
@@ -166,7 +150,7 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
-    public FilterData[] getFilterData() {
+    private FilterData[] getFilterData() {
         ArrayList<FilterData> arrayList = new ArrayList();
         for (BaseWidget item : dynamicViewList) {
             if (!TextUtils.isEmpty(item.getValue1())) {
@@ -176,4 +160,16 @@ public class FilterActivity extends AppCompatActivity {
 
         return arrayList.toArray(new FilterData[arrayList.size()]);
     }
+
+    private Boolean validateFilterData() {
+        for (BaseWidget item : dynamicViewList) {
+            String value = item.validate();
+            if (!TextUtils.isEmpty(value)) {
+                MessageUtils.createDialog(this, getString(R.string.alert_dialog_error), getString(R.string.activity_filter_validate_error, value)).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

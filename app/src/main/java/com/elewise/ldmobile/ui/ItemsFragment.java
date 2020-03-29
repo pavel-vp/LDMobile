@@ -29,8 +29,8 @@ public class ItemsFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_doc_items, container, false);
         LinearLayout llDynamicPart = rootView.findViewById(R.id.llDynamicPart);
 
-        if (detail != null && detail.getItems() != null) {
-            for (DocumentItem item : detail.getItems()) {
+        if (detail != null && detail.getLines() != null) {
+            for (DocumentItem item : detail.getLines()) {
                 View convertView = inflater.inflate(R.layout.doc_line_item, container, false);
                 TextView tvName = convertView.findViewById(R.id.tvName);
                 TextView tvDesc = convertView.findViewById(R.id.tvDesc);

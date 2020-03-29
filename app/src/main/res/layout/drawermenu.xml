@@ -80,7 +80,7 @@
         <LinearLayout
             android:id="@+id/llDocuments"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="34dp"
             style="@style/SelectableItem"
             android:orientation="horizontal">
@@ -90,8 +90,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="34dp"
                 android:src="@drawable/ic_document"/>
 
             <TextView
@@ -108,7 +108,7 @@
         <LinearLayout
             android:id="@+id/llSettings"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             style="@style/SelectableItem"
             android:orientation="horizontal">
 
@@ -117,8 +117,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="34dp"
                 android:src="@drawable/ic_settings"/>
 
             <TextView
@@ -135,7 +135,7 @@
         <LinearLayout
             android:id="@+id/llAbout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             style="@style/SelectableItem"
             android:orientation="horizontal">
 
@@ -144,8 +144,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="34dp"
                 android:src="@drawable/ic_bookmark"/>
 
             <TextView
