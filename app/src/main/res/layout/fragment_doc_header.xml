@@ -30,22 +30,22 @@
         android:orientation="horizontal">
 
         <android.support.design.button.MaterialButton
-            android:id="@+id/btnSuccess"
+            android:id="@+id/btnOne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
             style="@style/AppTheme.Button.Accent"
-            android:text="@string/fragment_doc_header_succes"/>
+            tools:text="@string/fragment_doc_header_succes"/>
 
         <android.support.design.button.MaterialButton
-            android:id="@+id/btnReject"
+            android:id="@+id/btnTwo"
             style="@style/AppTheme.Button.Default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:text="@string/fragment_doc_header_reject"
+            tools:text="@string/fragment_doc_header_reject"
             />
     </LinearLayout>
 

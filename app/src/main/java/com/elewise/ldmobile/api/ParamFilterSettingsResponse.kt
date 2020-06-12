@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ParamFilterSettingsResponse(
-        val status: String,
+        var status: String,
         val message: String?,
         val filters: List<FilterElement>
 )

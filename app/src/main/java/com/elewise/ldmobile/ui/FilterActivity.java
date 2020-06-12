@@ -30,6 +30,7 @@ public class FilterActivity extends AppCompatActivity {
     private Button btnClear;
     private LinearLayout llDynamicPart;
     private List<BaseWidget> dynamicViewList = new ArrayList();
+    private Session session;
 
     private ProgressDialog progressDialog;
     AlertDialog dialog;
@@ -44,13 +45,15 @@ public class FilterActivity extends AppCompatActivity {
         btnClear = findViewById(R.id.btnClear);
 
         btnClear.setOnClickListener(view -> {
-            Session.getInstance().setFilterData(new FilterData[0]);
+            session.setFilterData(new FilterData[0]);
             finish();
         });
 
+        session = Session.getInstance();
+
         btnApply.setOnClickListener(view -> {
             if (validateFilterData()) {
-                Session.getInstance().setFilterData(getFilterData());
+                session.setFilterData(getFilterData());
                 finish();
             }
         });
@@ -77,8 +80,7 @@ public class FilterActivity extends AppCompatActivity {
     private void loadData() {
         progressDialog.show();
         new Thread(() -> {
-                    ParamFilterSettingsResponse
-            response = Session.getInstance().getFilterSettings();
+            ParamFilterSettingsResponse response = session.getFilterSettings();
             handleFilterSettingsResponse(response);
         }).start();
     }
@@ -91,8 +93,7 @@ public class FilterActivity extends AppCompatActivity {
 
             if (response != null) {
                 if (response.getStatus().equals(ResponseStatusType.S.name())) {
-                    errorMessage = "";
-
+                    // в цикле добавляем виджеты
                     for (FilterElement item : response.getFilters()) {
                         if (item.getType().equals("date")) {
                             DateWidget view = new DateWidget(this, item);
@@ -114,15 +115,16 @@ public class FilterActivity extends AppCompatActivity {
                             Log.e("loadData", "uncnown filter type");
                         }
                     }
+                    return;
                 } else if (response.getStatus().equals(ResponseStatusType.E.name())) {
                     if (!TextUtils.isEmpty(response.getMessage())) {
                         errorMessage = response.getMessage();
                     }
                 } else if (response.getStatus().equals(ResponseStatusType.A.name())) {
-                    errorMessage = getString(R.string.error_authentication);
+                    session.errorAuth();
+                    return;
                 } else {
-                    errorMessage = getString(R.string.error_unknown);
-                    Log.e("getFilterSettings", "Unknown Status Type");
+                    errorMessage = getString(R.string.error_unknown_status_type);
                 }
             }
 

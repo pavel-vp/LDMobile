@@ -21,6 +21,7 @@
     </style>
 
     <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:minHeight">42dp</item>
         <item name="android:background">@drawable/round_rect</item>
         <item name="android:popupBackground">@drawable/round_rect</item>
         <item name="android:spinnerMode">dropdown</item>

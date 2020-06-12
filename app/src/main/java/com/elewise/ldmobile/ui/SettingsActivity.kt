@@ -1,36 +1,37 @@
 package com.elewise.ldmobile.ui
 
-import android.app.Activity
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.MenuItem
 import android.widget.Toast
 import com.elewise.ldmobile.R
+import com.elewise.ldmobile.service.Prefs
+import com.elewise.ldmobile.service.Session
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity: AppCompatActivity() {
-    val STORAGE_NAME = "settings"
-    lateinit var storage: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        storage = getSharedPreferences(STORAGE_NAME, Activity.MODE_PRIVATE)
-
-        edConnectAddress.setText(getConnectAddress());
+        edConnectAddress.setText(Prefs.getConnectAddress(this));
 
         btnSave.setOnClickListener {
             if (TextUtils.isEmpty(edConnectAddress.text.toString())) {
                 Toast.makeText(this, R.string.activity_settings_error_empty, Toast.LENGTH_LONG).show()
             } else {
-                saveConnectAddress(edConnectAddress.text.toString())
+                Prefs.saveConnectAddress(this, edConnectAddress.text.toString())
                 finish()
             }
         }
+
+        btnOpenCriptoProSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsCriptoProActivity::class.java))
+        }
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -41,14 +42,5 @@ class SettingsActivity: AppCompatActivity() {
         } else {
             return super.onOptionsItemSelected(item)
         }
-    }
-    private fun getConnectAddress(): String {
-        return storage.getString(STORAGE_NAME, "")
-    }
-
-    private fun saveConnectAddress(address: String) {
-        val edit = storage.edit()
-        edit.putString(STORAGE_NAME, address)
-        edit.apply()
     }
 }

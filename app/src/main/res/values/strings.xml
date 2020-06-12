@@ -55,7 +55,8 @@
 
     <string name="dialog_reject_doc_packet_title">Отказать пакет</string>
     <string name="dialog_reject_doc_packet_message">Доступные для отказа: %s</string>
-    <string name="dialog_reject_doc_packet_reason_head">Введите причину отказа</string>
+    <string name="dialog_reject_doc_packet_comment">Комментарий</string>
+    <string name="dialog_refect_doc_packet_need_specify_comment">Необходимо ввести комментарий</string>
     <string name="dialog_reject_doc_packet_ok">Отказать</string>
     <string name="dialog_reject_doc_packet_cancel">Отмена</string>
 
@@ -65,22 +66,246 @@
     <string name="alert_dialog_error_subscribe_packet">Невозможно выполнить действие по пакету. В пакете документов отсутствуют документы готовые к отправке</string>
     
     <string name="error_unknown">Произошла непредвиденная ошибка</string>
+    <string name="error_unknown_status_type">Неизвестный статус выполнения запроса</string>
     <string name="error_load_data">Ошибка загрузки данных</string>
     <string name="error_authentication">Ошибка аутентификации</string>
 
     <string name="activity_login_hint_login">Логин</string>
     <string name="activity_login_hint_password">Пароль</string>
     <string name="activity_login_btn_login">Войти</string>
+    <string name="activity_login_enter_login">Введите логин</string>
+    <string name="activity_login_enter_password">Введите пароль</string>
 
     <string name="activity_settings_title">Настройки</string>
     <string name="activity_settings_hint">Укажите адрес подключения</string>
     <string name="activity_settings_btn_save">Сохранить</string>
     <string name="activity_settings_error_empty">Необходимо указать адрес подключения</string>
 
+    <string name="activity_settings_cripto_pro_title">Настройки КриптоПро</string>
+    <string name="activity_settings_cripto_pro_copied_ok">Контейнер успешно скопирован</string>
+    <string name="activity_settings_cripto_pro_copied_failed">Ошибка копирования контейнера</string>
+
     <string name="activity_filter_validate_error">Необходимо указать: «%s»</string>
 
     <string name="progress_dialog_load">Пожалуйста подождите..</string>
 
     <string name="activity_about_title">О программе</string>
+
+    <string name="action_success">Успешно выполнено</string>
+    <string name="action_error">Действие не выполнено</string>
+
+    <string name="dialog_add_to_chain_title">Добавить в цепочку?</string>
+    <string name="dialog_add_buttion">Добавить</string>
+    <string name="dialog_delete_from_chain_title">Удалить из цепочки?</string>
+    <string name="dialog_delete_button">Удалить</string>
+    <string name="dialog_cancel_button">Отмена</string>
+
+
+    <!-- cripto pro -->
+    <string name="ContainerTab">Containers</string>
+    <string name="ExamplesTab">Examples</string>
+    <string name="SettingsTab">Settings</string>
+    <string name="IntentsTab">Intents</string>
+    <string name="UtilitiesTab">Utilities</string>
+
+    <string name="ContainerGenKeyPair">Create container (signature key)</string>
+    <string name="ContainerGenKeyPairDH">Create container (exchange key)</string>
+    <string name="ContainerChangePassAndCopy">Create container and change pin</string>
+    <string name="ContainerRemoveOneContainer">Delete container</string>
+    <string name="ContainerRemoveContainers">Delete all containers</string>
+    <string name="ContainerContainerName">Container:</string>
+    <string name="ContainerSelfSignedButton">Self-signed (limited use)</string>
+    <string name="ContainerCA14Button">MS CA</string>
+    <string name="ContainerCA15Button">CA 1.5</string>
+    <string name="ContainerCA20Button">CA 2.0 (default password: 123)</string>
+    <string name="ContainerContainerNameIsNull">Error! Container alias not set.</string>
+    <string name="ContainerContainerNameExists">Error! Container exists.</string>
+    <string name="ContainerNewPasswordSet" formatted="false">Password have changed: %s</string>
+    <string name="ContainerRequireRemoveContainer">Do you want to remove container(s)?</string>
+
+    <string name="ContainerMoveLabel">Копировать контейнер из:</string>
+    <string name="CertTrustMoveLabel">Копировать корневой из:</string>
+    <string name="ContainerDefaultPath">/mnt/sdcard/keys</string>
+
+    <string name="ShowLog">Log</string>
+    <string name="StatusField">Status</string>
+    <string name="StatusUnknown">unknown</string>
+    <string name="StatusOK">done</string>
+    <string name="StatusError">failed</string>
+    <string name="SettingsCopy">Копировать контейнер</string>
+
+
+    <string name="SettingsCopyTrust">Добавить корневой</string>
+    <string name="SettingsTitleTrustCert">Корневые</string>
+    <string name="SettingsTitleChain">Цепочка</string>
+
+    <string name="SettingsKeyStoreType">Тип контейнера:</string>
+    <string name="SettingsProviderType">Тип провайдера:</string>
+    <string name="SettingsKeyAlgorithm">KeyAlgorithm:</string>
+
+    <string name="ExamplesExampleName">Example:</string>
+    <string name="ExamplesClientName">Выбранный для подписи контейнер:</string>
+    <string name="ExamplesClientPassword">Client password:</string>
+    <string name="ExamplesServerName">Recipient container:</string>
+    <string name="ExamplesServerPassword">Recipient password:</string>
+    <string name="ExamplesExecute">Execute</string>
+
+    <string name="ProgressDialogExecuting">Please wait&#8230;</string>
+
+    <string name="ExamplesInstallCAdESCAWarning">
+        You have chosen CAdES example which requires CA certificates to being installed.
+        A special example %s will install the certificates. You can also install the
+        certificates using Settings > Security on your device. Press Execute to fulfil
+        the example.
+    </string>
+
+    <string name="ExamplesAuthInstallCACAdES">Automatically install CA certificates</string>
+    <string name="ContainerAboutTestContainer" formatted="false">Container: %s, password: %s</string>
+
+    <string-array name="providerTypes">
+        <item>GOST R 34.10&#8211;2001</item>
+        <item>GOST R 34.10&#8211;2012 (256)</item>
+        <item>GOST R 34.10&#8211;2012 (512)</item>
+    </string-array>
+
+    <string-array name="ExamplesDescription">
+        <item>Check certificate status (online)</item>
+        <item>Show certificate content</item>
+        <item>Hash some data</item>
+        <item>Sign some data</item>
+        <item>Create and verify plain signature</item>
+        <item>Create and verify CMS signature</item>
+        <item>Create and verify CMS signature with attributes</item>
+        <item>Create and verify XML signature</item>
+        <item>Install trusted test root certificates</item>
+        <item>Create and verify CAdES-BES signature</item>
+        <item>Create and verify CAdES-X Long Type 1 signature</item>
+        <item>Create and verify XAdES-BES signature</item>
+        <item>Create and verify XAdES-X Long Type 1 signature</item>
+        <item>Encrypt and decrypt data using agree key</item>
+        <item>Encrypt and decrypt data using session key</item>
+        <item>Encrypt and decrypt Enveloped CMS (KeyTransport)</item>
+        <item>Encrypt and decrypt Enveloped CMS (KeyAgreement)</item>
+        <item>Establish TLS connection</item>
+        <item>Establish TLS connection with client auth</item>
+        <item>Establish TLS connection (apache http 4)</item>
+        <item>Establish TLS connection with client auth (apache http 4)</item>
+        <item>Establish TLS connection (HttpsUrlConnection)</item>
+        <item>Establish TLS connection with client auth (HttpsUrlConnection)</item>
+    </string-array>
+
+    <string-array name="ExampleClasses">
+        <item>CheckCertStatusExample</item>
+        <item>PrintCertificateContentExample</item>
+        <item>HashExample</item>
+        <item>SignExample</item>
+        <item>VerifyExample</item>
+        <item>CMSSimpleSignExample</item>
+        <item>CMSWithAttributesSignExample</item>
+        <item>XMLSignVerifyExample</item>
+        <item>InstallCAdESTestTrustCertExample</item>
+        <item>CAdESBESSignVerifyExample</item>
+        <item>CAdESXLT1SignVerifyExample</item>
+        <item>XAdESBESSignVerifyExample</item>
+        <item>XAdESXLT1SignVerifyExample</item>
+        <item>ClassicEncryptDecryptExample</item>
+        <item>SessionEncryptDecryptExample</item>
+        <item>TransportEnvelopedCMSExample</item>
+        <item>AgreementEnvelopedCMSExample</item>
+        <item>TLSSimpleExample</item>
+        <item>TLSClientAuthExample</item>
+        <item>HttpTLSSimpleExample</item>
+        <item>HttpTLSClientAuthExample</item>
+        <item>HttpsUrlConnectionSimpleExample</item>
+        <item>HttpsUrlConnectionClientAuthExample</item>
+    </string-array>
+
+    <string-array name="ExampleRequireWrittenPin">
+        <item>TLSClientAuthExample</item>
+        <item>HttpTLSClientAuthExample</item>
+        <item>HttpsUrlConnectionClientAuthExample</item>
+    </string-array>
+
+    <string-array name="ExampleRequireServerContainer">
+        <item>TransportEnvelopedCMSExample</item>
+        <item>AgreementEnvelopedCMSExample</item>
+    </string-array>
+
+    <!-- Интенты -->
+
+    <string name="IntentsIntentCopyContainer">Copy container</string>
+    <string name="IntentsIntentCertSource">Take certificate from:</string>
+    <string name="IntentsIntentCertSourceChain">Use certificate chain</string>
+    <string name="IntentsIntentInstallCertInContainer">Install certificate</string>
+    <string name="IntentsIntentSignData">Sign data</string>
+    <string name="IntentsIntentVerifySignature">Verify signature</string>
+    <string name="IntentsIntentBuildChain">Build chain</string>
+    <string name="IntentsIntentGenerate">Create key container</string>
+
+    <string name="IntentsSignatureAlias">Alias of container to make signature:</string>
+    <string name="IntentsSignatureData">Data to sign:</string>
+    <string name="IntentsSignatureType">Signature type:</string>
+    <string name="IntentsSignatureDetached">Detached signature</string>
+    <string name="IntentsSignatureCAdESLong">Produce CAdES-X Long Type 1</string>
+
+    <string name="IntentsStorageKind">Storage kind:</string>
+    <string name="IntentsObjectAlias">Build chain for object with alias:</string>
+    <string name="IntentsVerifyAsDefault">Verify with default type</string>
+
+    <string-array name="IntentsStorageList">
+        <item>Personal</item>
+        <item>Intermediate</item>
+        <item>Trust</item>
+        <item>AddressBook</item>
+    </string-array>
+
+    <string-array name="IntentsCAdESType">
+        <item>CAdES-BES</item>
+        <item>CAdES-T</item>
+        <item>CAdES-X Long Type 1</item>
+    </string-array>
+
+    <string-array name="IntentsIntentCertSourceList">
+        <item>file path entered in intent</item>
+        <!--
+        <item>content passed as intent parameter</item>
+        <item>file path passed as intent parameter</item>
+        -->
+    </string-array>
+
+    <string name="IntentsContainerType">Container type:</string>
+    <string name="IntentsContainerAlias">Container alias:</string>
+    <string name="IntentsKeyAlgorithm2001">GOST R 34.10&#8211;2001</string>
+    <string name="IntentsKeyAlgorithm2012256">GOST R 34.10&#8211;2012&#8211;256</string>
+    <string name="IntentsKeyAlgorithm2012512">GOST R 34.10&#8211;2012&#8211;512</string>
+    <string name="IntentsKeyExchange">Exchange key</string>
+    <string name="IntentsCertSelfSigned">Self-signed certificate</string>
+    <string name="IntentsCAVersion">Version of Crypto-Pro CA:</string>
+    <string name="IntentsCAAddress">Address of Crypto-Pro CA:</string>
+
+    <string-array name="IntentsCAAddressList">
+        <item>http://www.cryptopro.ru/certsrv/</item>
+        <item>https://www.cryptopro.ru:5555/ui/</item>
+    </string-array>
+
+    <string-array name="IntentsCAVersionList">
+        <item>MS CA</item>
+        <item>1.5</item>
+    </string-array>
+
+    <string name="UtilitiesInFile">Input file:</string>
+    <string name="UtilitiesOutFile">Output file:</string>
+    <string name="UtilitiesEncrypt">Encrypt</string>
+    <string name="UtilitiesDecrypt">Decrypt</string>
+    <string name="UtilitiesExecute">Execute</string>
+    <string name="UtilitiesCompare">Compare files</string>
+    <string name="UtilitiesRecipient">Recipient:</string>
+    <string name="Utilities3Dots">&#8230;</string>
+    <string name="UtilitiesCmsUtil">CMSUtil</string>
+    <string name="UtilitiesPassword">Password:</string>
+
+    <!-- Wait progress bar -->
+    <string name="PBMessageWait">Please, wait&#8230;</string>
+    <string name="PBMessageAlreadyRunning">Please, wait, task has already been run.</string>
 
 </resources>

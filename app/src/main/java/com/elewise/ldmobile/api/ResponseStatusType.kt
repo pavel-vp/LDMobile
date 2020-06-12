@@ -1,3 +1,3 @@
 package com.elewise.ldmobile.api
 
-public enum class ResponseStatusType {S, A, E}
+enum class ResponseStatusType {S, A, E}

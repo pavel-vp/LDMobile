@@ -12,20 +12,27 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.elewise.ldmobile.R;
+import com.elewise.ldmobile.api.ParamDocumentDetailsResponse;
 import com.elewise.ldmobile.service.Session;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DocActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager viewPager;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
-        viewPager = (ViewPager) findViewById(R.id.vpDoc);
+        session = Session.getInstance();
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager = findViewById(R.id.vpDoc);
         viewPager.setAdapter(mSectionsPagerAdapter);
 
         // Передаём ViewPager в TabLayout
@@ -34,7 +41,7 @@ public class DocActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle(Session.getInstance().getCurrentDocumentDetail().getDoc_title());
+        setTitle(session.getCurrentDocumentDetail().getDoc_title());
     }
 
     @Override
@@ -51,31 +58,46 @@ public class DocActivity extends AppCompatActivity {
 
         private String tabTitles[];
 
-        SectionsPagerAdapter(FragmentManager fm, Context context) {
+        private String TAB_TITLE_DOCUMENT = getString(R.string.doc_activity_tab_document);
+        private String TAB_TITLE_LINES = getString(R.string.doc_activity_tab_lines);
+        private String TAB_TITLE_HISTORY = getString(R.string.doc_activity_tab_history);
+
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            tabTitles = new String[] { context.getString(R.string.doc_activity_tab_document),
-                    context.getString(R.string.doc_activity_tab_lines),
-                    context.getString(R.string.doc_activity_tab_history)};
+
+            List<String> listTitles = new ArrayList<>();
+
+            ParamDocumentDetailsResponse curentDocument = session.getCurrentDocumentDetail();
+            if (curentDocument.getHeader_attributes().length > 0) {
+                listTitles.add(TAB_TITLE_DOCUMENT);
+            }
+            if (curentDocument.getLines() != null && curentDocument.getLines().length > 0) {
+                listTitles.add(TAB_TITLE_LINES);
+            }
+
+            if (curentDocument.getHistory() != null && curentDocument.getHistory().length > 0) {
+                listTitles.add(TAB_TITLE_HISTORY);
+            }
+
+            tabTitles = listTitles.toArray(new String[listTitles.size()]);
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0: {
-                    return DocFragment.newInstance();
-                }
-                case 1: {
-                    return ItemsFragment.newInstance();
-                }
-                default: {
-                    return HistoryFragment.newInstance();
-                }
+
+            String name = tabTitles[position];
+            if (name.equals(TAB_TITLE_DOCUMENT)) {
+                return DocFragment.newInstance();
+            } else if (name.equals(TAB_TITLE_LINES)) {
+                return ItemsFragment.newInstance();
+            } else {
+                return HistoryFragment.newInstance();
             }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return tabTitles.length;
         }
 
         @Override public CharSequence getPageTitle(int position) {

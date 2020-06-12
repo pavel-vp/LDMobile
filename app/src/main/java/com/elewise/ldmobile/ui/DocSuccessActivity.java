@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import com.elewise.ldmobile.R;
 
+// todo unused
 public class DocSuccessActivity extends AppCompatActivity {
     public static final int PARAM_RESULT_N0T = 3;
     public static final int PARAM_RESULT_OK = 2;

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.api.data.DocumentAttachment;
+import com.elewise.ldmobile.service.Prefs;
 
 /**
  * Adapter
@@ -55,7 +56,7 @@ public class AttachmentAdapter extends BaseAdapter {
     private void showAttachment(Integer file_id) {
         // Вызвать вебстраницу с урлем
         Intent i = new Intent(Intent.ACTION_VIEW);
-        String url = this.context.getResources().getString(R.string.rest_server_base_url) + "";
+        String url = Prefs.INSTANCE.getConnectAddress(context) + "";
         i.setData(Uri.parse(url));
         this.context.startActivity(i);
     }

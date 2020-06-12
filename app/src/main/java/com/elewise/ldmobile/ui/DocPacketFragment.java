@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +25,15 @@ import com.elewise.ldmobile.utils.MessageUtils;
 
 public class DocPacketFragment extends Fragment {
 
-    public static final int REQUEST_SUCCESS_CODE = 101;
-    public static final int REQUEST_REJECT_CODE = 102;
+    public static final int REQUEST_ONE_CODE = 101;
+    public static final int REQUEST_TWO_CODE = 102;
 
-    private Button btnSubscribe;
-    private Button btnRefuse;
+    private Button btnOne;
+    private Button btnTwo;
     private AlertDialog dialog;
     private ProgressDialog progressDialog;
+    private Session session;
+    ParamDocumentDetailsResponse documentDetail;
 
     public DocPacketFragment() {
     }
@@ -48,42 +51,63 @@ public class DocPacketFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.progress_dialog_load));
 
-        ParamDocumentDetailsResponse detail = Session.getInstance().getCurrentDocumentDetail();
+        session = Session.getInstance();
+
+        documentDetail = session.getCurrentDocumentDetail();
 
         LinearLayout llDynamicPart = rootView.findViewById(R.id.llDynamicPart);
         LinearLayout llButtons = rootView.findViewById(R.id.llButtons);
-        btnSubscribe = rootView.findViewById(R.id.btnSubscribe);
-        btnRefuse = rootView.findViewById(R.id.btnRefuse);
+        btnOne = rootView.findViewById(R.id.btnOne);
+        btnTwo = rootView.findViewById(R.id.btnTwo);
 
-        if (detail.getUser_action() != null && detail.getUser_action().equals(ActionType.SIGN.getAction())) {
+        addButtons(llButtons);
+
+        btnOne.setOnClickListener(view -> {
+            // todo Есть такой скрин в Figma. На какой параметр ориентироваться
+//            if (true) {
+                Intent intent = new Intent(getContext(), DocPacketActionActivity.class);
+                intent.putExtra(DocPacketActionActivity.PARAM_IN_DOC_DETAIL, documentDetail.getButtons()[0]);
+                startActivityForResult(intent, REQUEST_ONE_CODE);
+//            } else {
+//                dialog = MessageUtils.createDialog(this.getActivity(), R.string.alert_dialog_error, R.string.alert_dialog_error_subscribe_packet);
+//                dialog.show();
+//            }
+        });
+
+        btnTwo.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), DocPacketActionActivity.class);
+            intent.putExtra(DocPacketActionActivity.PARAM_IN_DOC_DETAIL, documentDetail.getButtons()[1]);
+            startActivityForResult(intent, REQUEST_TWO_CODE);
+        });
+
+
+        addDynamicPart(inflater, documentDetail, llDynamicPart);
+        addAttachments(inflater, rootView, documentDetail);
+
+        return rootView;
+    }
+
+    private void addButtons(LinearLayout llButtons) {
+        if (documentDetail.getButtons().length > 0) {
             llButtons.setVisibility(View.VISIBLE);
+
+            int i = 0;
+            while (i < documentDetail.getButtons().length) {
+                ButtonDesc item = documentDetail.getButtons()[i];
+
+                if (i == 0) {
+                    btnOne.setText(item.getCaption());
+                }
+
+                if (i == 1) {
+                    btnTwo.setText(item.getCaption());
+                }
+
+                i++;
+            }
         } else {
             llButtons.setVisibility(View.GONE);
         }
-
-        btnSubscribe.setOnClickListener(view -> {
-            // todo Есть такой скрин в Figma. На какой параметр ориентироваться
-            if (true) {
-                Intent intent = new Intent(getContext(), DocPacketSuccessActivity.class);
-                intent.putExtra(DocPacketSuccessActivity.PARAM_LIST_DOCS, "АВР 256, Т12 №1002");
-                startActivityForResult(intent, REQUEST_SUCCESS_CODE);
-            } else {
-                dialog = MessageUtils.createDialog(this.getActivity(), R.string.alert_dialog_error, R.string.alert_dialog_error_subscribe_packet);
-                dialog.show();
-            }
-        });
-
-        btnRefuse.setOnClickListener(view -> {
-            Intent intent = new Intent(getContext(), DocPacketRejectActivity.class);
-            intent.putExtra(DocPacketRejectActivity.PARAM_LIST_DOCS, "АВР 256, Т12 №1002");
-            startActivityForResult(intent, REQUEST_REJECT_CODE);
-        });
-
-
-        addDynamicPart(inflater, detail, llDynamicPart);
-        addAttachments(inflater, rootView, detail);
-
-        return rootView;
     }
 
     private void addAttachments(LayoutInflater inflater, View rootView, ParamDocumentDetailsResponse detail) {
@@ -126,7 +150,7 @@ public class DocPacketFragment extends Fragment {
             if (isFirst) {
                 ImageView ivDocType = convertView.findViewById(R.id.ivDocType);
                 ivDocType.setVisibility(View.VISIBLE);
-                ImageUtils.INSTANCE.setIcon(getResources(), ivDocType, Session.getInstance().getCurrentDocumentDetail().getDoc_icon());
+                ImageUtils.INSTANCE.setIcon(getResources(), ivDocType, session.getCurrentDocumentDetail().getDoc_icon());
                 isFirst = false;
             }
             tvDesc.setText(item.getDesc());
@@ -141,43 +165,54 @@ public class DocPacketFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ParamDocumentDetailsResponse result = null;
-                try {
-                    result = Session.getInstance().getDocumentDetail(relatedDoc.getDoc_id(), relatedDoc.getDoc_type());
-                    Session.getInstance().setCurrentDocumentDetail(result);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                ParamDocumentDetailsResponse result = session.getDocumentDetail(relatedDoc.getDoc_id(), relatedDoc.getDoc_type());
                 handleDocumentDetailsResponse(result);
             }
         }).start();
     }
 
-    private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse documentDetail) {
+    private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse response) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 progressDialog.cancel();
 
-                if (documentDetail != null) {
-                    if (documentDetail.getDoc_type().equals(DocType.PD.name())) {
-                        Intent intent = new Intent();
-                        intent.setClass(DocPacketFragment.this.getActivity(), DocPacketActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        DocPacketFragment.this.getActivity().startActivity(intent);
+                String errorMessage = getString(R.string.error_load_data);
+
+                if (response != null) {
+                    if (response.getStatus().equals(ResponseStatusType.S.name())) {
+                        session.setCurrentDocumentDetail(response);
+                        if (response.getDoc_type().equals(DocType.PD.name())) {
+                            Intent intent = new Intent();
+                            intent.setClass(getActivity(), DocPacketActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent();
+                            intent.setClass(getActivity(), DocActivity.class);
+                            startActivity(intent);
+                        }
+                        return;
+                    } else if (response.getStatus().equals(ResponseStatusType.E.name())) {
+                        if (!TextUtils.isEmpty(response.getMessage())) {
+                            errorMessage = response.getMessage();
+                        }
+                    } else if (response.getStatus().equals(ResponseStatusType.A.name())) {
+                        session.errorAuth();
+                        return;
                     } else {
-                        Intent intent = new Intent();
-                        intent.setClass(DocPacketFragment.this.getActivity(), DocActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        DocPacketFragment.this.getActivity().startActivity(intent);
+                        errorMessage = getString(R.string.error_unknown_status_type);
                     }
-                } else {
-                    // показать ошибку
-                    dialog = MessageUtils.createDialog(DocPacketFragment.this.getActivity(), R.string.alert_dialog_error, R.string.error_load_data);
-                    dialog.show();
                 }
+
+                showError(errorMessage);
             }
         });
+    }
+
+    private void showError(String errorMessage) {
+        // показать ошибку
+        dialog = MessageUtils.createDialog(getActivity(), getString(R.string.alert_dialog_error), errorMessage);
+        dialog.show();
     }
 
     @Override
@@ -190,15 +225,18 @@ public class DocPacketFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SUCCESS_CODE) {
-            if (resultCode == DocPacketSuccessActivity.PARAM_RESULT_OK) {
-                Toast.makeText(getContext(), "Пакет подписан!", Toast.LENGTH_LONG).show();
+        if (requestCode == REQUEST_ONE_CODE) {
+            if (resultCode == DocPacketActionActivity.PARAM_RESULT_OK) {
+                Toast.makeText(getContext(), R.string.action_success, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), R.string.action_error, Toast.LENGTH_LONG).show();
             }
         } else {
-            if (requestCode == REQUEST_REJECT_CODE) {
-                if (resultCode == DocPacketRejectActivity.PARAM_RESULT_OK) {
-                    String reason = data.getStringExtra(DocPacketRejectActivity.PARAM_REASON);
-                    Toast.makeText(getContext(), "Пакет отказан по причине "+reason, Toast.LENGTH_LONG).show();
+            if (requestCode == REQUEST_TWO_CODE) {
+                if (resultCode == DocPacketActionActivity.PARAM_RESULT_OK) {
+                    Toast.makeText(getContext(), R.string.action_success, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getContext(), R.string.action_error, Toast.LENGTH_LONG).show();
                 }
             }
         }

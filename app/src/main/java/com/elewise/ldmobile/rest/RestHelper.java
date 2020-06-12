@@ -10,7 +10,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +18,11 @@ public class RestHelper {
 
     private static RestHelper restHelper = null;
     private static RestApi service = null;
+
+    public static RestHelper createNewInstance(String baseUrl) {
+        restHelper = new RestHelper(baseUrl);
+        return restHelper;
+    }
 
     public static RestHelper getInstance(String baseUrl) {
         if (restHelper == null) {
@@ -69,6 +73,11 @@ public class RestHelper {
 
     public ParamAuthorizationResponse getAuthorizationTokenSync(String userName, String password) throws IOException {
         Call<ParamAuthorizationResponse> callRes = service.getAuthorizationToken(new ParamAuthorizationRequest(userName, password));
+        return callRes.execute().body();
+    }
+
+    public ParamTokenActivityCheckResponse tokenActivityCheck(String token) throws IOException {
+        Call<ParamTokenActivityCheckResponse> callRes = service.tokenActivityCheck(new ParamTokenActivityCheckRequest(token));
         return callRes.execute().body();
     }
 

@@ -27,6 +27,7 @@ import com.elewise.ldmobile.utils.MessageUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class DocsFragment extends Fragment {
     private ProcessType processType;
     private ProgressDialog progressDialog;
     AlertDialog dialog;
+    Session session;
 
     public static DocsFragment newInstance(ProcessType processType) {
         Bundle args = new Bundle();
@@ -52,6 +54,7 @@ public class DocsFragment extends Fragment {
         if (getArguments() != null) {
             processType = ProcessType.valueOf(getArguments().getString(ARG_PAGE));
         }
+        session = Session.getInstance();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getString(R.string.progress_dialog_load));
@@ -81,25 +84,44 @@ public class DocsFragment extends Fragment {
     private void getDocuments() {
         progressDialog.show();
         new Thread(() -> {
-            FilterData[] filterData = Session.getInstance().getFilterData();
-            List<DocumentForList> docsList = Session.getInstance().getDocuments(10, 0,
+            FilterData[] filterData = session.getFilterData();
+            ParamDocumentsResponse response = session.getDocuments(10, 0,
                     processType, filterData);
 
-            handleDocumentsResponse(docsList);
+            handleDocumentsResponse(response);
         }).start();
     }
 
-    private void handleDocumentsResponse(List<DocumentForList> docsList) {
+    private void handleDocumentsResponse(ParamDocumentsResponse response) {
         getActivity().runOnUiThread(() -> {
             progressDialog.cancel();
 
-            if (docsList != null && !docsList.isEmpty()) {
-                ((DocsAdapter) lvDocs.getAdapter()).setList(docsList);
-                lvDocs.setVisibility(View.VISIBLE);
-                tvNoResults.setVisibility(View.GONE);
-            } else {
-                lvDocs.setVisibility(View.GONE);
-                tvNoResults.setVisibility(View.VISIBLE);
+            String errorMessage = getString(R.string.error_load_data);
+
+            if (response != null) {
+                if (response.getStatus().equals(ResponseStatusType.S.name())) {
+                    List<DocumentForList> docsList = session.groupDocByDate(response.getContents());
+                    if (docsList != null && !docsList.isEmpty()) {
+                        ((DocsAdapter) lvDocs.getAdapter()).setList(docsList);
+                        lvDocs.setVisibility(View.VISIBLE);
+                        tvNoResults.setVisibility(View.GONE);
+                    } else {
+                        lvDocs.setVisibility(View.GONE);
+                        tvNoResults.setVisibility(View.VISIBLE);
+                    }
+                    return;
+                } else if (response.getStatus().equals(ResponseStatusType.E.name())) {
+                    if (!TextUtils.isEmpty(response.getMessage())) {
+                        errorMessage = response.getMessage();
+                    }
+                } else if (response.getStatus().equals(ResponseStatusType.A.name())) {
+                    session.errorAuth();
+                    return;
+                } else {
+                    errorMessage = getString(R.string.error_unknown_status_type);
+                }
+
+                showError(errorMessage);
             }
         });
     }
@@ -107,52 +129,50 @@ public class DocsFragment extends Fragment {
     private void showDocDetail(final Document document) {
         progressDialog.show();
         new Thread(() -> {
-            try {
-                ParamDocumentDetailsResponse result = Session.getInstance().getDocumentDetail(document.getDoc_id(), document.getDoc_type());
-                if (result == null) {
-                    showError(getString(R.string.error_unknown));
-                } else {
-                    if (result.getStatus().equals(ResponseStatusType.E.name())) {
-                        String message = result.getMessage();
-                        if (TextUtils.isEmpty(message)) showError(getString(R.string.error_unknown));
-                        else showError(message);
-                    } else if (result.getStatus().equals(ResponseStatusType.A.name())) {
-                        showError(getString(R.string.error_authentication));
-                    } else {
-                        Session.getInstance().setCurrentDocumentDetail(result);
-                        handleDocumentDetailsResponse(result);
-                    }
-                }
-            } catch (Exception e) {
-                showError(getString(R.string.error_unknown));
-                e.printStackTrace();
-            }
+            ParamDocumentDetailsResponse result = Session.getInstance().getDocumentDetail(document.getDoc_id(), document.getDoc_type());
+            handleDocumentDetailsResponse(result);
         }).start();
     }
 
-    private void showError(String message) {
+    private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse response) {
         getActivity().runOnUiThread(() -> {
             progressDialog.cancel();
-            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+
+            String errorMessage = getString(R.string.error_load_data);
+
+            if (response != null) {
+                if (response.getStatus().equals(ResponseStatusType.S.name())) {
+                    Session.getInstance().setCurrentDocumentDetail(response);
+                    if (response.getDoc_type().equals(DocType.PD.name())) {
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), DocPacketActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), DocActivity.class);
+                        startActivity(intent);
+                    }
+                    return;
+                } else if (response.getStatus().equals(ResponseStatusType.E.name())) {
+                    if (!TextUtils.isEmpty(response.getMessage())) {
+                        errorMessage = response.getMessage();
+                    }
+                } else if (response.getStatus().equals(ResponseStatusType.A.name())) {
+                    session.errorAuth();
+                    return;
+                } else {
+                    errorMessage = getString(R.string.error_unknown_status_type);
+                }
+            }
+
+            showError(errorMessage);
         });
     }
 
-    private void handleDocumentDetailsResponse(final ParamDocumentDetailsResponse documentDetail) {
-        getActivity().runOnUiThread(() -> {
-            progressDialog.cancel();
-
-            if (documentDetail.getDoc_type().equals(DocType.PD.name())) {
-                Intent intent = new Intent();
-                intent.setClass(DocsFragment.this.getActivity(), DocPacketActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                DocsFragment.this.getActivity().startActivity(intent);
-            } else {
-                Intent intent = new Intent();
-                intent.setClass(DocsFragment.this.getActivity(), DocActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                DocsFragment.this.getActivity().startActivity(intent);
-            }
-        });
+    private void showError(String errorMessage) {
+        // показать ошибку
+        dialog = MessageUtils.createDialog(getActivity(), getString(R.string.alert_dialog_error), errorMessage);
+        dialog.show();
     }
 
 

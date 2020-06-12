@@ -7,8 +7,7 @@ import android.widget.TextView;
 
 import com.elewise.ldmobile.R;
 
-import retrofit2.http.PUT;
-
+// todo unused
 public class DocPacketSuccessActivity extends AppCompatActivity {
     public static final int PARAM_RESULT_NOT = 3;
     public static final int PARAM_RESULT_OK = 2;
@@ -27,7 +26,7 @@ public class DocPacketSuccessActivity extends AppCompatActivity {
 
         btnSubscribe = findViewById(R.id.btnSubscribe);
         btnCancel = findViewById(R.id.btnCancel);
-        tvMessage = findViewById(R.id.tvMessage);
+        tvMessage = findViewById(R.id.tvText);
         tvMessage.setText(String.format(getString(R.string.dialog_succes_doc_packet_message), listDocs));
 
         btnSubscribe.setOnClickListener(view -> {

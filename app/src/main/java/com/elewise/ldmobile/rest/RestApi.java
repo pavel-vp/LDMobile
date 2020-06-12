@@ -12,6 +12,10 @@ public interface RestApi {
     @POST("Authorization")
     Call<ParamAuthorizationResponse> getAuthorizationToken(@Body ParamAuthorizationRequest request);
 
+    // Проверка статуса активности сессии
+    @POST("TokenActivityCheck")
+    Call<ParamTokenActivityCheckResponse> tokenActivityCheck(@Body ParamTokenActivityCheckRequest request);
+
     // Загрузить список фильтров
     @POST("GetFilterSettings")
     Call<ParamFilterSettingsResponse> getFilterSettings(@Body ParamFilterSettingsRequest request);

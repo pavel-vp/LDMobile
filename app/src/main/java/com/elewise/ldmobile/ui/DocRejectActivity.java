@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.elewise.ldmobile.R;
 
+// todo unused
 public class DocRejectActivity extends AppCompatActivity {
     public static final int PARAM_RESULT_NOT = 3;
     public static final int PARAM_RESULT_OK = 2;

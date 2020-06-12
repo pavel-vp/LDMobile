@@ -16,7 +16,6 @@ data class ParamDocumentDetailsResponse (
         val history: Array<DocumentHistory>?,
         val attachments: Array<DocumentAttachment>?,
         val related_docs: Array<RelatedDoc>?,
-        val buttons: Array<ButtonDesc>,
-        val user_action: String?
+        val buttons: Array<ButtonDesc>
 )
 

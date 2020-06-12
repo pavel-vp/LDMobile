@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:orientation="vertical">
 
@@ -25,11 +25,11 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
-                android:text="@string/dialog_reject_doc_packet_title"
+                tools:text="@string/dialog_reject_doc_packet_title"
                 />
 
             <TextView
-                android:id="@+id/tvMessage"
+                android:id="@+id/tvText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
@@ -37,20 +37,25 @@
                 android:textColor="@android:color/black"
                 android:text="@string/dialog_reject_doc_packet_message" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/llComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/dialog_reject_doc_packet_reason_head" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/dialog_reject_doc_packet_comment" />
 
-            <EditText
-                android:id="@+id/edReason"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top"
-                android:lines="3">
-            </EditText>
+                <EditText
+                    android:id="@+id/edComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:lines="3"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,13 +66,13 @@
 
 
                 <android.support.design.button.MaterialButton
-                    android:id="@+id/btnRefuse"
+                    android:id="@+id/btnOk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
                     style="@style/AppTheme.Button.Accent"
-                    android:text="@string/dialog_reject_doc_packet_ok" />
+                    tools:text="@string/dialog_reject_doc_packet_ok" />
 
                 <android.support.design.button.MaterialButton
                     android:id="@+id/btnCancel"

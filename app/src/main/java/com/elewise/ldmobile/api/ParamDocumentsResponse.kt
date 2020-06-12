@@ -7,7 +7,7 @@ data class ParamDocumentsResponse (
         val status: String,
         val message: String?,
         val returned_quantity: Int?,
-        val contents: Array<Document>?
+        var contents: List<Document>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
