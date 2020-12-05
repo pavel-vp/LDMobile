@@ -12,7 +12,7 @@ data class ParamDocumentsResponse (
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Document(
-        val doc_type: String,
+        val doc_alt_type: String,
         val doc_id: Int,
         val doc_date: String,
         val doc_name: String,

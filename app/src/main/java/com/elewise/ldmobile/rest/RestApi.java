@@ -2,7 +2,9 @@ package com.elewise.ldmobile.rest;
 
 import com.elewise.ldmobile.api.*;
 
+import kotlinx.coroutines.Deferred;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -18,15 +20,15 @@ public interface RestApi {
 
     // Загрузить список фильтров
     @POST("GetFilterSettings")
-    Call<ParamFilterSettingsResponse> getFilterSettings(@Body ParamFilterSettingsRequest request);
+    Deferred<Response<ParamFilterSettingsResponse>> getFilterSettings(@Body ParamFilterSettingsRequest request);
 
     // Загрузить список документов
     @POST("GetDocuments")
-    Call<ParamDocumentsResponse> getDocuments(@Body ParamDocumentsRequest request);
+    Deferred<Response<ParamDocumentsResponse>> getDocuments(@Body ParamDocumentsRequest request);
 
     // Загрузить детализацию по документу
     @POST("GetDocumentDetails")
-    Call<ParamDocumentDetailsResponse> getDocumentDetails(@Body ParamDocumentDetailsRequest request);
+    Deferred<Response<ParamDocumentDetailsResponse>> getDocumentDetails(@Body ParamDocumentDetailsRequest request);
 
     // Загрузить файл
     @POST("GetFile")

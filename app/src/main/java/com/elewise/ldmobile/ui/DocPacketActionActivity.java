@@ -21,8 +21,6 @@ import com.elewise.ldmobile.api.ParamExecDocumentResponse;
 import com.elewise.ldmobile.api.data.ButtonDesc;
 import com.elewise.ldmobile.api.data.DocumentDetailButtonCommentFlag;
 import com.elewise.ldmobile.criptopro.CAdESSignVerifyExample;
-import com.elewise.ldmobile.criptopro.OnSignedResult;
-import com.elewise.ldmobile.criptopro.SignedResult;
 import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
 import com.elewise.ldmobile.criptopro.util.Logger;
 import com.elewise.ldmobile.criptopro.util.ProviderType;
@@ -30,10 +28,8 @@ import com.elewise.ldmobile.service.Prefs;
 import com.elewise.ldmobile.service.Session;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -229,7 +225,7 @@ public class DocPacketActionActivity extends AppCompatActivity {
             @Override
             public void run() {
                 ParamDocumentDetailsResponse docDetails = session.getCurrentDocumentDetail();
-                ParamExecDocumentResponse result = session.execDocument(docDetails.getDoc_id(), docDetails.getDoc_type(), "sign_before", edComment.getText().toString());
+                ParamExecDocumentResponse result = session.execDocument(docDetails.getDoc_id(), docDetails.getDoc_alt_type(), "sign_before", edComment.getText().toString());
                 Log.e("execDocumentResult", result.toString());
             }
         }).start();

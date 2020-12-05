@@ -2,16 +2,14 @@ package com.elewise.ldmobile.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.MenuItem
 import android.widget.Toast
 import com.elewise.ldmobile.R
 import com.elewise.ldmobile.service.Prefs
-import com.elewise.ldmobile.service.Session
 import kotlinx.android.synthetic.main.activity_settings.*
 
-class SettingsActivity: AppCompatActivity() {
+class SettingsActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +30,7 @@ class SettingsActivity: AppCompatActivity() {
             startActivity(Intent(this, SettingsCriptoProActivity::class.java))
         }
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        updateActionBar(getString(R.string.activity_settings_title))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

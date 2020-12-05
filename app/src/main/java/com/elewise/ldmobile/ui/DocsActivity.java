@@ -2,16 +2,14 @@ package com.elewise.ldmobile.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,9 +20,7 @@ import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.model.ProcessType;
 import com.elewise.ldmobile.service.Session;
 
-import org.w3c.dom.Text;
-
-public class DocsActivity extends AppCompatActivity {
+public class DocsActivity extends BaseActivity {
 
     DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -51,7 +47,7 @@ public class DocsActivity extends AppCompatActivity {
         TextView tvAvatar = findViewById(R.id.tvAvatar);
         tvAvatar.setText(tvLogin.getText().toString().toUpperCase().substring(0, 1));
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        updateActionBar(getString(R.string.docs_activity_title), false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, 0, 0) {

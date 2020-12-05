@@ -1,17 +1,16 @@
 package com.elewise.ldmobile.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.elewise.ldmobile.R
 
-class AboutActivity: AppCompatActivity() {
+class AboutActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        updateActionBar(getString(R.string.activity_about_title))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

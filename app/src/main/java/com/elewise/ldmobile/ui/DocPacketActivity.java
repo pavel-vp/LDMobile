@@ -7,13 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.service.Session;
 
-public class DocPacketActivity extends AppCompatActivity {
+public class DocPacketActivity extends BaseActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager viewPager;
@@ -31,8 +30,7 @@ public class DocPacketActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tlDocs);
         tabLayout.setupWithViewPager(viewPager);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(Session.getInstance().getCurrentDocumentDetail().getDoc_title());
+        updateActionBar(Session.getInstance().getCurrentDocumentDetail().getDoc_title());
     }
 
     @Override

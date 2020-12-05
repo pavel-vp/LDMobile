@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import kotlinx.coroutines.Deferred;
+import retrofit2.Response;
 import ru.CryptoPro.JCSP.support.BKSTrustStore;
 
 public class Session {
@@ -32,7 +35,7 @@ public class Session {
 
     private static Session session;
 
-    public static Session getInstance() {
+    public static @NonNull Session getInstance() {
         if (session == null) {
             session = new Session(MainApp.getApplcationContext());
         }
@@ -59,7 +62,7 @@ public class Session {
     }
 
     public void createRestHelper() {
-        this.restHelper = RestHelper.createNewInstance(Prefs.INSTANCE.getConnectAddress(context));
+        this.restHelper = RestHelper.Companion.createNewInstance(Prefs.INSTANCE.getConnectAddress(context));
     }
 
 
@@ -97,31 +100,16 @@ public class Session {
     }
 
 
-    public ParamDocumentsResponse getDocuments(int size, int from, ProcessType processType, FilterData[] filterData) {
-        try {
-            return restHelper.getDocumentsSync(getToken(), size, from, processType, filterData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Deferred<Response<ParamDocumentsResponse>> getDocuments(int size, int from, ProcessType processType, FilterData[] filterData) {
+        return restHelper.getDocumentsSync(getToken(), size, from, processType, filterData);
     }
 
-    public ParamFilterSettingsResponse getFilterSettings() {
-        try {
-            return restHelper.getFilterSettings(getToken());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Deferred<Response<ParamFilterSettingsResponse>> getFilterSettings() {
+        return restHelper.getFilterSettings(getToken());
     }
 
-    public ParamDocumentDetailsResponse getDocumentDetail(int docId, String docType) {
-        try {
-            return restHelper.getDocumentDetailsSync(getToken(), docType, docId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Deferred<Response<ParamDocumentDetailsResponse>> getDocumentDetail(int docId) {
+        return restHelper.getDocumentDetailsSync(getToken(), docId);
     }
 
     public byte[] getFile(int fileId) {

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 data class ParamExecDocumentRequest (
         val access_token: String,
         val doc_id: Int,
-        val doc_type: String,
+        val doc_alt_type: String,
         val action: String,
         val comment: String?
 )

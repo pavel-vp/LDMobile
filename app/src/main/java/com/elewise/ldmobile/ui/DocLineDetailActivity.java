@@ -2,19 +2,18 @@ package com.elewise.ldmobile.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.model.*;
-import com.elewise.ldmobile.api.*;
-import com.elewise.ldmobile.api.data.*;
+import com.elewise.ldmobile.api.data.DocLineDetail;
+import com.elewise.ldmobile.api.data.DocumentItem;
 import com.elewise.ldmobile.service.Session;
 
-public class DocLineDetailActivity extends AppCompatActivity {
+public class DocLineDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,7 @@ public class DocLineDetailActivity extends AppCompatActivity {
             llDynamicPart.addView(convertView);
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(documentItem.getLine_name());
+        updateActionBar(documentItem.getLine_name());
     }
 
     @Override

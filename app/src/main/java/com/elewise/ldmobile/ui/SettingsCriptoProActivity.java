@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,8 +24,6 @@ import com.elewise.ldmobile.criptopro.util.ProviderType;
 import com.elewise.ldmobile.service.Prefs;
 import com.elewise.ldmobile.widget.CertWidgetTrust;
 
-import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -46,7 +41,7 @@ import ru.CryptoPro.JCSP.support.BKSTrustStore;
 import ru.cprocsp.ACSP.tools.common.CSPTool;
 import ru.cprocsp.ACSP.tools.common.Constants;
 
-public class SettingsCriptoProActivity extends AppCompatActivity
+public class SettingsCriptoProActivity extends BaseActivity
         implements AdapterView.OnItemSelectedListener {
 
     // todo обсудить пароль!!
@@ -84,8 +79,9 @@ public class SettingsCriptoProActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_settings_cripto_pro);
+
+        updateActionBar(getString(R.string.activity_settings_cripto_pro_title));
 
         initCopyContainersButton();
 
@@ -149,6 +145,9 @@ public class SettingsCriptoProActivity extends AppCompatActivity
                 final Intent intent = new Intent(INTENT_CONTAINER_SELECT);
                 intent.putExtra("onlyDirs", true);
                 startActivityForResult(intent, CONTAINER_SELECT_CODE_IN);
+
+//                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+//                startActivityForResult(intent, CONTAINER_SELECT_CODE_IN);
             }
         });
 
@@ -300,6 +299,7 @@ public class SettingsCriptoProActivity extends AppCompatActivity
         switch (requestCode) {
             case CONTAINER_SELECT_CODE_IN: {
                 if (resultCode == Activity.RESULT_OK && data != null) {
+//                    final String chosenFilePath = data.getDataString();
                     final String chosenFilePath = data.getStringExtra("chosenObject");
                     etContainerFolder.setText(chosenFilePath);
                 }
@@ -424,9 +424,11 @@ public class SettingsCriptoProActivity extends AppCompatActivity
 
         try {
             final CertificateFactory factory = CertificateFactory.getInstance("X.509");
-            X509Certificate trustCert = (X509Certificate) factory.generateCertificate(trustStream);
+            List<X509Certificate> trustCert = (List<X509Certificate>)factory.generateCertificates(trustStream);
 
-            saveTrustCert(trustStoreFile, trustCert);
+            for (X509Certificate item: trustCert) {
+                saveTrustCert(trustStoreFile, item);
+            }
         } finally {
             if (trustStream != null) {
                 try {

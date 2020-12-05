@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 data class ParamDocumentDetailsResponse (
         val status: String,
         val message: String?,
-        val doc_type: String,
+        val doc_alt_type: String,
         val doc_id: Int,
         val doc_title: String,
         val doc_icon: String,

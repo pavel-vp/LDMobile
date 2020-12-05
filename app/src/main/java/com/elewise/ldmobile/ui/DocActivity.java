@@ -1,14 +1,11 @@
 package com.elewise.ldmobile.ui;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.elewise.ldmobile.R;
@@ -18,7 +15,7 @@ import com.elewise.ldmobile.service.Session;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DocActivity extends AppCompatActivity {
+public class DocActivity extends BaseActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager viewPager;
@@ -41,7 +38,7 @@ public class DocActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle(session.getCurrentDocumentDetail().getDoc_title());
+        updateActionBar(session.getCurrentDocumentDetail().getDoc_title());
     }
 
     @Override
