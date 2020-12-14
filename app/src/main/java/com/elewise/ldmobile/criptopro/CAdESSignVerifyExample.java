@@ -17,6 +17,18 @@ package com.elewise.ldmobile.criptopro;
 
 import android.os.Environment;
 
+import com.elewise.ldmobile.criptopro.base.SignData;
+import com.elewise.ldmobile.criptopro.interfaces.ThreadExecuted;
+import com.elewise.ldmobile.criptopro.util.Constants;
+import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
+import com.elewise.ldmobile.criptopro.util.KeyStoreType;
+import com.elewise.ldmobile.utils.Logger;
+
+import org.bouncycastle.asn1.DERSet;
+import org.bouncycastle.asn1.cms.AttributeTable;
+import org.bouncycastle.asn1.cms.CMSAttributes;
+import org.bouncycastle.asn1.cms.Time;
+import org.bouncycastle.asn1.x509.Attribute;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.util.CollectionStore;
 
@@ -28,18 +40,13 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
-import com.elewise.ldmobile.criptopro.base.SignData;
-import com.elewise.ldmobile.criptopro.interfaces.ThreadExecuted;
-import com.elewise.ldmobile.criptopro.util.Constants;
-import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
-import com.elewise.ldmobile.criptopro.util.KeyStoreType;
-import com.elewise.ldmobile.criptopro.util.Logger;
-
-import ru.CryptoPro.AdES.tools.AlgorithmUtility;
 import ru.CryptoPro.CAdES.CAdESSignature;
 import ru.CryptoPro.CAdES.CAdESType;
+import ru.CryptoPro.JCP.tools.AlgorithmUtility;
 import ru.CryptoPro.JCSP.JCSP;
 
 /**
@@ -58,7 +65,7 @@ public class CAdESSignVerifyExample extends SignData {
     /**
      * Тип подписи.
      */
-    private Integer cAdESType = CAdESType.CAdES_BES;
+    private Integer cAdESType =  CAdESType.CAdES_BES;
 
     // Данные для подписи
     private byte[] dataToSign;
@@ -148,12 +155,16 @@ public class CAdESSignVerifyExample extends SignData {
                     getCertificate().getSubjectDN());
 
                 if (cAdESType.equals(CAdESType.CAdES_BES)) {
+                    final Hashtable table = new Hashtable();
+                    Attribute attr = new Attribute(CMSAttributes.signingTime,
+                            new DERSet(new Time(new Date()))); // устанавливаем время подписи
+                    table.put(attr.getAttrType(), attr);
+                    AttributeTable attrTable = new AttributeTable(table);
+
                     cAdESSignature.addSigner(JCSP.PROVIDER_NAME, digestAlgOid,
-                        keyAlgOid, getPrivateKey(), chain, cAdESType, null, false);
+                        keyAlgOid, getPrivateKey(), chain, cAdESType, null, false, attrTable, null);
 
-                }
-                else {
-
+                } else {
                     cAdESSignature.addSigner(JCSP.PROVIDER_NAME, digestAlgOid,
                         keyAlgOid, getPrivateKey(), chain, cAdESType, TSA_DEFAULT,
                             false);
@@ -174,23 +185,66 @@ public class CAdESSignVerifyExample extends SignData {
                 signatureStream.close();
 
                 byte[] sign = signatureStream.toByteArray();
-                Logger.log(sign, true);
+                Logger.log("sign true");
 
                 // Проверяем подпись.
+                cAdESSignature = new CAdESSignature(sign, dataToSign, cAdESType, false);
+                cAdESSignature.verify(chain);
+
+
+//                // Список всех подписантов в исходной подписи.
+//                Collection<SignerInformation> srcSignerInfos = new ArrayList<SignerInformation>();
+//
+//                for (CAdESSigner signer : cAdESSignature.getCAdESSignerInfos()) {
+//                    srcSignerInfos.add(signer.getSignerInfo());
+//                }
+//
+//                // 2. Усовершенствование подписи.
+//
+//                // Получаем только первого подписанта CAdES-BES, его усовершенствуем. Остальных не трогаем.
+//                CMSSignedData srcSignedData = new CMSSignedData(sign);//cAdESSignature.getSignedData();
+//
+//                List<JcaX509CertificateHolder> tempCerts1 = new ArrayList<>();
+//                tempCerts1.add(new JcaX509CertificateHolder(getCertificates().get(1)));
+////                tempCerts.addAll(getTrustCertificateHolders());
+//
+//                cAdESSignature.setCertificateStore(new CollectionStore(tempCerts1));
+//
+//                CAdESSigner srcSigner = cAdESSignature.getCAdESSignerInfo(0);
+//
+//                // Исключаем его из исходного списка, т.к. его место займет усовершенствованный подписант.
+//                srcSignerInfos.remove(srcSigner.getSignerInfo());
+//
+//
+//                // Улучшаем CAdES-BES до CAdES-X Long Type 1.
+//                srcSigner.enhance(JCP.PROVIDER_NAME, JCP.GOST_DIGEST_OID, chain,
+//                        TSA_DEFAULT, CAdESType.CAdES_X_Long_Type_1);
+//
+//                // Усовершенствованный подписант.
+//                SignerInformation enhSigner = srcSigner.getSignerInfo();
+//
+//                // Добавляем его в исходный список подписантов.
+//                srcSignerInfos.add(enhSigner);
+//
+//                // Список подписантов.
+//                SignerInformationStore dstSignerInfoStore = new SignerInformationStore(srcSignerInfos);
+//
+//                // Обновляем исходную подпись c ее начальным списком подписантов на тот же,
+//                // но с первым усовершенствованным подписантом.
+//                CMSSignedData dstSignedData =
+//                        CMSSignedData.replaceSigners(srcSignedData, dstSignerInfoStore);
+//
+//                sign = dstSignedData.getEncoded();
 
                 Logger.log("Verify CAdES signature of type: " +
                     (cAdESType.equals(CAdESType.CAdES_BES)
                         ? "CAdES-BES" : "CAdES-X Long Type 1"));
 
-                cAdESSignature = new CAdESSignature(sign, dataToSign, cAdESType, false);
-                cAdESSignature.verify(chain);
-
                 Logger.log("Verification completed (OK)");
-                Logger.setStatusOK();
 
                 callback.signedResult(new SignedResult(true, "", sign));
 
-                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/mydir";
+                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/sign";
                 writeFileOnInternalStorage("first_signed_file.docx.sgn", path, sign);
             } catch (Exception e) {
                 callback.signedResult(new SignedResult(false, e.toString(), new byte[0]));
@@ -198,7 +252,25 @@ public class CAdESSignVerifyExample extends SignData {
                 throw e;
             }
         }
+    }
 
+    private List<X509Certificate> getCertificates() throws Exception{
+        KeyStore ts = KeyStore.getInstance(
+                containerAdapter.getTrustStoreType(),
+                containerAdapter.getTrustStoreProvider());
+
+        List<X509Certificate> res = new ArrayList<>();
+
+        ts.load(containerAdapter.getTrustStoreStream(),
+                containerAdapter.getTrustStorePassword());
+
+        for (String alias: Collections.list(ts.aliases())) {
+            X509Certificate cert = (X509Certificate) ts.getCertificate(alias);
+            if (!alias.startsWith("root")) {
+                res.add(0, (X509Certificate) ts.getCertificate(alias));
+            }
+        }
+        return res;
     }
 
     private List<JcaX509CertificateHolder> getTrustCertificateHolders() throws Exception {
@@ -214,7 +286,7 @@ public class CAdESSignVerifyExample extends SignData {
         for (String alias: Collections.list(ts.aliases())) {
             if (!alias.startsWith("root")) {
                 res.add(new JcaX509CertificateHolder((X509Certificate) ts.getCertificate(alias)));
-                return res;
+//                return res;
             }
         }
 

@@ -28,7 +28,7 @@
         android:layout_marginBottom="24dp"
         android:orientation="horizontal">
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnApply"
             style="@style/AppTheme.Button.Accent"
             android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:text="@string/filter_activity_btn_apply" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClear"
             style="@style/AppTheme.Button.Default"
             android:layout_width="wrap_content"

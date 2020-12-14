@@ -21,7 +21,7 @@ object Prefs {
     }
 
     fun getConnectAddress(context: Context): String {
-        return getStorage(context).getString(PREFS_CONNECT_ADDRESS, context.getString(R.string.rest_server_base_url))
+        return getStorage(context).getString(PREFS_CONNECT_ADDRESS, context.getString(R.string.rest_server_base_url))!!
     }
 
     fun saveConnectAddress(context: Context, address: String) {
@@ -34,7 +34,7 @@ object Prefs {
     }
 
     fun getLastLogin(context: Context): String {
-        return getStorage(context).getString(PREFS_LAST_LOGIN, "")
+        return getStorage(context).getString(PREFS_LAST_LOGIN, "")!!
     }
 
     fun saveLastLogin(context: Context, address: String) {
@@ -44,7 +44,7 @@ object Prefs {
     }
 
     fun getToken(context: Context): String {
-        return getStorage(context).getString(PREFS_TOKEN, "")
+        return getStorage(context).getString(PREFS_TOKEN, "")!!
     }
 
     fun saveToken(context: Context, token: String) {
@@ -54,7 +54,7 @@ object Prefs {
     }
 
     fun getContainerAlias(context: Context): String {
-        return getStorage(context).getString(PREFS_CONTAINER_ALIAS, "")
+        return getStorage(context).getString(PREFS_CONTAINER_ALIAS, "")!!
     }
 
     fun saveContainerAlias(context: Context, alias: String) {

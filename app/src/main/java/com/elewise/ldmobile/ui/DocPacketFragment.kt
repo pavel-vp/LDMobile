@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -141,11 +141,11 @@ class DocPacketFragment : Fragment() {
                 session.currentDocumentDetail = response
                 if (response.doc_alt_type == DocType.PD.name) {
                     val intent = Intent()
-                    intent.setClass(activity, DocPacketActivity::class.java)
+                    intent.setClass(activity!!, DocPacketActivity::class.java)
                     startActivity(intent)
                 } else {
                     val intent = Intent()
-                    intent.setClass(activity, DocActivity::class.java)
+                    intent.setClass(activity!!, DocActivity::class.java)
                     startActivity(intent)
                 }
                 return

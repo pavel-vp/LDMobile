@@ -18,6 +18,8 @@ package com.elewise.ldmobile.criptopro.util;
 import android.content.Context;
 import android.content.res.Resources;
 
+import com.elewise.ldmobile.utils.Logger;
+
 import java.io.InputStream;
 
 import ru.CryptoPro.JCSP.JCSP;

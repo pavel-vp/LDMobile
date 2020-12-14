@@ -100,7 +100,7 @@ class FilterActivity : BaseActivity() {
                 return
             } else if (response.status == ResponseStatusType.E.name) {
                 if (!TextUtils.isEmpty(response.message)) {
-                    errorMessage = response.message
+                    errorMessage = response.message!!
                 }
             } else if (response.status == ResponseStatusType.A.name) {
                 session.errorAuth()
@@ -118,15 +118,6 @@ class FilterActivity : BaseActivity() {
         super.onDestroy()
         viewModelJob.cancel()
         progressDialog?.dismiss()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == android.R.id.home) {
-            finish()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
     }
 
     private val filterData: Array<FilterData>

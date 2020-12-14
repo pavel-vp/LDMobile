@@ -21,6 +21,6 @@ class AddToChainDialogFragment: DialogFragment() {
 
     fun showDialog(alias: String) {
         this.alias = alias
-        this.dialog.show()
+        dialog.show()
     }
 }

@@ -4,25 +4,31 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import com.elewise.ldmobile.R;
+import com.elewise.ldmobile.criptopro.base.GenKeyPairData;
 import com.elewise.ldmobile.criptopro.util.KeyStoreType;
 import com.elewise.ldmobile.criptopro.util.KeyStoreUtil;
-import com.elewise.ldmobile.criptopro.util.Logger;
 import com.elewise.ldmobile.criptopro.util.ProviderType;
+import com.elewise.ldmobile.model.CertificateInfo;
 import com.elewise.ldmobile.service.Prefs;
+import com.elewise.ldmobile.utils.Logger;
 import com.elewise.ldmobile.widget.CertWidgetTrust;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,18 +38,29 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import ru.CryptoPro.JCSP.CSPConfig;
+import ru.CryptoPro.JCSP.CSPProviderInterface;
 import ru.CryptoPro.JCSP.support.BKSTrustStore;
 import ru.cprocsp.ACSP.tools.common.CSPTool;
 import ru.cprocsp.ACSP.tools.common.Constants;
+import ru.cprocsp.ACSP.util.FileExplorerActivity;
+
+import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.CSP_50_LICENSE_DEFAULT;
+import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.LICENSE_STATUS_EXPIRED;
+import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.LICENSE_STATUS_INVALID;
+import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.LICENSE_STATUS_OK;
+import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.LICENSE_TYPE_EXPIRED;
+import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.LICENSE_TYPE_PERMANENT;
+import static ru.cprocsp.ACSP.util.FileExplorerActivity.INTENT_EXTRA_IN_ONLY_DIRS;
+import static ru.cprocsp.ACSP.util.FileExplorerActivity.INTENT_EXTRA_OUT_CHOSEN_OBJECT;
 
 public class SettingsCriptoProActivity extends BaseActivity
         implements AdapterView.OnItemSelectedListener {
-
     // todo обсудить пароль!!
     // Пароль к хранилищу доверенных сертификатов по умолчанию.
     private static final char[] DEFAULT_TRUST_STORE_PASSWORD = BKSTrustStore.STORAGE_PASSWORD;
@@ -57,12 +74,6 @@ public class SettingsCriptoProActivity extends BaseActivity
     // Идентификатор запроса выбора контейнера.
     private static final int CERT_TRUST_SELECT_CODE_IN = 1;
 
-    // Путь к контейнеру.
-    private EditText etContainerFolder;
-
-    // путь к выбранному корневому
-    private EditText etCertTrustFolder;
-
     // Номер выбранного типа хранилища в списке.
     private int keyStoreTypeIndex = 0;
 
@@ -74,7 +85,14 @@ public class SettingsCriptoProActivity extends BaseActivity
     private ArrayAdapter<String> containerAliasAdapter = null;
 
     private LinearLayout lvTrustCert;
-    private ListView lvChain;
+
+    private FileExplorerActivity fileExplorerActivity;
+
+    private AlertDialog dialogRemoveCert;
+    private AlertDialog dialogRemoveContainer;
+
+    private TextView tvLicenseNumber;
+    private TextView tvLicenseStatus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,12 +101,91 @@ public class SettingsCriptoProActivity extends BaseActivity
 
         updateActionBar(getString(R.string.activity_settings_cripto_pro_title));
 
-        initCopyContainersButton();
+        tvLicenseNumber = findViewById(R.id.tvLicenseNumber);
+        tvLicenseStatus = findViewById(R.id.tvLicenseStatus);
 
-        initCopyCertTrustButton();
+        showContainerType();
 
+        showProviderType();
+
+        Button btnChangeLicense = findViewById(R.id.btnChangeLicense);
+        btnChangeLicense.setOnClickListener(v -> {
+            startActivity(new Intent(this, InputLicenseNumberActivity.class));
+        });
+
+        Button btnMoveContainers = findViewById(R.id.btnMoveContainers);
+        btnMoveContainers.setOnClickListener(v -> {
+            final Intent intent = new Intent(INTENT_CONTAINER_SELECT);
+            intent.putExtra(INTENT_EXTRA_IN_ONLY_DIRS, true);
+            startActivityForResult(intent, CONTAINER_SELECT_CODE_IN);
+        });
+
+        Button btnMoveCertTrust = findViewById(R.id.btnMoveCertTrust);
+        btnMoveCertTrust.setOnClickListener(v -> {
+            final Intent intent = new Intent(INTENT_CONTAINER_SELECT);
+            intent.putExtra(INTENT_EXTRA_OUT_CHOSEN_OBJECT, true);
+            startActivityForResult(intent, CERT_TRUST_SELECT_CODE_IN);
+        });
+
+        ImageButton btnRemoveContainer = findViewById(R.id.btnRemoveContainer);
+        btnRemoveContainer.setOnClickListener(v -> {
+            String alias = (String) spClientList.getSelectedItem();
+            if (alias != null) {
+                createAndShowDialogRemoveContainer(alias);
+            }
+        });
+
+        // Список клиентских алиасов.
+        spClientList = findViewById(R.id.spExamplesClientList);
+        containerAliasAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        // Способ отображения.
+
+        containerAliasAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+
+        spClientList.setAdapter(containerAliasAdapter);
+        spClientList.setOnItemSelectedListener(this);
+
+        updateContainerList();
+
+        lvTrustCert = findViewById(R.id.lvTrustCert);
+        updateTrustListAndCertList();
+    }
+
+    private void showLicenseNumberInfo() {
+        CSPProviderInterface providerInfo = CSPConfig.INSTANCE.getCSPProviderInfo();
+        String licenseNumber = providerInfo.getLicense().getSerialNumber();
+        tvLicenseNumber.setText(licenseNumber);
+        int licenseStatus = providerInfo.getLicense().getExistingLicenseStatus();
+
+        if (licenseStatus == LICENSE_STATUS_OK && !providerInfo.getLicense().getSerialNumber().equals(CSP_50_LICENSE_DEFAULT)) {
+            int licenseType = providerInfo.getLicense().getLicenseType();
+            switch (licenseType) {
+                case LICENSE_TYPE_PERMANENT: {
+                    tvLicenseStatus.setText(getString(R.string.settings_license_type_permanent));
+                    break;
+                }
+                case LICENSE_TYPE_EXPIRED: {
+                    String days = String.valueOf(providerInfo.getLicense().getExpiredThroughDays());
+                    tvLicenseStatus.setText(getString(R.string.settings_license_type_expired_days, days));
+                    break;
+                }
+            }
+        } else {
+            if (licenseStatus == LICENSE_STATUS_EXPIRED) {
+                tvLicenseStatus.setText(getString(R.string.settings_license_type_expired));
+            } else {
+                if (licenseStatus == LICENSE_STATUS_INVALID) {
+                    tvLicenseStatus.setText(getString(R.string.settings_license_type_invalid));
+                } else {
+                    Log.e("error", "unknown license status type");
+                }
+            }
+        }
+    }
+
+    private void showContainerType() {
         // Тип контейнера.
-
         Spinner spKeyStoreType = findViewById(R.id.spKeyStore);
 
         // Получение списка поддерживаемых типов хранилищ.
@@ -110,9 +207,9 @@ public class SettingsCriptoProActivity extends BaseActivity
         // Выбираем сохраненный ранее тип.
         keyStoreTypeIndex = keyStoreTypeAdapter.getPosition(KeyStoreType.currentType());
         spKeyStoreType.setSelection(keyStoreTypeIndex);
+    }
 
-        // Тип провайдера.
-
+    private void showProviderType() {
         Spinner spProviderType = findViewById(R.id.spProviderType);
 
         // Создаем ArrayAdapter для использования строкового массива
@@ -131,60 +228,23 @@ public class SettingsCriptoProActivity extends BaseActivity
         // Выбираем сохраненный ранее тип.
         providerTypeIndex = providerTypeAdapter.getPosition(ProviderType.currentType());
         spProviderType.setSelection(providerTypeIndex);
+    }
 
-        // Путь к контейнеру.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showLicenseNumberInfo();
 
-        etContainerFolder = findViewById(R.id.etContainerFolder);
-
-        // Кнопка выбора контейнера.
-
-        Button btOpenCopyContainer = findViewById(R.id.btOpenCopyContainer);
-        btOpenCopyContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(INTENT_CONTAINER_SELECT);
-                intent.putExtra("onlyDirs", true);
-                startActivityForResult(intent, CONTAINER_SELECT_CODE_IN);
-
-//                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-//                startActivityForResult(intent, CONTAINER_SELECT_CODE_IN);
-            }
-        });
-
-
-        etCertTrustFolder = findViewById(R.id.etCertTrustFolder);
-        // Кнопка выбора корневого сертификата.
-        Button btOpenCopyCertTrust = findViewById(R.id.btOpenCopyCertTrust);
-        btOpenCopyCertTrust.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Выбрать файл
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                startActivityForResult(intent, CERT_TRUST_SELECT_CODE_IN);
-            }
-        });
-
-        // Список клиентских алиасов.
-        spClientList = findViewById(R.id.spExamplesClientList);
-        containerAliasAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
-        // Способ отображения.
-
-        containerAliasAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
-
-        spClientList.setAdapter(containerAliasAdapter);
-        spClientList.setOnItemSelectedListener(this);
-
-        updatealiasList();
-
-        updateTrustListAndCertList();
+        // Необходимо для отображения диалоговых окон
+        // ДСЧ, ввода пин-кода и сообщений.
+        if (CSPConfig.INSTANCE != null) {
+            CSPConfig.registerActivityContext(this);
+        }
     }
 
     List<String> oldAliasesList = new ArrayList<>();
 
-    private void updatealiasList() {
+    private void updateContainerList() {
         List<String> aliasesList = KeyStoreUtil.aliases(
                 KeyStoreType.currentType(),
                 ProviderType.currentProviderType()
@@ -201,17 +261,49 @@ public class SettingsCriptoProActivity extends BaseActivity
     }
 
     public void updateTrustListAndCertList() {
-        lvTrustCert = findViewById(R.id.lvTrustCert);
+        lvTrustCert.removeAllViews();
 
-        for (String item: getTrustList()) {
-            lvTrustCert.addView(new CertWidgetTrust(this, item, new AddToChainDialogFragment()));
+        for (CertificateInfo item: getTrustList()) {
+            lvTrustCert.addView(new CertWidgetTrust(this, item, alias -> {
+                createAndShowDialogRemoveCert(alias);
+                return null;
+            }));
         }
-
-        lvChain = findViewById(R.id.lvChain);
     }
 
-    private List<String> getTrustList() {
-        List<String> res = new ArrayList<>();
+    private void createAndShowDialogRemoveContainer(String alias) {
+        if (dialogRemoveContainer== null) {
+            dialogRemoveContainer= new AlertDialog
+                    .Builder(this)
+                    .setTitle(R.string.activity_settings_dialog_remove_key_store_title)
+                    .setNegativeButton(R.string.activity_settings_dialog_cancel, null)
+                    .setPositiveButton(R.string.activity_settings_dialog_remove, (dialog, which) -> {
+                        KeyStoreUtil.removeContainer(alias);
+                        updateContainerList();
+                    })
+                    .create();
+        }
+        dialogRemoveContainer.show();
+    }
+
+    private void createAndShowDialogRemoveCert(String alias) {
+        if (dialogRemoveCert == null) {
+            dialogRemoveCert = new AlertDialog
+                    .Builder(this)
+                    .setTitle(R.string.activity_settings_dialog_remove_cert_title)
+                    .setNegativeButton(R.string.activity_settings_dialog_cancel, null)
+                    .setPositiveButton(R.string.activity_settings_dialog_remove, (dialog, which) -> {
+                        removeCertificate(alias);
+                        updateTrustListAndCertList();
+                    })
+                    .create();
+        }
+        dialogRemoveCert.show();
+    }
+
+    private List<CertificateInfo> getTrustList() {
+        List<CertificateInfo> res = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         try {
             FileInputStream storeStream = new FileInputStream(TRUST_STORE_PATH);
             KeyStore keyStore = KeyStore.getInstance(BKSTrustStore.STORAGE_TYPE);
@@ -227,7 +319,15 @@ public class SettingsCriptoProActivity extends BaseActivity
 
             for (String alias : Collections.list(keyStore.aliases())) {
                 if (!alias.startsWith("root")) {
-                    res.add(alias);
+                    StringBuilder stringBuffer = new StringBuilder();
+                    X509Certificate certificate = ((X509Certificate)keyStore.getCertificate(alias));
+                    stringBuffer.append("Серийный номер: " + certificate.getSerialNumber().toString(16));
+                    stringBuffer.append("Владелец: " + certificate.getSubjectDN() + "\n");
+                    stringBuffer.append("Издатель: " + certificate.getIssuerDN() + "\n");
+                    stringBuffer.append("Действителен с: " + sdf.format(certificate.getNotBefore()) + "\n");
+                    stringBuffer.append("Действителен по: " + sdf.format(certificate.getNotAfter()));
+
+                    res.add(new CertificateInfo(alias, stringBuffer.toString()));
                 }
             }
             return res;
@@ -287,7 +387,7 @@ public class SettingsCriptoProActivity extends BaseActivity
 
         ProviderType.currentProviderType();
 
-        updatealiasList();
+        updateContainerList();
     }
 
     @Override
@@ -299,116 +399,94 @@ public class SettingsCriptoProActivity extends BaseActivity
         switch (requestCode) {
             case CONTAINER_SELECT_CODE_IN: {
                 if (resultCode == Activity.RESULT_OK && data != null) {
-//                    final String chosenFilePath = data.getDataString();
-                    final String chosenFilePath = data.getStringExtra("chosenObject");
-                    etContainerFolder.setText(chosenFilePath);
+                    final String path = data.getStringExtra(INTENT_EXTRA_OUT_CHOSEN_OBJECT);
+                    if (path != null) {
+                        copyContainer(path);
+                    }
                 }
+                break;
             }
             case CERT_TRUST_SELECT_CODE_IN: {
                 if (resultCode == Activity.RESULT_OK && data != null) {
-                    final String chosenFilePath = data.getDataString();
-                    etCertTrustFolder.setText(chosenFilePath);
+                    final String path = data.getStringExtra(INTENT_EXTRA_OUT_CHOSEN_OBJECT);
+                    if (path != null) {
+                        copyCertTrust(path);
+                    }
                 }
+                break;
             }
-            break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     // Добавление обработчика в кнопку копирования контейнеров
-    private void initCopyContainersButton() {
-        Button btCopyContainers = findViewById(R.id.btMoveContainers);
+    private void copyContainer(@NonNull String path) {
+        Logger.log("*** Copy containers to the " +
+                "application store ***");
 
-        // Копирование контейнера.
-        btCopyContainers.setOnClickListener(new View.OnClickListener() {
+        boolean copied = false;
 
-            @Override
-            public void onClick(View v) {
-                Logger.clear();
-                Logger.log("*** Copy containers to the " +
-                        "application store ***");
+        try {
+            // Получаем исходную папку с контейнерами.
+            if (path.isEmpty()) {
+                Logger.log("Container directory is undefined.");
+                return;
 
-                // Получаем исходную папку с контейнерами.
-                final String containerFolder = String.valueOf(etContainerFolder.getText());
-                if (containerFolder == null || containerFolder.isEmpty()) {
-
-                    Logger.log("Containers' directory is undefined.");
-                    return;
-
-                }
-
-                boolean copied = false;
-
-                try {
-
-                    Logger.log("Source directory: " + containerFolder);
-                    CSPTool cspTool = new CSPTool(v.getContext());
-
-                    copied = cspTool.getAppInfrastructure()
-                            .copyContainerFromDirectory(containerFolder);
-
-                } catch (Exception e) {
-                    Log.e(Constants.APP_LOGGER_TAG, e.getMessage(), e);
-                }
-
-                if (copied) {
-                    Logger.setStatusOK();
-                    Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_copied_ok, Toast.LENGTH_LONG).show();
-                    updatealiasList();
-                } else {
-                    Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_copied_failed, Toast.LENGTH_LONG).show();
-                }
             }
-        });
+
+            Logger.log("Source directory: " + path);
+            CSPTool cspTool = new CSPTool(SettingsCriptoProActivity.this);
+
+            copied = cspTool.getAppInfrastructure()
+                    .copyContainerFromDirectory(path);
+
+        } catch (Exception e) {
+            Log.e(Constants.APP_LOGGER_TAG, e.getMessage(), e);
+        }
+
+        if (copied) {
+            Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_add_container_ok, Toast.LENGTH_LONG).show();
+            updateContainerList();
+        } else {
+            Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_add_container_failed, Toast.LENGTH_LONG).show();
+        }
     }
 
     private InputStream chooseCertTrust;
 
     // Добавление обработчика в кнопку копирования корневого сертификата
-    private void initCopyCertTrustButton() {
+    private void copyCertTrust(@NonNull String path) {
         try {
-            Button btMoveCertTrust = findViewById(R.id.btMoveCertTrust);
-
             checkTrustStore();
 
-            // Копирование корневого сертификата.
-            btMoveCertTrust.setOnClickListener(new View.OnClickListener() {
+            Logger.log("*** Copy cert trust to the " +
+                    "application store ***");
 
-                @Override
-                public void onClick(View v) {
-                    Logger.clear();
-                    Logger.log("*** Copy cert trust to the " +
-                            "application store ***");
+            // Получаем исходную папку с контейнерами.
+            if (path.isEmpty()) {
 
-                    // Получаем исходную папку с контейнерами.
-                    final String containerFolder = String.valueOf(etCertTrustFolder.getText());
-                    if (containerFolder == null || containerFolder.isEmpty()) {
+                Logger.log("Cert trust' directory is undefined.");
+                return;
 
-                        Logger.log("Cert trust' directory is undefined.");
-                        return;
+            }
 
-                    }
+            boolean copied = false;
 
-                    boolean copied = false;
+            try {
+                Uri uri = Uri.parse("file://"+path);
+                chooseCertTrust = getContentResolver().openInputStream(uri);
+                loadCert(chooseCertTrust);
+                copied = true;
+            } catch (Exception e) {
+                Log.e(Constants.APP_LOGGER_TAG, e.getMessage(), e);
+            }
 
-                    try {
-                        Uri uri = Uri.parse(containerFolder);
-                        chooseCertTrust = getContentResolver().openInputStream(uri);
-                        loadCert(chooseCertTrust);
-                        copied = true;
-                    } catch (Exception e) {
-                        Log.e(Constants.APP_LOGGER_TAG, e.getMessage(), e);
-                    }
-
-                    if (copied) {
-                        Logger.setStatusOK();
-                        Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_copied_ok, Toast.LENGTH_LONG).show();
-                        updatealiasList();
-                    } else {
-                        Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_copied_failed, Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+            if (copied) {
+                Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_add_cert_ok, Toast.LENGTH_LONG).show();
+                updateTrustListAndCertList();
+            } else {
+                Toast.makeText(SettingsCriptoProActivity.this, R.string.activity_settings_cripto_pro_add_cert_failed, Toast.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             Log.e("save trust", e.toString());
         }
@@ -502,5 +580,33 @@ public class SettingsCriptoProActivity extends BaseActivity
                     "existed in the trust store.");
         } // else
 
+    }
+
+    private void removeCertificate(String alias) {
+        try {
+            FileInputStream storeStream = new FileInputStream(TRUST_STORE_PATH);
+            KeyStore keyStore = KeyStore.getInstance(BKSTrustStore.STORAGE_TYPE);
+
+            keyStore.load(storeStream, DEFAULT_TRUST_STORE_PASSWORD);
+            storeStream.close();
+
+            keyStore.deleteEntry(alias);
+            keyStore.store(new FileOutputStream(TRUST_STORE_PATH), DEFAULT_TRUST_STORE_PASSWORD);
+            Log.e("Removed access key", alias);
+        } catch (Exception e) {
+            Log.e("error remove cert", e.toString());
+            Snackbar.make(spClientList, "error remove", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialogRemoveCert != null) {
+            dialogRemoveCert.dismiss();
+        }
+        if (dialogRemoveContainer != null) {
+            dialogRemoveContainer.dismiss();
+        }
     }
 }

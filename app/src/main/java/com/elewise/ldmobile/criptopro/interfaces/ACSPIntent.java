@@ -107,18 +107,4 @@ public interface ACSPIntent {
      */
     String STORAGE_TRUST = "Trust";
 
-    /**
-     * TODO: Временный файл для проверки.
-     */
-    /*
-    String TMP_CERT_FILE = "/mnt/sdcard/111.cer";
-    */
-
-    /**
-     * TODO: Временный файл для проверки.
-     */
-    /*
-    String TMP_CERT_CHAIN_FILE = "/mnt/sdcard/111.p7b";
-    */
-
 }

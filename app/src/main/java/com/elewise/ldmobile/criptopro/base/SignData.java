@@ -22,6 +22,8 @@ import java.security.cert.X509Certificate;
 import com.elewise.ldmobile.criptopro.interfaces.HashData;
 import com.elewise.ldmobile.criptopro.interfaces.ThreadExecuted;
 import com.elewise.ldmobile.criptopro.util.*;
+import com.elewise.ldmobile.utils.Logger;
+
 import ru.CryptoPro.JCP.KeyStore.JCPPrivateKeyEntry;
 import ru.CryptoPro.JCP.params.JCPProtectionParameter;
 import ru.CryptoPro.JCSP.JCSP;

@@ -82,8 +82,14 @@
     <string name="activity_settings_error_empty">Необходимо указать адрес подключения</string>
 
     <string name="activity_settings_cripto_pro_title">Настройки КриптоПро</string>
-    <string name="activity_settings_cripto_pro_copied_ok">Контейнер успешно скопирован</string>
-    <string name="activity_settings_cripto_pro_copied_failed">Ошибка копирования контейнера</string>
+    <string name="activity_settings_cripto_pro_add_container_ok">Контейнер успешно добавлен</string>
+    <string name="activity_settings_cripto_pro_add_container_failed">Ошибка добавления контейнера</string>
+    <string name="activity_settings_cripto_pro_add_cert_ok">Сертификат успешно добавлен</string>
+    <string name="activity_settings_cripto_pro_add_cert_failed">Ошибка добавления сертификата</string>
+    <string name="activity_settings_dialog_remove_cert_title">Удалить сертификат?</string>
+    <string name="activity_settings_dialog_remove_key_store_title">Удалить контейнер?</string>
+    <string name="activity_settings_dialog_cancel">Отмена</string>
+    <string name="activity_settings_dialog_remove">Удалить</string>
 
     <string name="activity_filter_validate_error">Необходимо указать: «%s»</string>
 
@@ -100,6 +106,47 @@
     <string name="dialog_delete_button">Удалить</string>
     <string name="dialog_cancel_button">Отмена</string>
 
+    <string name="dialog_not_granted_perm">Внимание! Без доступа к памяти, вы не сможете настроить CriptoPro. Запросить разрешения повторно?</string>
+    <string name="toast_open_settings_hint">Необходимо, в разделе разрешения, выдать доступ к памяти</string>
+    <string name="action_settings">Настройки</string>
+    <string name="snackbar_open_settings_hint">Нет доступа к памяти</string>
+    <string name="dialog_btn_cancel">Отмена</string>
+    <string name="dilog_btn_request">Запросить</string>
+
+    <string name="cripto_pro_invalid_license">Лицензионный ключ CriptoPro недействителен</string>
+
+
+    <string name="ContainerMoveLabel">Копировать контейнер из:</string>
+    <string name="CertTrustMoveLabel">Копировать корневой из:</string>
+    <string name="ContainerDefaultPath">/mnt/sdcard/keys</string>
+
+    <string name="ShowLog">Log</string>
+    <string name="StatusField">Status</string>
+    <string name="StatusUnknown">unknown</string>
+    <string name="StatusOK">done</string>
+    <string name="StatusError">failed</string>
+    <string name="SettingsCopy">Добавить контейнер</string>
+
+
+    <string name="SettingsCopyTrust">Добавить корневой</string>
+    <string name="SettingsTitleTrustCert">Корневые</string>
+    <string name="SettingsTitleChain">Цепочка</string>
+
+    <string name="SettingsLicenseNumber">Лицензионный ключ:</string>
+    <string name="SettingsKeyStoreType">Тип контейнера:</string>
+    <string name="SettingsProviderType">Тип провайдера:</string>
+    <string name="SettingsKeyAlgorithm">KeyAlgorithm:</string>
+    <string name="settings_btn_change_license">Ввести новую лицензию</string>
+    <string name="settings_license_type_permanent">Статус: постоянная лицензия</string>
+    <string name="settings_license_type_expired_days">Статус: осталось дней: %s</string>
+    <string name="settings_license_type_expired">Статус: истекла</string>
+    <string name="settings_license_type_invalid">Статус: недействительна</string>
+
+    <string name="frm_input_license_tile">Ввести новый номер:</string>
+    <string name="frm_input_license_btn_cancel">Отмена</string>
+    <string name="frm_input_license_btn_ok">Ок</string>
+    <string name="frm_input_license_result_ok">Лицензия успешно установлена</string>
+    <string name="frm_input_license_result_fail">Ошибка установки лицензии</string>
 
     <!-- cripto pro -->
     <string name="ContainerTab">Containers</string>
@@ -122,26 +169,6 @@
     <string name="ContainerContainerNameExists">Error! Container exists.</string>
     <string name="ContainerNewPasswordSet" formatted="false">Password have changed: %s</string>
     <string name="ContainerRequireRemoveContainer">Do you want to remove container(s)?</string>
-
-    <string name="ContainerMoveLabel">Копировать контейнер из:</string>
-    <string name="CertTrustMoveLabel">Копировать корневой из:</string>
-    <string name="ContainerDefaultPath">/mnt/sdcard/keys</string>
-
-    <string name="ShowLog">Log</string>
-    <string name="StatusField">Status</string>
-    <string name="StatusUnknown">unknown</string>
-    <string name="StatusOK">done</string>
-    <string name="StatusError">failed</string>
-    <string name="SettingsCopy">Копировать контейнер</string>
-
-
-    <string name="SettingsCopyTrust">Добавить корневой</string>
-    <string name="SettingsTitleTrustCert">Корневые</string>
-    <string name="SettingsTitleChain">Цепочка</string>
-
-    <string name="SettingsKeyStoreType">Тип контейнера:</string>
-    <string name="SettingsProviderType">Тип провайдера:</string>
-    <string name="SettingsKeyAlgorithm">KeyAlgorithm:</string>
 
     <string name="ExamplesExampleName">Example:</string>
     <string name="ExamplesClientName">Выбранный для подписи контейнер:</string>

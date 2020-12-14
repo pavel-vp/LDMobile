@@ -15,8 +15,8 @@ import android.util.Log;
 
 import com.elewise.ldmobile.criptopro.interfaces.ThreadExecuted;
 import com.elewise.ldmobile.criptopro.util.Constants;
-import com.elewise.ldmobile.criptopro.util.Logger;
 import com.elewise.ldmobile.criptopro.util.ProgressDialogHolder;
+import com.elewise.ldmobile.utils.Logger;
 
 /**
  * Служебный класс ClientThread выполняет задачу
@@ -85,7 +85,6 @@ public class ClientThread extends Thread {
         } catch (Exception e) {
 
             Logger.log(e.getMessage());
-            Logger.setStatusFailed();
 
             Log.e(Constants.APP_LOGGER_TAG, "Operation exception", e);
 

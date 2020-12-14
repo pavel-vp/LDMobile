@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +22,11 @@ import com.elewise.ldmobile.api.data.ButtonDesc;
 import com.elewise.ldmobile.api.data.DocumentDetailButtonCommentFlag;
 import com.elewise.ldmobile.criptopro.CAdESSignVerifyExample;
 import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
-import com.elewise.ldmobile.criptopro.util.Logger;
 import com.elewise.ldmobile.criptopro.util.ProviderType;
 import com.elewise.ldmobile.service.Prefs;
 import com.elewise.ldmobile.service.Session;
+import com.elewise.ldmobile.utils.Logger;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -34,12 +35,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import ru.CryptoPro.CAdES.CAdESSignature;
 import ru.CryptoPro.CAdES.CAdESType;
 import ru.CryptoPro.JCSP.CSPConfig;
+import ru.CryptoPro.JCSP.CSPProviderInterface;
 import ru.CryptoPro.JCSP.support.BKSTrustStore;
+import ru.cprocsp.ACSP.tools.common.CSPLicenseConstants;
 import ru.cprocsp.ACSP.tools.common.Constants;
 
 import static com.elewise.ldmobile.ui.SettingsCriptoProActivity.TRUST_STORE_PATH;
+import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.CSP_50_LICENSE_DEFAULT;
 
 public class DocPacketActionActivity extends AppCompatActivity {
     public static final int PARAM_RESULT_NOT = 3;
@@ -90,12 +95,17 @@ public class DocPacketActionActivity extends AppCompatActivity {
                 Toast.makeText(DocPacketActionActivity.this, getString(R.string.dialog_refect_doc_packet_need_specify_comment),
                         Toast.LENGTH_LONG).show();
             } else {
-                execDocument();
+                CSPProviderInterface providerInfo = CSPConfig.INSTANCE.getCSPProviderInfo();
+                if (providerInfo.getLicense().getExistingLicenseStatus() == CSPLicenseConstants.LICENSE_STATUS_OK && !providerInfo.getLicense().getSerialNumber().equals(CSP_50_LICENSE_DEFAULT)) {
+                    execDocument();
 
-                sign();
+                    sign();
 
-                Intent intent = new Intent();
-                setResult(PARAM_RESULT_OK, intent);
+                    Intent intent = new Intent();
+                    setResult(PARAM_RESULT_OK, intent);
+                } else {
+                    Snackbar.make(view, R.string.cripto_pro_invalid_license, Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -125,21 +135,21 @@ public class DocPacketActionActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        final boolean success = (resultCode == Activity.RESULT_OK);
-
-        switch (requestCode) {
-
-            case REQUEST_FILE: {
-                Uri uri = Uri.parse(data.getDataString());
-                // загружаем файл выбранный
-                try {
-                    bytesData = readFile(getContentResolver().openInputStream(uri));
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_FILE: {
+                    if (data.getDataString() != null) {
+                        Uri uri = Uri.parse(data.getDataString());
+                        // загружаем файл выбранный
+                        try {
+                            bytesData = readFile(getContentResolver().openInputStream(uri));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }
-
     }
 
     @Override
@@ -162,7 +172,6 @@ public class DocPacketActionActivity extends AppCompatActivity {
             // Сборка универсального ContainerAdapter.
 
             // Клиентский контейнер (подписант, отправитель, TLS).
-            // todo несколько контейнеров??
             String clientAlias = Prefs.INSTANCE.getContainerAlias(this);
             CharSequence clientPasswordSequence = "1";
             char[] clientPassword = null;
@@ -197,6 +206,8 @@ public class DocPacketActionActivity extends AppCompatActivity {
             adapter.setTrustStoreStream(new FileInputStream(TRUST_STORE_PATH));
             adapter.setTrustStorePassword(BKSTrustStore.STORAGE_PASSWORD);
 
+//            CAdESSignature signatureCades = new CAdESSignature(true);
+
             CAdESSignVerifyExample example = new CAdESSignVerifyExample(adapter, CAdESType.CAdES_BES, bytesData,
                     result -> {
                         Log.e("signedResult", result.toString());
@@ -214,7 +225,6 @@ public class DocPacketActionActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Logger.log(e.getMessage());
-            Logger.setStatusFailed();
             Log.e(Constants.APP_LOGGER_TAG, e.getMessage(), e);
         }
     }

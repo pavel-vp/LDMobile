@@ -94,4 +94,14 @@ public class KeyStoreUtil {
 
     }
 
+    public static void removeContainer(String name) {
+        try {
+            KeyStore keyStore = KeyStore.getInstance(KeyStoreType.currentType(), JCSP.PROVIDER_NAME);
+            keyStore.load(null, null);
+            keyStore.deleteEntry(name);
+            keyStore.store(null, null);
+        } catch (Exception e) {
+            Log.e("error", e.toString());
+        }
+    }
 }

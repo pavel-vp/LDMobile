@@ -10,6 +10,8 @@
  */
 package com.elewise.ldmobile.criptopro.util;
 
+import com.elewise.ldmobile.utils.Logger;
+
 import java.security.Provider;
 import java.util.Iterator;
 import java.util.Set;

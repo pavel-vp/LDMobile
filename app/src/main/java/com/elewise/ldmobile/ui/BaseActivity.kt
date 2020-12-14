@@ -1,12 +1,9 @@
 package com.elewise.ldmobile.ui
 
 import android.R.attr.*
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import com.elewise.ldmobile.R
 
@@ -39,6 +36,15 @@ open class BaseActivity: AppCompatActivity() {
             actionBar.setCustomView(v, p)
             actionBar.setDisplayShowTitleEnabled(true)
             actionBar.setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
         }
     }
 }

@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fadeScrollbars="false"
     android:fillViewport="false">
 
@@ -13,12 +14,48 @@
         android:orientation="vertical">
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="@string/SettingsLicenseNumber" />
+
+        <TextView
+            android:id="@+id/tvLicenseNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="top|center_horizontal"
+            android:textStyle="bold"
+            android:focusableInTouchMode="true" />
+
+        <TextView
+            android:id="@+id/tvLicenseStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:focusableInTouchMode="true"
+            android:layout_marginBottom="8dp"
+            tools:text="Статус лицензии: действителен" />
+
+        <Button
+            android:id="@+id/btnChangeLicense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button.Accent"
+            android:layout_marginBottom="8dp"
+            android:text="@string/settings_btn_change_license" />
+
+        <TextView
             android:id="@+id/tvSettingKeyStore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:visibility="gone"
             android:text="@string/SettingsKeyStoreType" />
 
         <Spinner
@@ -29,6 +66,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:focusable="true"
+            android:visibility="gone"
             android:focusableInTouchMode="true" />
 
         <TextView
@@ -38,17 +76,25 @@
             android:layout_gravity="top|center_horizontal"
             android:text="@string/ExamplesClientName" />
 
-        <Spinner
-            android:id="@+id/spExamplesClientList"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal" />
+            android:orientation="horizontal">
+            <Spinner
+                android:id="@+id/spExamplesClientList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="top|center_horizontal" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="top|center_horizontal"
-            android:background="@android:color/darker_gray" />
+            <ImageButton
+                android:id="@+id/btnRemoveContainer"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                style="@style/AppTheme.Button.Accent"
+                android:src="@drawable/ic_trash_can"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvSettingProviderStore"
@@ -68,90 +114,16 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:singleLine="false"
-            android:text="@string/ContainerMoveLabel"
-            android:textSize="14dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <EditText
-                android:id="@+id/etContainerFolder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|center_horizontal"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:text="@string/ContainerDefaultPath" />
-
-            <Button
-                android:id="@+id/btOpenCopyContainer"
-                style="@style/AppTheme.Button.Accent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Utilities3Dots" />
-        </LinearLayout>
-
         <Button
-            android:id="@+id/btMoveContainers"
+            android:id="@+id/btnMoveContainers"
             style="@style/AppTheme.Button.Accent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
             android:text="@string/SettingsCopy" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:singleLine="false"
-            android:text="@string/CertTrustMoveLabel"
-            android:textSize="14dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <EditText
-                android:id="@+id/etCertTrustFolder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|center_horizontal"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:text="@string/ContainerDefaultPath" />
-
-            <Button
-                android:id="@+id/btOpenCopyCertTrust"
-                style="@style/AppTheme.Button.Accent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Utilities3Dots" />
-        </LinearLayout>
-
         <Button
-            android:id="@+id/btMoveCertTrust"
+            android:id="@+id/btnMoveCertTrust"
             style="@style/AppTheme.Button.Accent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,25 +136,14 @@
             android:layout_marginTop="16dp"
             android:text="@string/SettingsTitleTrustCert"
             android:textColor="@android:color/black"
+            android:textStyle="bold"
             android:textSize="16sp"/>
 
         <LinearLayout
             android:id="@+id/lvTrustCert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/SettingsTitleChain"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-        <ListView
-            android:id="@+id/lvChain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </ScrollView>

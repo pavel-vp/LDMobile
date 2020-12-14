@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +42,7 @@ class DocsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            processType = ProcessType.valueOf(it.getString(ARG_PAGE))
+            processType = ProcessType.valueOf(it.getString(ARG_PAGE)!!)
         }
     }
 
@@ -136,11 +136,11 @@ class DocsFragment : Fragment() {
                 Session.getInstance().currentDocumentDetail = response
                 if (response.doc_alt_type == DocType.PD.name) {
                     val intent = Intent()
-                    intent.setClass(activity, DocPacketActivity::class.java)
+                    intent.setClass(activity!!, DocPacketActivity::class.java)
                     startActivity(intent)
                 } else {
                     val intent = Intent()
-                    intent.setClass(activity, DocActivity::class.java)
+                    intent.setClass(activity!!, DocActivity::class.java)
                     startActivity(intent)
                 }
                 return

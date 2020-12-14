@@ -1,16 +1,11 @@
 package com.elewise.ldmobile.service;
 
-import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
 
 import com.elewise.ldmobile.LoginActivity;
 import com.elewise.ldmobile.MainApp;
-import com.elewise.ldmobile.R;
 import com.elewise.ldmobile.api.*;
 import com.elewise.ldmobile.api.data.*;
 import com.elewise.ldmobile.model.*;
@@ -19,7 +14,6 @@ import com.elewise.ldmobile.rest.RestHelper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import kotlinx.coroutines.Deferred;

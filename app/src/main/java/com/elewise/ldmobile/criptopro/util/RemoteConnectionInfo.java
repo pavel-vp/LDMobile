@@ -10,6 +10,8 @@
  */
 package com.elewise.ldmobile.criptopro.util;
 
+import com.elewise.ldmobile.utils.Logger;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 

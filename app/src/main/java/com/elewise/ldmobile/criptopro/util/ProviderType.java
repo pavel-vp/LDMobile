@@ -81,7 +81,7 @@ public class ProviderType extends ArrayResourceSelector {
     public static AlgorithmSelector.DefaultProviderType currentProviderType() {
 
         if (!initiated) {
-            return AlgorithmSelector.DefaultProviderType.pt2001;
+            return AlgorithmSelector.DefaultProviderType.pt2012Short;
         } // if
 
         String val = currentType();

@@ -12,13 +12,4 @@ class AboutActivity: BaseActivity() {
 
         updateActionBar(getString(R.string.activity_about_title))
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-            return true
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
-    }
 }

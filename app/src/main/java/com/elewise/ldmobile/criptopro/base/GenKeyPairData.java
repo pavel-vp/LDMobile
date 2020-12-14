@@ -12,6 +12,7 @@ package com.elewise.ldmobile.criptopro.base;
 
 import android.content.Context;
 
+import com.elewise.ldmobile.utils.Logger;
 import com.objsys.asn1j.runtime.Asn1DerEncodeBuffer;
 import com.objsys.asn1j.runtime.Asn1Integer;
 import com.objsys.asn1j.runtime.Asn1ObjectIdentifier;
@@ -38,7 +39,6 @@ import java.util.Vector;
 import com.elewise.ldmobile.criptopro.util.AlgorithmSelector;
 import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
 import com.elewise.ldmobile.criptopro.util.KeyStoreType;
-import com.elewise.ldmobile.criptopro.util.Logger;
 import ru.CryptoPro.JCP.ASN.CA_Definitions.CertificateTemplate;
 import ru.CryptoPro.JCP.ASN.PKIX1Explicit88.Extension;
 import ru.CryptoPro.JCP.JCP;

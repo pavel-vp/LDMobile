@@ -35,15 +35,4 @@ public class DocLineDetailActivity extends BaseActivity {
 
         updateActionBar(documentItem.getLine_name());
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
 }
