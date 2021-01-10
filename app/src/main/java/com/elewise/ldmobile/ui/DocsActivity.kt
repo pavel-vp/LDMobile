@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,14 +21,12 @@ import com.elewise.ldmobile.model.ProcessType
 import com.elewise.ldmobile.service.Prefs
 import com.elewise.ldmobile.service.Session
 import com.elewise.ldmobile.ui.DocsFragment.Companion.newInstance
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.drawermenu.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class DocsActivity : BaseActivity() {
 

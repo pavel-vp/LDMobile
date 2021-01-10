@@ -134,8 +134,8 @@ class DocFragment : Fragment() {
 
     private fun buttonCreateClickListener(button: Button, buttonDesc: ButtonDesc) {
         button.setOnClickListener {
-            val intent = Intent(context, DocPacketActionActivity::class.java)
-            intent.putExtra(DocPacketActionActivity.PARAM_IN_DOC_DETAIL, buttonDesc)
+            val intent = Intent(context, DocActionActivity::class.java)
+            intent.putExtra(DocActionActivity.PARAM_IN_DOC_DETAIL, buttonDesc)
             startActivityForResult(intent, REQUEST_ONE_CODE)
         }
     }
@@ -247,7 +247,7 @@ class DocFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_ONE_CODE) {
-            if (resultCode == DocPacketActionActivity.PARAM_RESULT_OK) {
+            if (resultCode == DocActionActivity.PARAM_RESULT_OK) {
                 Toast.makeText(context, R.string.action_exec_success, Toast.LENGTH_LONG).show()
                 activity!!.finish()
             }
@@ -271,7 +271,7 @@ class DocFragment : Fragment() {
             fileDir.mkdir()
         }
 
-        val file = File(fileDir, "filename.xml")// File.createTempFile("file_attach", ".xml", File(path))
+        val file = File(fileDir, "filename.xml")
         val fileOutputStream: FileOutputStream
         try {
             fileOutputStream = FileOutputStream(file)

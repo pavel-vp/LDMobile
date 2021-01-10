@@ -10,6 +10,8 @@
  */
 package com.elewise.ldmobile.criptopro.base;
 
+import com.elewise.ldmobile.criptopro.util.AlgorithmSelector;
+import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
 import com.objsys.asn1j.runtime.Asn1BerDecodeBuffer;
 import com.objsys.asn1j.runtime.Asn1Exception;
 
@@ -17,8 +19,6 @@ import java.io.IOException;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
-import com.elewise.ldmobile.criptopro.util.AlgorithmSelector;
-import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
 import ru.CryptoPro.JCP.ASN.PKIX1Explicit88.SubjectPublicKeyInfo;
 import ru.CryptoPro.JCP.params.AlgIdInterface;
 import ru.CryptoPro.JCP.params.AlgIdSpec;

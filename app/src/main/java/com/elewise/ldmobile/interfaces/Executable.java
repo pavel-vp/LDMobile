@@ -15,8 +15,6 @@
  */
 package com.elewise.ldmobile.interfaces;
 
-import ru.CryptoPro.JCP.JCP;
-
 /**
  * Служебный интерфейс Executable предназначен
  * для реализации примеров.
@@ -25,17 +23,6 @@ import ru.CryptoPro.JCP.JCP;
  * @.Version
  */
 public interface Executable<T> {
-
-    /**
-     * Алгоритм ключа.
-     */
-    String KEY_ALGORITHM = JCP.GOST_EL_2012_256_NAME;
-
-    /**
-     * Алгоритм подписи.
-     */
-    String SIG_ALGORITHM = JCP.GOST_SIGN_2012_256_NAME;
-
     /**
      * Выполнение задачи.
      *

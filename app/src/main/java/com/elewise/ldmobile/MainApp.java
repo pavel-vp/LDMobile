@@ -1,22 +1,18 @@
 package com.elewise.ldmobile;
 
 import android.content.Context;
-import androidx.multidex.MultiDexApplication;
 import android.util.Log;
 
-import com.elewise.ldmobile.criptopro.LicenseNewExample;
+import androidx.multidex.MultiDexApplication;
+
 import com.elewise.ldmobile.criptopro.util.ProviderType;
 import com.elewise.ldmobile.utils.Logger;
-
-import org.apache.xml.security.utils.resolver.ResourceResolver;
-import org.jcp.xml.dsig.internal.dom.XMLDSigRI;
 
 import java.io.File;
 import java.security.Provider;
 import java.security.Security;
 
 import ru.CryptoPro.AdES.AdESConfig;
-import ru.CryptoPro.JCPxml.XmlInit;
 import ru.CryptoPro.JCSP.CSPConfig;
 import ru.CryptoPro.JCSP.CSPProviderInterface;
 import ru.CryptoPro.JCSP.JCSP;

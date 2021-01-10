@@ -14,15 +14,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import com.elewise.ldmobile.criptopro.interfaces.HashData;
+import com.elewise.ldmobile.criptopro.interfaces.ThreadExecuted;
+import com.elewise.ldmobile.criptopro.util.AlgorithmSelector;
+import com.elewise.ldmobile.criptopro.util.Constants;
+import com.elewise.ldmobile.criptopro.util.ContainerAdapter;
+import com.elewise.ldmobile.criptopro.util.Containers;
+import com.elewise.ldmobile.criptopro.util.ProgressDialogHolder;
+import com.elewise.ldmobile.utils.Logger;
+
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-
-import com.elewise.ldmobile.criptopro.interfaces.HashData;
-import com.elewise.ldmobile.criptopro.interfaces.ThreadExecuted;
-import com.elewise.ldmobile.criptopro.util.*;
-import com.elewise.ldmobile.utils.Logger;
 
 import ru.CryptoPro.JCP.KeyStore.JCPPrivateKeyEntry;
 import ru.CryptoPro.JCP.params.JCPProtectionParameter;

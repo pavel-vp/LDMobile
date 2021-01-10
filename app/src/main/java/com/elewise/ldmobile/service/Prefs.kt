@@ -3,11 +3,8 @@ package com.elewise.ldmobile.service
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import com.elewise.ldmobile.R
 import com.elewise.ldmobile.api.ParamAuthorizationResponse
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import java.lang.Exception
 
 object Prefs {
     private val STORAGE_NAME = "settings"

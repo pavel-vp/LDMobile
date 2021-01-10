@@ -9,7 +9,6 @@ import com.elewise.ldmobile.criptopro.LicenseNewExample
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_input_license_number.*
 import ru.CryptoPro.JCSP.CSPConfig
-import java.lang.Exception
 
 class InputLicenseNumberActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,5 @@
 package com.elewise.ldmobile.utils
 
-import android.Manifest
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Intent

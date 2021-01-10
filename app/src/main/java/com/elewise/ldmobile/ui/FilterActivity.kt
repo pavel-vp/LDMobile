@@ -5,12 +5,12 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import com.elewise.ldmobile.R
-import com.elewise.ldmobile.api.*
+import com.elewise.ldmobile.api.FilterData
+import com.elewise.ldmobile.api.ParamExecOperationActionType
+import com.elewise.ldmobile.api.ParamFilterSettingsResponse
+import com.elewise.ldmobile.api.ResponseStatusType
 import com.elewise.ldmobile.service.Session
 import com.elewise.ldmobile.utils.MessageUtils
 import com.elewise.ldmobile.widget.*
@@ -19,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.util.*
 
 

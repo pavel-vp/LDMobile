@@ -1,21 +1,14 @@
 package com.elewise.ldmobile.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.ContactsContract.Directory.PACKAGE_NAME
 import android.view.MenuItem
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.elewise.ldmobile.BuildConfig
 import com.elewise.ldmobile.R
 import com.elewise.ldmobile.service.Session
 import kotlinx.android.synthetic.main.activity_doc.*
-import java.io.File
 
 
 class DocActivity : BaseActivity() {
@@ -28,7 +21,6 @@ class DocActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         updateView()
     }
-
 
     private fun updateView() {
         val mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)

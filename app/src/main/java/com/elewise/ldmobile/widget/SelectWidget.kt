@@ -2,7 +2,6 @@ package com.elewise.ldmobile.widget
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -12,7 +11,6 @@ import com.elewise.ldmobile.R
 import com.elewise.ldmobile.api.FilterElement
 import com.elewise.ldmobile.ui.FilterActivity
 import kotlinx.android.synthetic.main.select_widget.view.*
-
 
 
 class SelectWidget(activity: FilterActivity, val descrView: FilterElement): BaseWidget(activity) {

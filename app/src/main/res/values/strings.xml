@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">LDMobile</string>
     <string name="action_filter">Фильтр</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="rest_server_base_url"></string>
 
     <string name="docs_activity_title">Электронные документы</string>
     <string name="docs_activity_no_results">Нет результатов</string>
@@ -18,14 +16,6 @@
 
     <string name="fragment_doc_packet_header_related">Связанные документы</string>
     <string name="fragment_doc_packet_header_attachments">Вложения</string>
-    <string name="fragment_doc_packet_header_subscribe">Подписать</string>
-    <string name="fragment_doc_packet_header_refuse">Отказать</string>
-
-    <string name="menu_docs_approve_success">Согласовать</string>
-    <string name="menu_docs_approve_reject">Отказать</string>
-
-    <string name="menu_docs_sign_success">Подписать</string>
-    <string name="menu_docs_sign_reject">Отказать</string>
 
     <string name="drawer_menu_login">Логин:</string>
     <string name="drawer_menu_role">Роль:</string>
@@ -33,25 +23,9 @@
     <string name="drawer_menu_settings">Настройки</string>
     <string name="drawer_menu_about">О программе</string>
 
-
     <string name="filter_activity_title">Фильтр</string>
     <string name="filter_activity_btn_apply">Применить</string>
     <string name="filter_activity_btn_clear">Сбросить</string>
-
-    <string name="dialog_succes_doc_title">Согласование</string>
-    <string name="dialog_succes_doc_message">Вы уверены, что хотите согласовать документ?</string>
-    <string name="dialog_succes_doc_ok">Согласовать</string>
-    <string name="dialog_succes_doc_cancel">Отмена</string>
-
-    <string name="dialog_reject_doc_title">Отклонить</string>
-    <string name="dialog_reject_doc_reason">Введите причину отказа</string>
-    <string name="dialog_reject_doc_ok">Отклонить</string>
-    <string name="dialog_reject_doc_cancel">Отмена</string>
-
-    <string name="dialog_succes_doc_packet_title">Подписать пакет</string>
-    <string name="dialog_succes_doc_packet_message">Доступные для подписания: %s</string>
-    <string name="dialog_succes_doc_packet_ok">Подписать</string>
-    <string name="dialog_succes_doc_packet_cancel">Отмена</string>
 
     <string name="dialog_reject_doc_packet_title">Отказать пакет</string>
     <string name="dialog_reject_doc_packet_message">Доступные для отказа: %s</string>
@@ -62,8 +36,6 @@
 
     <string name="alert_dialog_ok">Ок</string>
     <string name="alert_dialog_error">Ошибка</string>
-    <string name="alert_dialog_error_login">Не удалось войти в систему</string>
-    <string name="alert_dialog_error_subscribe_packet">Невозможно выполнить действие по пакету. В пакете документов отсутствуют документы готовые к отправке</string>
     
     <string name="error_unknown">Произошла непредвиденная ошибка</string>
     <string name="error_unknown_status_type">Неизвестный статус выполнения запроса</string>
@@ -100,12 +72,6 @@
     <string name="action_exec_success">Успешно выполнено</string>
     <string name="action_error">Действие не выполнено</string>
 
-    <string name="dialog_add_to_chain_title">Добавить в цепочку?</string>
-    <string name="dialog_add_buttion">Добавить</string>
-    <string name="dialog_delete_from_chain_title">Удалить из цепочки?</string>
-    <string name="dialog_delete_button">Удалить</string>
-    <string name="dialog_cancel_button">Отмена</string>
-
     <string name="dialog_not_granted_perm">Внимание! Без доступа к памяти, вы не сможете настроить CriptoPro. Запросить разрешения повторно?</string>
     <string name="toast_open_settings_hint">Необходимо, в разделе разрешения, выдать доступ к памяти</string>
     <string name="action_settings">Настройки</string>
@@ -115,27 +81,13 @@
 
     <string name="cripto_pro_invalid_license">Лицензионный ключ CriptoPro недействителен</string>
 
-
-    <string name="ContainerMoveLabel">Копировать контейнер из:</string>
-    <string name="CertTrustMoveLabel">Копировать корневой из:</string>
-    <string name="ContainerDefaultPath">/mnt/sdcard/keys</string>
-
-    <string name="ShowLog">Log</string>
-    <string name="StatusField">Status</string>
-    <string name="StatusUnknown">unknown</string>
-    <string name="StatusOK">done</string>
-    <string name="StatusError">failed</string>
     <string name="SettingsCopy">Добавить контейнер</string>
-
-
     <string name="SettingsCopyTrust">Добавить корневой</string>
     <string name="SettingsTitleTrustCert">Корневые</string>
-    <string name="SettingsTitleChain">Цепочка</string>
 
     <string name="SettingsLicenseNumber">Лицензионный ключ:</string>
     <string name="SettingsKeyStoreType">Тип контейнера:</string>
     <string name="SettingsProviderType">Тип провайдера:</string>
-    <string name="SettingsKeyAlgorithm">KeyAlgorithm:</string>
     <string name="settings_btn_change_license">Ввести новую лицензию</string>
     <string name="settings_license_type_permanent">Статус: постоянная лицензия</string>
     <string name="settings_license_type_expired_days">Статус: осталось дней: %s</string>
@@ -151,20 +103,12 @@
 
     <string name="chosed_container">Выбранный для подписи контейнер:</string>
 
-    <string name="action_activity_sign">Подписать</string>
-    <string name="action_activity_not_sign">Отказать</string>
-    <string name="action_activity_approve">Согласовать</string>
-    <string name="action_activity_reject">Отклонить</string>
-    <string name="action_activity_return_executor">Вернуть исполнителю</string>
-    <string name="action_activity_annul_confirm">Подтвердить аннулирование</string>
-    <string name="action_activity_annul_reject">Отказать в аннулировании</string>
-
-    <string name="ProgressDialogExecuting">Пожалуйста подождите&#8230;</string>
+    <string name="progress_dialog_executing">Пожалуйста подождите&#8230;</string>
     <string name="not_added_connection_address">В настройках не указан адрес подключения</string>
     <string name="not_find_app">Не найдено приложение для выполнения действия</string>
     <string name="not_find_doc_id">Нет документов к подписанию</string>
     <string name="about_program">LegalDoc.Mobile 3.0 (3.0.1)\n© ООО \"Интеллект ЛАБ\", 2020</string>
-    <string name="login_progress">Вход в систему...</string>
+    <string name="login_progress">Вход в систему&#8230;</string>
 
     <string-array name="providerTypes">
         <item>GOST R 34.10&#8211;2001</item>

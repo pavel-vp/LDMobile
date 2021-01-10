@@ -43,7 +43,7 @@ public class ProgressDialogHolder extends ProgressDialog {
         setIndeterminate(true);
         setCancelable(cancelable);
 
-        String message = context.getString(R.string.ProgressDialogExecuting);
+        String message = context.getString(R.string.progress_dialog_executing);
         setMessage(message);
         setOnKeyListener((dialog, keyCode, event) -> {
             // Закрытие окна при нажатии на Back.

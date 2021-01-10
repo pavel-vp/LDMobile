@@ -26,11 +26,6 @@ import android.util.Log
  * @.Version
  */
 class Logger {
-    /**
-     * Добавление сообщений в лог.
-     *
-     * @param message Сообщение.
-     */
     fun append(message: String?) {
         if (message != null) {
             Log.d(LOG_TAG, message)
@@ -38,14 +33,7 @@ class Logger {
     }
 
     companion object {
-        /**
-         * Тэг лога.
-         */
         const val LOG_TAG = "ACSP_Embedded"
-
-        /**
-         * Экземпляр лога.
-         */
         @JvmField
         var INSTANCE: Logger? = null
         @JvmStatic

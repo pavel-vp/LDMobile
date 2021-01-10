@@ -1,7 +1,6 @@
 package com.elewise.ldmobile.ui
 
 import android.os.Bundle
-import android.view.MenuItem
 import com.elewise.ldmobile.R
 
 class AboutActivity: BaseActivity() {

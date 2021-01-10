@@ -16,7 +16,7 @@
             android:usesCleartextTraffic="true"
             android:name=".MainApp">
         <activity
-                android:name="com.elewise.ldmobile.LoginActivity"
+                android:name="com.elewise.ldmobile.ui.LoginActivity"
                 android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -29,8 +29,6 @@
         <activity android:name=".ui.DocActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
-        <activity android:name=".ui.DocPacketActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".ui.DocsActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.FilterActivity"
@@ -50,7 +48,7 @@
             <!--android:theme="@style/AppTheme.TranscluentModal"-->
             <!--android:windowSoftInputMode="adjustResize|stateHidden"/>-->
         <activity
-            android:name=".ui.DocPacketActionActivity"
+            android:name=".ui.DocActionActivity"
             android:theme="@style/AppTheme.TranscluentModal"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".ui.SettingsActivity"

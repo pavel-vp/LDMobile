@@ -34,7 +34,7 @@ public class LicenseNewExample implements Executable<Boolean> {
     /**
      * Новая лицензия CSP.
      */
-    private String license;// = "5050G-M0000-01GPD-9BUCU-GW9NG"; // Лицензия CSP 5.0
+    private String license;
 
     /**
      * Параметры провайдера.

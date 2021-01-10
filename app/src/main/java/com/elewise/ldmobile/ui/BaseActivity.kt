@@ -1,6 +1,5 @@
 package com.elewise.ldmobile.ui
 
-import android.app.Activity
 import android.content.Context
 import android.view.*
 import android.view.inputmethod.InputMethodManager

@@ -3,8 +3,6 @@ package com.elewise.ldmobile.rest
 import android.util.Log
 import com.elewise.ldmobile.BuildConfig
 import com.elewise.ldmobile.api.*
-import com.elewise.ldmobile.api.ParamExecOperationResponse
-import com.elewise.ldmobile.api.ParamGetFileResponse
 import com.elewise.ldmobile.model.ProcessType
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred

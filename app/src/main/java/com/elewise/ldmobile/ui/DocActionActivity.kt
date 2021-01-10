@@ -3,7 +3,6 @@ package com.elewise.ldmobile.ui
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.os.Environment
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
@@ -24,7 +23,7 @@ import com.elewise.ldmobile.service.Session
 import com.elewise.ldmobile.utils.Logger.Companion.log
 import com.elewise.ldmobile.utils.MessageUtils
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_doc_packet_reject.*
+import kotlinx.android.synthetic.main.activity_doc_action.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,9 +33,9 @@ import ru.CryptoPro.CAdES.CAdESType
 import ru.CryptoPro.JCSP.CSPConfig
 import ru.CryptoPro.JCSP.support.BKSTrustStore
 import ru.cprocsp.ACSP.tools.common.CSPLicenseConstants
-import java.io.*
+import java.io.FileInputStream
 
-class DocPacketActionActivity : AppCompatActivity() {
+class DocActionActivity : AppCompatActivity() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -50,7 +49,7 @@ class DocPacketActionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_doc_packet_reject)
+        setContentView(R.layout.activity_doc_action)
         buttonDesc = intent.getSerializableExtra(PARAM_IN_DOC_DETAIL) as ButtonDesc
         tvTitle.setText(buttonDesc.title)
         tvText.setText(buttonDesc.text)
@@ -63,7 +62,7 @@ class DocPacketActionActivity : AppCompatActivity() {
         }
         btnOk.setOnClickListener { view: View ->
             if (buttonDesc.comment_flag && TextUtils.isEmpty(edComment.getText().trim().toString())) {
-                Toast.makeText(this@DocPacketActionActivity, getString(R.string.dialog_refect_doc_packet_need_specify_comment),
+                Toast.makeText(this@DocActionActivity, getString(R.string.dialog_refect_doc_packet_need_specify_comment),
                         Toast.LENGTH_LONG).show()
             } else {
                 val providerInfo = CSPConfig.INSTANCE.cspProviderInfo
@@ -300,9 +299,6 @@ class DocPacketActionActivity : AppCompatActivity() {
         adapter.providerType = ProviderType.currentProviderType()
         adapter.resources = resources // для примера установки сертификатов
 
-//            final String trustStorePath = this.getApplicationInfo().dataDir +
-//                    File.separator + BKSTrustStore.STORAGE_DIRECTORY + File.separator +
-//                    BKSTrustStore.STORAGE_FILE_TRUST;
         log("Example trust store: " + SettingsCriptoProActivity.TRUST_STORE_PATH)
         adapter.trustStoreProvider = BouncyCastleProvider.PROVIDER_NAME
         adapter.trustStoreType = BKSTrustStore.STORAGE_TYPE

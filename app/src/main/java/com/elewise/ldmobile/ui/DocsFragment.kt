@@ -15,8 +15,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.elewise.ldmobile.R
-import com.elewise.ldmobile.api.*
-import com.elewise.ldmobile.model.DocType
+import com.elewise.ldmobile.api.Document
+import com.elewise.ldmobile.api.FilterData
+import com.elewise.ldmobile.api.ParamDocumentDetailsResponse
+import com.elewise.ldmobile.api.ResponseStatusType
 import com.elewise.ldmobile.model.DocumentForList
 import com.elewise.ldmobile.model.ProcessType
 import com.elewise.ldmobile.service.Session
@@ -71,7 +73,6 @@ class DocsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        registerForContextMenu(lvDocs)
 
         lvDocs.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {

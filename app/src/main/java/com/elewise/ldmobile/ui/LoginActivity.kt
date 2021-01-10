@@ -1,4 +1,4 @@
-package com.elewise.ldmobile
+package com.elewise.ldmobile.ui
 
 import android.app.AlertDialog
 import android.app.ProgressDialog
@@ -10,14 +10,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.elewise.ldmobile.R
 import com.elewise.ldmobile.api.AuthStatusType
 import com.elewise.ldmobile.api.ParamAuthorizationResponse
 import com.elewise.ldmobile.api.ParamTokenActivityCheckResponse
 import com.elewise.ldmobile.api.ResponseSessionActivityStatus
 import com.elewise.ldmobile.service.Prefs
 import com.elewise.ldmobile.service.Session
-import com.elewise.ldmobile.ui.DocsActivity
-import com.elewise.ldmobile.ui.SettingsActivity
 import com.elewise.ldmobile.utils.MessageUtils
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
@@ -101,7 +100,6 @@ class LoginActivity : AppCompatActivity() {
     private fun handleTokenActivityCheck(response: ParamTokenActivityCheckResponse?) {
         runOnUiThread {
             if (response != null) {
-                // tood check activity_status null!! nullpointer
                 if (response.session_activity_status != null && response.session_activity_status == ResponseSessionActivityStatus.Y.name) {
                     // сессия еще активна, перейдем сразу к документам
                     openDocsActivity()
