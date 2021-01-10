@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.DocActivity$DocFragment">
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,29 +23,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            style="@style/AppTheme.Button.Accent"
-            tools:text="@string/fragment_doc_header_succes"/>
+<!--        <LinearLayout-->
+<!--            android:id="@+id/llBtnLineOne"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnTwo"
-            style="@style/AppTheme.Button.Default"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_weight="1"
-            tools:text="@string/fragment_doc_header_reject"
-            />
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/btnOne"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="4dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:visibility="gone"-->
+<!--                style="@style/AppTheme.Button.Accent"-->
+<!--                tools:text="@string/fragment_doc_header_succes"/>-->
+
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/btnTwo"-->
+<!--                style="@style/AppTheme.Button.Default"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="4dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:visibility="gone"-->
+<!--                tools:text="@string/fragment_doc_header_reject" />-->
+<!--        </LinearLayout>-->
     </LinearLayout>
+
+
 
 </LinearLayout>

@@ -39,6 +39,6 @@ android:orientation="horizontal">
     android:layout_marginStart="16dp"
     android:visibility="gone"
     tools:visibility="visible"
-    android:src="@drawable/ic_doc_type_asv_mini"/>
+    tools:src="@drawable/ic_doc_type_asv_mini"/>
 
 </LinearLayout>

@@ -21,7 +21,20 @@ class InputLicenseNumberActivity: AppCompatActivity() {
         }
 
         btnOk.setOnClickListener {
-            val newLicense = edLicenseNumber.text.toString()
+            var newLicense = edLicenseNumber.text.toString().trim().replace("-", "")
+
+            if (newLicense.count() != 25) {
+                Snackbar.make(btnOk, R.string.frm_input_license_incorrect, Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            var i = 0
+            while (i < 4) {
+                val separatorPosition = 5*(i + 1) + i
+                newLicense = newLicense.substring(0, separatorPosition)  + "-" + newLicense.substring(separatorPosition, newLicense.count())
+                i++
+            }
+
             try {
                 val providerInfo = CSPConfig.INSTANCE.cspProviderInfo
                 val licenseNewExample = LicenseNewExample(providerInfo, newLicense)

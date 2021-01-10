@@ -44,31 +44,7 @@ public class MainApp extends MultiDexApplication {
         // check license
         providerInfo.getLicense().checkAndSave(providerInfo.getLicense().getSerialNumber(), false);
 
-        // 1. Инициализация провайдеров: CSP и java-провайдеров
-        // (Обязательная часть).
-
-//        if (!initCSPProviders()) {
-//            Log.i(Constants.APP_LOGGER_TAG, "Couldn't initialize CSP.");
-//            return;
-//        } // if
-//
         initJavaProviders();
-//
-//        // 2. Копирование тестовых контейнеров для подписи,
-//        // проверки подписи, шифрования и TLS (Примеры и вывод
-//        // в лог).
-//
-//        initLogger();
-//        installContainers();
-//
-//        // 3. Инициируем объект для управления выбором типа
-//        // контейнера (Настройки).
-//
-//        KeyStoreType.init(this);
-//
-//        // 4. Инициируем объект для управления выбором типа
-//        // провайдера (Настройки).
-//
         ProviderType.init(this);
     }
 
@@ -229,131 +205,11 @@ public class MainApp extends MultiDexApplication {
 
     }
 
-//   /* /************************ Инициализация провайдера ************************/
-//
-//    /**
-//     * Инициализация CSP провайдера.
-//     *
-//     * @return True в случае успешной инициализации.
-//     */
-//    private boolean initCSPProviders() {
-//
-//        // Инициализация провайдера CSP. Должна выполняться
-//        // один раз в главном потоке приложения, т.к. использует
-//        // статические переменные.
-//        //
-//        // 1. Создаем инфраструктуру CSP и копируем ресурсы
-//        // в папку. В случае ошибки мы, например, выводим окошко
-//        // (или как-то иначе сообщаем) и завершаем работу.
-//
-//        int initCode   = CSPConfig.initEx(this);
-//        boolean initOk = initCode == CSPConfig.CSP_INIT_OK;
-//
-//        // Если инициализация не удалась, то сообщим об ошибке.
-//        if (!initOk) {
-//
-//            switch (initCode) {
-//
-//                // Не передан контекст приложения (null). Он необходим,
-//                // чтобы произвести копирование ресурсов CSP, создание
-//                // папок, смену директории CSP и т.п.
-//                case CSPConfig.CSP_INIT_CONTEXT:
-//                    Log.e("initCSPProviders", "Couldn't initialize context.");
-//                    break;
-//
-//                /**
-//                 * Не удается создать инфраструктуру CSP (папки): нет
-//                 * прав (нарушен контроль целостности) или ошибки.
-//                 * Подробности в logcat.
-//                 */
-//                case CSPConfig.CSP_INIT_CREATE_INFRASTRUCTURE:
-//                    Log.e("initCSPProviders", "Couldn't create CSP infrastructure.");
-//                    break;
-//
-//                /**
-//                 * Не удается скопировать все или часть ресурсов CSP -
-//                 * конфигурацию, лицензию (папки): нет прав (нарушен
-//                 * контроль целостности) или ошибки.
-//                 * Подробности в logcat.
-//                 */
-//                case CSPConfig.CSP_INIT_COPY_RESOURCES:
-//                    Log.e("initCSPProviders", "Couldn't copy CSP resources.");
-//                    break;
-//
-//                /**
-//                 * Не удается задать рабочую директорию для загрузки
-//                 * CSP. Подробности в logcat.
-//                 */
-//                case CSPConfig.CSP_INIT_CHANGE_WORK_DIR:
-//                    Log.e("initCSPProviders", "Couldn't change CSP working directory.");
-//                    break;
-//
-//                /**
-//                 * Неправильная лицензия.
-//                 */
-//                case CSPConfig.CSP_INIT_INVALID_LICENSE:
-//                    Log.e("initCSPProviders", "Invalid CSP serial number.");
-//                    break;
-//
-//                /**
-//                 * Не удается создать хранилище доверенных сертификатов
-//                 * для CAdES API.
-//                 */
-//                case CSPConfig.CSP_TRUST_STORE_FAILED:
-//                    Log.e("initCSPProviders", "Couldn't create trust store for CAdES API.");
-//                    break;
-//
-//                /**
-//                 * Не удается сохранить путь к библиотекам провайдера
-//                 * в конфиг.
-//                 */
-//                case CSPConfig.CSP_STORE_LIBRARY_PATH:
-//                    Log.e("initCSPProviders", "Couldn't store native library path to config.");
-//                    break;
-//
-//                /**
-//                 * Ошибка контроля целостности.
-//                 */
-//                case CSPConfig.CSP_INIT_INVALID_INTEGRITY:
-//                    Log.e("initCSPProviders", "Integrity control failure.");
-//                    break;
-//
-//            } // switch
-//
-//        } // if
-//
-//        return initOk;
-//    }
-//
-//    /**
-//     * Добавление нативного провайдера Java CSP,
-//     * SSL-провайдера и Revocation-провайдера в
-//     * список Security. Инициализируется JCPxml,
-//     * CAdES.
-//     *
-//     * Происходит один раз при инициализации.
-//     * Возможно только после инициализации в CSPConfig!
-//     *
-//     */
     private void initJavaProviders() {
 
         // Задание провайдера по умолчанию для CAdES.
 
         AdESConfig.setDefaultProvider(JCSP.PROVIDER_NAME);
-
-        // Инициализация XML DSig (хеш, подпись).
-
-//        XmlInit.init();
-
-        // Добавление реализации поиска узла по ID.
-
-//        ResourceResolver.registerAtStart(XmlInit.JCP_XML_DOCUMENT_ID_RESOLVER);
-
-        // Добавление XMLDSigRI провайдера, так как его
-        // использует XAdES.
-
-//        Provider xmlDSigRi = new XMLDSigRI();
-//        Security.addProvider(xmlDSigRi);
 
         Provider provider = Security.getProvider("XMLDSig");
         if (provider != null) {
@@ -364,7 +220,7 @@ public class MainApp extends MultiDexApplication {
             Security.getProvider("XMLDSig").put("KeyInfoFactory.DOM",
                     "ru.CryptoPro.JCPxml.dsig.internal.dom.DOMKeyInfoFactory");
 
-        } // if
+        }
 
         // Включаем возможность онлайновой проверки статуса
         // сертификата.
@@ -399,35 +255,4 @@ public class MainApp extends MultiDexApplication {
         System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
 
     }
-//
-//    /**
-//     * Инициализация объекта для отображения логов.
-//     *
-//     */
-//    private void initLogger() {
-//
-//        // Поле для вывода логов и метка для отображения
-//        // статуса.
-//
-////        EditText etLog = (EditText) findViewById(R.id.etLog);
-////        etLog.setMinLines(10);
-////
-////        TextView tvOpStatus = (TextView) findViewById(R.id.tvOpStatus);
-//
-////        Logger.init(getResources(), etLog, tvOpStatus);
-////        Logger.clear();
-//
-//    }
-//
-//    /**
-//     * Копирование тестовых контейнеров для подписи,
-//     * шифрования, обмена по TLS из архива в папку
-//     * keys приложения.
-//     *
-//     */
-//    private void installContainers() {
-////        final CSPTool cspTool = new CSPTool(this);
-////        cspTool.getAppInfrastructure().copyContainerFromArchive(R.raw.keys);
-//    }
-//
 }

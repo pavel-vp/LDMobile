@@ -156,6 +156,7 @@ public class CAdESSignVerifyExample extends SignData {
 
                 if (cAdESType.equals(CAdESType.CAdES_BES)) {
                     final Hashtable table = new Hashtable();
+                    // todo date sign!!!
                     Attribute attr = new Attribute(CMSAttributes.signingTime,
                             new DERSet(new Time(new Date()))); // устанавливаем время подписи
                     table.put(attr.getAttrType(), attr);
@@ -173,9 +174,6 @@ public class CAdESSignVerifyExample extends SignData {
 
                 ByteArrayOutputStream signatureStream =
                     new ByteArrayOutputStream();
-
-                Logger.log("Compute signature for message '" +
-                    Constants.MESSAGE + "'");
 
                 cAdESSignature.open(signatureStream);
 
@@ -244,8 +242,8 @@ public class CAdESSignVerifyExample extends SignData {
 
                 callback.signedResult(new SignedResult(true, "", sign));
 
-                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/sign";
-                writeFileOnInternalStorage("first_signed_file.docx.sgn", path, sign);
+//                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/sign";
+//                writeFileOnInternalStorage("first_signed_file.docx.sgn", path, sign);
             } catch (Exception e) {
                 callback.signedResult(new SignedResult(false, e.toString(), new byte[0]));
                 // пробросим дальше для корректного завершения

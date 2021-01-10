@@ -1,9 +1,10 @@
 package com.elewise.ldmobile.rest;
 
 import com.elewise.ldmobile.api.*;
+import com.elewise.ldmobile.api.ParamExecOperationResponse;
+import com.elewise.ldmobile.api.ParamGetFileResponse;
 
 import kotlinx.coroutines.Deferred;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -12,11 +13,11 @@ public interface RestApi {
 
     // Авторизация
     @POST("Authorization")
-    Call<ParamAuthorizationResponse> getAuthorizationToken(@Body ParamAuthorizationRequest request);
+    Deferred<Response<ParamAuthorizationResponse>> getAuthorizationToken(@Body ParamAuthorizationRequest request);
 
     // Проверка статуса активности сессии
     @POST("TokenActivityCheck")
-    Call<ParamTokenActivityCheckResponse> tokenActivityCheck(@Body ParamTokenActivityCheckRequest request);
+    Deferred<Response<ParamTokenActivityCheckResponse>> tokenActivityCheck(@Body ParamTokenActivityCheckRequest request);
 
     // Загрузить список фильтров
     @POST("GetFilterSettings")
@@ -32,14 +33,17 @@ public interface RestApi {
 
     // Загрузить файл
     @POST("GetFile")
-    Call<byte[]> getFile(@Body ParamGetFileRequest request);
+    Deferred<Response<ParamGetFileResponse>> getFile(@Body ParamGetFileRequest request);
 
     // Сохранеие файла подписи
     @POST("SaveFileSign")
-    Call<ParamSaveFileSignResponse> saveFileSign(@Body ParamSaveFileSignRequest request);
+    Deferred<Response<ParamSaveFileSignResponse>> saveFileSign(@Body ParamSaveFileSignRequest request);
 
-    // Сохранеие файла подписи
+    // выполнение операции с документом
     @POST("ExecDocument")
-    Call<ParamExecDocumentResponse> execDocument(@Body ParamExecDocumentRequest request);
+    Deferred<Response<ParamExecDocumentResponse>> execDocument(@Body ParamExecDocumentRequest request);
 
+    // выполнение произвольной операции
+    @POST("ExecOperation")
+    Deferred<Response<ParamExecOperationResponse>> execOperation(@Body ParamExecOperationRequest request);
 }

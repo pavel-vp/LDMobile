@@ -1,10 +1,12 @@
 package com.elewise.ldmobile.ui
 
-import android.R.attr.*
+import android.app.Activity
+import android.content.Context
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.TextView
 import com.elewise.ldmobile.R
 
 
@@ -46,5 +48,10 @@ open class BaseActivity: AppCompatActivity() {
         } else {
             return super.onOptionsItemSelected(item)
         }
+    }
+
+    fun hideKeyboard(view: View) {
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

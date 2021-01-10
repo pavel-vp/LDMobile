@@ -1,16 +1,16 @@
 package com.elewise.ldmobile.ui
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.elewise.ldmobile.R
-import com.elewise.ldmobile.api.FilterData
-import com.elewise.ldmobile.api.ParamFilterSettingsResponse
-import com.elewise.ldmobile.api.ResponseStatusType
+import com.elewise.ldmobile.api.*
 import com.elewise.ldmobile.service.Session
 import com.elewise.ldmobile.utils.MessageUtils
 import com.elewise.ldmobile.widget.*
@@ -19,45 +19,73 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.*
 
 
 class FilterActivity : BaseActivity() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    var dialog: AlertDialog? = null
 
-    private val dynamicViewList: MutableList<BaseWidget?> = ArrayList()
+    private val dynamicViewList: MutableList<BaseWidget> = ArrayList()
     private var session = Session.getInstance()
     private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filter)
-        btnClear.setOnClickListener(View.OnClickListener { view: View? ->
-            session.filterData = arrayOfNulls(0)
-            finish()
-        })
-        btnApply.setOnClickListener(View.OnClickListener { view: View? ->
+        btnClear.setOnClickListener{ view: View? ->
+            uiScope.launch {
+                showProgressDialog()
+                try {
+                    val response = session.execOperation(ParamExecOperationActionType.reset_filters.name).await().body()
+                    response?.let {
+                        if (it.status == (ResponseStatusType.S.name)) {
+                            loadData(true)
+                        } else {
+                            showError(getString(R.string.error_unknown))
+                        }
+                    }
+                } catch (e: Exception) {
+                    progressDialog?.dismiss()
+                    showError()
+                }
+            }
+        }
+        btnApply.setOnClickListener{ view: View? ->
             if (validateFilterData()) {
+                // fixme фильтр локально устанавливается тут, но на сервере только при отправке getDocuments
                 session.filterData = filterData
                 finish()
             }
-        })
+        }
+        llDynamicPart.setOnClickListener { hideKeyboard() }
+        scrollView.setOnTouchListener { v, event ->
+            hideKeyboard()
+            false
+        }
         updateActionBar(getString(R.string.filter_activity_title))
-    }
-
-    override fun onResume() {
-        super.onResume()
         loadData()
     }
 
-    private fun loadData() {
+    private fun loadData(withClean: Boolean = false) {
         uiScope.launch {
-            showProgressDialog()
-            val request = session.filterSettings
-            val response = request.await()
-            handleFilterSettingsResponse(response.body())
+            try {
+                showProgressDialog()
+                val request = session.filterSettings
+                val response = request.await()
+                handleFilterSettingsResponse(response.body(), withClean)
+            } catch (e: Exception) {
+                progressDialog?.dismiss()
+                showError()
+            }
         }
+    }
+
+    private fun showError(errorMessage: String = getString(R.string.error_load_data)) {
+        // показать ошибку
+        dialog = MessageUtils.createDialog(this, getString(R.string.alert_dialog_error), errorMessage).apply { show() }
     }
 
     private fun showProgressDialog() {
@@ -70,47 +98,53 @@ class FilterActivity : BaseActivity() {
         progressDialog?.show()
     }
 
-    private fun handleFilterSettingsResponse(response: ParamFilterSettingsResponse?) {
+    private fun handleFilterSettingsResponse(response: ParamFilterSettingsResponse?, withClean: Boolean = false) {
         progressDialog?.cancel()
-        var errorMessage = getString(R.string.error_load_data)
         if (response != null) {
             if (response.status == ResponseStatusType.S.name) {
+                llDynamicPart.removeAllViews()
+                dynamicViewList.clear()
                 // в цикле добавляем виджеты
-                for (item in response.filters) {
-                    if (item.type == "date") {
-                        val view = DateWidget(this, item)
-                        dynamicViewList.add(view)
-                        llDynamicPart!!.addView(view)
-                    } else if (item.type == "string") {
-                        val view = InputWidget(this, item)
-                        dynamicViewList.add(view)
-                        llDynamicPart!!.addView(view)
-                    } else if (item.type == "list") {
-                        val view = SelectWidget(this, item)
-                        dynamicViewList.add(view)
-                        llDynamicPart!!.addView(view)
-                    } else if (item.type == "checkbox") {
-                        val view = CheckboxWidget(this, item)
-                        dynamicViewList.add(view)
-                        llDynamicPart!!.addView(view)
-                    } else {
-                        Log.e("loadData", "uncnown filter type")
+                response.filters?.let {
+                    for (item in it) {
+                        if (item.type == "date") {
+                            val view = DateWidget(this, item)
+                            dynamicViewList.add(view)
+                            llDynamicPart.addView(view)
+                        } else if (item.type == "string") {
+                            val view = InputWidget(this, item)
+                            dynamicViewList.add(view)
+                            llDynamicPart.addView(view)
+                        } else if (item.type == "list") {
+                            val view = SelectWidget(this, item)
+                            dynamicViewList.add(view)
+                            llDynamicPart.addView(view)
+                        } else if (item.type == "checkbox") {
+                            val view = CheckboxWidget(this, item)
+                            dynamicViewList.add(view)
+                            llDynamicPart.addView(view)
+                        } else {
+                            Log.e("loadData", "unknown filter type")
+                        }
                     }
                 }
-                return
+                if (withClean) {
+                    // сохраним дефольтный фильтр
+                    session.filterData = filterData
+                }
             } else if (response.status == ResponseStatusType.E.name) {
-                if (!TextUtils.isEmpty(response.message)) {
-                    errorMessage = response.message!!
+                if (response.message?.isNotEmpty() == true) {
+                    showError(response.message)
+                } else {
+                    showError()
                 }
             } else if (response.status == ResponseStatusType.A.name) {
                 session.errorAuth()
-                return
             } else {
-                errorMessage = getString(R.string.error_unknown_status_type)
+                showError(getString(R.string.error_unknown_status_type))
             }
-        }
-        if (!TextUtils.isEmpty(errorMessage)) {
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+        } else {
+            showError()
         }
     }
 
@@ -118,27 +152,35 @@ class FilterActivity : BaseActivity() {
         super.onDestroy()
         viewModelJob.cancel()
         progressDialog?.dismiss()
+        dialog?.dismiss()
     }
 
-    private val filterData: Array<FilterData>
+    private val filterData: List<FilterData>
         get() {
             val arrayList: ArrayList<FilterData> = ArrayList()
             for (item in dynamicViewList) {
-                if (!TextUtils.isEmpty(item!!.getValue1())) {
-                    arrayList.add(FilterData(item.getName(), item.getValue1(), item.getValue2()))
-                }
+                arrayList.add(FilterData(item.getName(), item.getValue1(), item.getValue2()))
             }
-            return arrayList.toTypedArray()
+            return arrayList
         }
 
     private fun validateFilterData(): Boolean {
         for (item in dynamicViewList) {
-            val value = item!!.validate()
+            val value = item.validate()
             if (!TextUtils.isEmpty(value)) {
                 MessageUtils.createDialog(this, getString(R.string.alert_dialog_error), getString(R.string.activity_filter_validate_error, value)).show()
                 return false
             }
         }
         return true
+    }
+
+    fun hideKeyboard() {
+        dynamicViewList.forEach {
+            if (it is InputWidget) {
+                it.clearFocusEditView()
+            }
+        }
+        hideKeyboard(llDynamicPart)
     }
 }

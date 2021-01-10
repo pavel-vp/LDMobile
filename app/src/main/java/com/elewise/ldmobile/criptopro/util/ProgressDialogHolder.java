@@ -19,7 +19,6 @@ package com.elewise.ldmobile.criptopro.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.KeyEvent;
 
 import com.elewise.ldmobile.R;
@@ -33,55 +32,26 @@ import com.elewise.ldmobile.R;
  * @.Version
  */
 public class ProgressDialogHolder extends ProgressDialog {
-
     /**
      * Конструктор.
      *
      * @param context Контекст приложения.
      * @param cancelable True, если окно можно закрыть.
      */
-    public ProgressDialogHolder(Context context, boolean
-        cancelable) {
-
+    public ProgressDialogHolder(Context context, boolean cancelable) {
         super(context);
-
         setIndeterminate(true);
         setCancelable(cancelable);
 
         String message = context.getString(R.string.ProgressDialogExecuting);
         setMessage(message);
-        /*
-        setButton(DialogInterface.BUTTON_NEGATIVE,
-            context.getString(android.R.string.cancel),
-            new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    cancel();
-                }
-
-        });
-        */
-        setOnKeyListener(new OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode,
-                                 KeyEvent event) {
-
-                // Закрытие окна при нажатии на Back.
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                    cancel();
-                    return true;
-
-                } // if
-
-                return false;
-
+        setOnKeyListener((dialog, keyCode, event) -> {
+            // Закрытие окна при нажатии на Back.
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                cancel();
+                return true;
             }
-
+            return false;
         });
-
     }
-
 }

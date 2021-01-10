@@ -22,11 +22,15 @@ import com.elewise.ldmobile.service.Session
 import com.elewise.ldmobile.utils.ImageUtils.setIcon
 import com.elewise.ldmobile.utils.MessageUtils
 import kotlinx.android.synthetic.main.fragment_doc_header.*
+import kotlinx.android.synthetic.main.fragment_doc_header.llButtons
+import kotlinx.android.synthetic.main.fragment_doc_header.llDynamicPart
+import kotlinx.android.synthetic.main.fragment_doc_packet_header.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+// todo unused remove!!!
 class DocPacketFragment : Fragment() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -34,7 +38,7 @@ class DocPacketFragment : Fragment() {
     private var dialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
     private var session: Session = Session.getInstance()
-    var documentDetail = session.currentDocumentDetail!!
+    var documentDetail = session.currentDocumentDetail
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -46,35 +50,42 @@ class DocPacketFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         addButtons(llButtons)
         btnOne.setOnClickListener {
-            // todo Есть такой скрин в Figma. На какой параметр ориентироваться
-            val intent = Intent(context, DocPacketActionActivity::class.java)
-            intent.putExtra(DocPacketActionActivity.PARAM_IN_DOC_DETAIL, documentDetail.buttons[0])
-            startActivityForResult(intent, REQUEST_ONE_CODE)
+            documentDetail.buttons?.get(0)?.let {
+                val intent = Intent(context, DocPacketActionActivity::class.java)
+                intent.putExtra(DocPacketActionActivity.PARAM_IN_DOC_DETAIL, it)
+                startActivityForResult(intent, REQUEST_ONE_CODE)
+            }
         }
         btnTwo.setOnClickListener {
-            val intent = Intent(context, DocPacketActionActivity::class.java)
-            intent.putExtra(DocPacketActionActivity.PARAM_IN_DOC_DETAIL, documentDetail.buttons[1])
-            startActivityForResult(intent, REQUEST_TWO_CODE)
+            documentDetail.buttons?.get(1)?.let {
+                val intent = Intent(context, DocPacketActionActivity::class.java)
+                intent.putExtra(DocPacketActionActivity.PARAM_IN_DOC_DETAIL, it)
+                startActivityForResult(intent, REQUEST_TWO_CODE)
+            }
         }
         addDynamicPart(layoutInflater, documentDetail, llDynamicPart)
         addAttachments(layoutInflater, view, documentDetail)
     }
 
     private fun addButtons(llButtons: LinearLayout) {
-        if (documentDetail.buttons.size > 0) {
-            llButtons.visibility = View.VISIBLE
-            var i = 0
-            while (i < documentDetail.buttons.size) {
-                val (_, caption) = documentDetail.buttons[i]
-                if (i == 0) {
-                    btnOne.text = caption
+        documentDetail.buttons?.let {
+            if (it.isNotEmpty()) {
+                llButtons.visibility = View.VISIBLE
+                var i = 0
+                while (i < it.size) {
+                    val (_, caption) = it[i]
+                    if (i == 0) {
+                        btnOne.text = caption
+                    }
+                    if (i == 1) {
+                        btnTwo.text = caption
+                    }
+                    i++
                 }
-                if (i == 1) {
-                    btnTwo.text = caption
-                }
-                i++
+            } else {
+                llButtons.visibility = View.GONE
             }
-        } else {
+        } ?: run {
             llButtons.visibility = View.GONE
         }
     }
@@ -108,19 +119,21 @@ class DocPacketFragment : Fragment() {
 
     private fun addDynamicPart(inflater: LayoutInflater, detail: ParamDocumentDetailsResponse, llDynamicPart: LinearLayout) {
         var isFirst = true
-        for ((desc, value) in detail.header_attributes) {
-            val convertView = inflater.inflate(R.layout.doc_header_item, llDynamicPart, false)
-            val tvDesc = convertView.findViewById<TextView>(R.id.tvDesc)
-            val tvValue = convertView.findViewById<TextView>(R.id.tvValue)
-            if (isFirst) {
-                val ivDocType = convertView.findViewById<ImageView>(R.id.ivDocType)
-                ivDocType.visibility = View.VISIBLE
-                setIcon(resources, ivDocType, session.currentDocumentDetail.doc_icon)
-                isFirst = false
+        detail.header_attributes?.let {
+            for ((desc, value) in detail.header_attributes) {
+                val convertView = inflater.inflate(R.layout.doc_header_item, llDynamicPart, false)
+                val tvDesc = convertView.findViewById<TextView>(R.id.tvDesc)
+                val tvValue = convertView.findViewById<TextView>(R.id.tvValue)
+                if (isFirst) {
+                    val ivDocType = convertView.findViewById<ImageView>(R.id.ivDocType)
+                    ivDocType.visibility = View.VISIBLE
+                    setIcon(resources, ivDocType, session.currentDocumentDetail.doc_icon)
+                    isFirst = false
+                }
+                tvDesc.text = desc
+                tvValue.text = value
+                llDynamicPart.addView(convertView)
             }
-            tvDesc.text = desc
-            tvValue.text = value
-            llDynamicPart.addView(convertView)
         }
     }
 
@@ -189,14 +202,14 @@ class DocPacketFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_ONE_CODE) {
             if (resultCode == DocPacketActionActivity.PARAM_RESULT_OK) {
-                Toast.makeText(context, R.string.action_success, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.action_exec_success, Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(context, R.string.action_error, Toast.LENGTH_LONG).show()
             }
         } else {
             if (requestCode == REQUEST_TWO_CODE) {
                 if (resultCode == DocPacketActionActivity.PARAM_RESULT_OK) {
-                    Toast.makeText(context, R.string.action_success, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, R.string.action_exec_success, Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(context, R.string.action_error, Toast.LENGTH_LONG).show()
                 }

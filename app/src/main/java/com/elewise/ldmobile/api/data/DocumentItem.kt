@@ -6,5 +6,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 data class DocumentItem (
         val line_name: String,
         val line_desc: String,
-        val details: Array<DocLineDetail>
+        val details: List<DocLineDetail>
 )

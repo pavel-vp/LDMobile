@@ -20,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.elewise.ldmobile.R;
-import com.elewise.ldmobile.criptopro.base.GenKeyPairData;
 import com.elewise.ldmobile.criptopro.util.KeyStoreType;
 import com.elewise.ldmobile.criptopro.util.KeyStoreUtil;
 import com.elewise.ldmobile.criptopro.util.ProviderType;
@@ -48,7 +47,6 @@ import ru.CryptoPro.JCSP.CSPProviderInterface;
 import ru.CryptoPro.JCSP.support.BKSTrustStore;
 import ru.cprocsp.ACSP.tools.common.CSPTool;
 import ru.cprocsp.ACSP.tools.common.Constants;
-import ru.cprocsp.ACSP.util.FileExplorerActivity;
 
 import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.CSP_50_LICENSE_DEFAULT;
 import static ru.cprocsp.ACSP.tools.common.CSPLicenseConstants.LICENSE_STATUS_EXPIRED;
@@ -61,7 +59,6 @@ import static ru.cprocsp.ACSP.util.FileExplorerActivity.INTENT_EXTRA_OUT_CHOSEN_
 
 public class SettingsCriptoProActivity extends BaseActivity
         implements AdapterView.OnItemSelectedListener {
-    // todo обсудить пароль!!
     // Пароль к хранилищу доверенных сертификатов по умолчанию.
     private static final char[] DEFAULT_TRUST_STORE_PASSWORD = BKSTrustStore.STORAGE_PASSWORD;
 
@@ -85,8 +82,6 @@ public class SettingsCriptoProActivity extends BaseActivity
     private ArrayAdapter<String> containerAliasAdapter = null;
 
     private LinearLayout lvTrustCert;
-
-    private FileExplorerActivity fileExplorerActivity;
 
     private AlertDialog dialogRemoveCert;
     private AlertDialog dialogRemoveContainer;
@@ -155,10 +150,17 @@ public class SettingsCriptoProActivity extends BaseActivity
     private void showLicenseNumberInfo() {
         CSPProviderInterface providerInfo = CSPConfig.INSTANCE.getCSPProviderInfo();
         String licenseNumber = providerInfo.getLicense().getSerialNumber();
+
+        if (licenseNumber.equals(CSP_50_LICENSE_DEFAULT)) {
+            tvLicenseNumber.setText("-");
+            tvLicenseStatus.setText(getString(R.string.settings_license_type_invalid));
+            return;
+        }
+
         tvLicenseNumber.setText(licenseNumber);
         int licenseStatus = providerInfo.getLicense().getExistingLicenseStatus();
 
-        if (licenseStatus == LICENSE_STATUS_OK && !providerInfo.getLicense().getSerialNumber().equals(CSP_50_LICENSE_DEFAULT)) {
+        if (licenseStatus == LICENSE_STATUS_OK) {
             int licenseType = providerInfo.getLicense().getLicenseType();
             switch (licenseType) {
                 case LICENSE_TYPE_PERMANENT: {
@@ -310,22 +312,16 @@ public class SettingsCriptoProActivity extends BaseActivity
 
             keyStore.load(storeStream, DEFAULT_TRUST_STORE_PASSWORD);
             storeStream.close();
-//            KeyStore ts = KeyStore.getInstance(
-//                    containerAdapter.getTrustStoreType(),
-//                    containerAdapter.getTrustStoreProvider());
-//
-//            ts.load(containerAdapter.getTrustStoreStream(),
-//                    containerAdapter.getTrustStorePassword());
 
             for (String alias : Collections.list(keyStore.aliases())) {
                 if (!alias.startsWith("root")) {
                     StringBuilder stringBuffer = new StringBuilder();
                     X509Certificate certificate = ((X509Certificate)keyStore.getCertificate(alias));
-                    stringBuffer.append("Серийный номер: " + certificate.getSerialNumber().toString(16));
-                    stringBuffer.append("Владелец: " + certificate.getSubjectDN() + "\n");
-                    stringBuffer.append("Издатель: " + certificate.getIssuerDN() + "\n");
-                    stringBuffer.append("Действителен с: " + sdf.format(certificate.getNotBefore()) + "\n");
-                    stringBuffer.append("Действителен по: " + sdf.format(certificate.getNotAfter()));
+                    stringBuffer.append("Серийный номер: ").append(certificate.getSerialNumber().toString(16))
+                        .append("\nВладелец: ").append(certificate.getSubjectDN())
+                        .append("\nИздатель: ").append(certificate.getIssuerDN())
+                        .append("\nДействителен с: ").append(sdf.format(certificate.getNotBefore()))
+                        .append("\nДействителен по: ").append(sdf.format(certificate.getNotAfter()));
 
                     res.add(new CertificateInfo(alias, stringBuffer.toString()));
                 }
@@ -346,25 +342,16 @@ public class SettingsCriptoProActivity extends BaseActivity
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
         switch (adapterView.getId()) {
-
             case R.id.spKeyStore: {
-
                 if (keyStoreTypeIndex != i) {
-
                     String keyStoreType = (String) adapterView.getItemAtPosition(i);
                     KeyStoreType.saveCurrentType(keyStoreType);
-
                     keyStoreTypeIndex = i;
-
-                } // if
-
+                }
+                break;
             }
-            break;
-
             case R.id.spProviderType: {
-
                 if (providerTypeIndex != i) {
 
                     String provType = (String) adapterView.getItemAtPosition(i);
@@ -372,21 +359,17 @@ public class SettingsCriptoProActivity extends BaseActivity
 
                     providerTypeIndex = i;
 
-                } // if
-
+                }
+                break;
             }
-            break;
-
             case R.id.spExamplesClientList: {
                 String clientAlias = (String) adapterView.getItemAtPosition(i);
                 Prefs.INSTANCE.saveContainerAlias(this, clientAlias);
+                break;
             }
-            break;
-
-        } // switch
+        }
 
         ProviderType.currentProviderType();
-
         updateContainerList();
     }
 
@@ -452,8 +435,6 @@ public class SettingsCriptoProActivity extends BaseActivity
         }
     }
 
-    private InputStream chooseCertTrust;
-
     // Добавление обработчика в кнопку копирования корневого сертификата
     private void copyCertTrust(@NonNull String path) {
         try {
@@ -474,7 +455,7 @@ public class SettingsCriptoProActivity extends BaseActivity
 
             try {
                 Uri uri = Uri.parse("file://"+path);
-                chooseCertTrust = getContentResolver().openInputStream(uri);
+                InputStream chooseCertTrust = getContentResolver().openInputStream(uri);
                 loadCert(chooseCertTrust);
                 copied = true;
             } catch (Exception e) {
@@ -512,6 +493,7 @@ public class SettingsCriptoProActivity extends BaseActivity
                 try {
                     trustStream.close();
                 } catch (IOException e) {
+                    Log.e("error load cert ", e.toString());
                 }
             }
         }

@@ -22,8 +22,12 @@ class InputWidget(context: Context, val descrView: FilterElement): BaseWidget(co
         edInput.setText(data)
     }
 
-    override fun getValue1(): String {
-        return edInput.text.toString()
+    override fun getValue1(): String? {
+        with(edInput.text.toString()) {
+            if (this.isEmpty()) {
+                return null
+            } else return this
+        }
     }
 
     override fun getName(): String {
@@ -39,5 +43,9 @@ class InputWidget(context: Context, val descrView: FilterElement): BaseWidget(co
 
     override fun setValue2(data: String) = Unit
 
-    override fun getValue2(): String = ""
+    override fun getValue2(): String? = null
+
+    fun clearFocusEditView() {
+        edInput.clearFocus()
+    }
 }

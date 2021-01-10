@@ -4,12 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import com.elewise.ldmobile.R
+import com.elewise.ldmobile.api.ParamAuthorizationResponse
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import java.lang.Exception
 
 object Prefs {
     private val STORAGE_NAME = "settings"
     private val PREFS_CONNECT_ADDRESS = "connect_address"
     private val PREFS_LAST_LOGIN = "last_login"
-    private val PREFS_TOKEN = "token"
+    private val PREFS_AUTH = "auth"
     private val PREFS_CONTAINER_ALIAS = "container_alias"
     private var storage: SharedPreferences? = null
 
@@ -21,7 +25,11 @@ object Prefs {
     }
 
     fun getConnectAddress(context: Context): String {
-        return getStorage(context).getString(PREFS_CONNECT_ADDRESS, context.getString(R.string.rest_server_base_url))!!
+        var connectAdr = getStorage(context).getString(PREFS_CONNECT_ADDRESS, null) ?: ""
+        if (connectAdr.length > 0 && !connectAdr.substring(connectAdr.length-1, connectAdr.length).equals("/")) {
+            connectAdr += "/"
+        }
+        return connectAdr
     }
 
     fun saveConnectAddress(context: Context, address: String) {
@@ -34,7 +42,7 @@ object Prefs {
     }
 
     fun getLastLogin(context: Context): String {
-        return getStorage(context).getString(PREFS_LAST_LOGIN, "")!!
+        return getStorage(context).getString(PREFS_LAST_LOGIN, "") ?: ""
     }
 
     fun saveLastLogin(context: Context, address: String) {
@@ -43,18 +51,22 @@ object Prefs {
         edit.apply()
     }
 
-    fun getToken(context: Context): String {
-        return getStorage(context).getString(PREFS_TOKEN, "")!!
+    fun getLastAuth(context: Context): ParamAuthorizationResponse? {
+        try {
+            return jacksonObjectMapper().readValue(getStorage(context).getString(PREFS_AUTH, ""), ParamAuthorizationResponse::class.java)
+        } catch (e: Exception) {
+            return null
+        }
     }
 
-    fun saveToken(context: Context, token: String) {
+    fun saveLastAuth(context: Context, auth: ParamAuthorizationResponse?) {
         val edit = getStorage(context).edit()
-        edit.putString(PREFS_TOKEN, token)
+        edit.putString(PREFS_AUTH, jacksonObjectMapper().writeValueAsString(auth))
         edit.commit()
     }
 
     fun getContainerAlias(context: Context): String {
-        return getStorage(context).getString(PREFS_CONTAINER_ALIAS, "")!!
+        return getStorage(context).getString(PREFS_CONTAINER_ALIAS, "") ?: ""
     }
 
     fun saveContainerAlias(context: Context, alias: String) {

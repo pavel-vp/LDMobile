@@ -5,37 +5,53 @@
     android:layout_height="wrap_content"
     style="@style/SelectableItem"
     android:paddingBottom="4dp"
-    android:orientation="horizontal">
+    android:orientation="vertical">
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:textSize="16sp"
-            android:layout_marginStart="16dp"
-            android:layout_gravity="center"
-            android:textColor="@color/colorPrimary"
-            tools:text="Акт выполненных работ №234"/>
-
-        <RelativeLayout
-            android:layout_width="22dp"
-            android:layout_height="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="6dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
-                <ImageView
-                    android:id="@+id/ivDocType"
-                    android:layout_height="16dp"
-                    android:layout_width="16dp"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/ic_doc_type_sf_mini"/>
+            android:textColor="@color/gray_dark"
+            android:text="@string/fragment_doc_packet_header_related"/>
 
-                <ImageView
-                    android:id="@+id/ivActionType"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorPrimary"
+                    tools:text="Акт выполненных работ №234"/>
+
+                <RelativeLayout
+                    android:layout_width="22dp"
                     android:layout_height="16dp"
-                    android:layout_width="16dp"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_state_lock_green"/>
-        </RelativeLayout>
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp">
+                        <ImageView
+                            android:id="@+id/ivDocType"
+                            android:layout_height="16dp"
+                            android:layout_width="16dp"
+                            android:layout_alignParentStart="true"
+                            tools:src="@drawable/ic_doc_type_invoice_mini"/>
+
+                        <ImageView
+                            android:id="@+id/ivActionType"
+                            android:layout_height="16dp"
+                            android:layout_width="16dp"
+                            android:layout_alignParentEnd="true"
+                            tools:src="@drawable/ic_state_lock_green"/>
+                </RelativeLayout>
+        </LinearLayout>
 </LinearLayout>

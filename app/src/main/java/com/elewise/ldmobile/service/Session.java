@@ -2,7 +2,9 @@ package com.elewise.ldmobile.service;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.elewise.ldmobile.LoginActivity;
 import com.elewise.ldmobile.MainApp;
@@ -40,7 +42,7 @@ public class Session {
     private RestHelper restHelper;
     private ParamDocumentDetailsResponse currentDocumentDetail;
     private DocumentItem currentDocumentItem;
-    private FilterData[] filterData = new FilterData[]{};
+    private @NonNull List<FilterData> filterData = new ArrayList<>();
 
     private Session(Context context) {
         this.context = context;
@@ -48,7 +50,7 @@ public class Session {
     }
 
     public void errorAuth() {
-        Prefs.INSTANCE.saveToken(context, "");
+        Prefs.INSTANCE.saveLastAuth(context, null);
 
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -56,36 +58,38 @@ public class Session {
     }
 
     public void createRestHelper() {
-        this.restHelper = RestHelper.Companion.createNewInstance(Prefs.INSTANCE.getConnectAddress(context));
-    }
-
-
-    public ParamAuthorizationResponse getAuthToken(String userName, String password) {
-        try {
-            return restHelper.getAuthorizationTokenSync(userName, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        String url = Prefs.INSTANCE.getConnectAddress(context);
+        if (url.isEmpty()) {
+            url = "http://url_stub.ru";
         }
+        this.restHelper = RestHelper.Companion.createNewInstance(url);
     }
 
-    public ParamTokenActivityCheckResponse tokenActivityCheck(String token) {
-        try {
-            return restHelper.tokenActivityCheck(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+
+    public Deferred<Response<ParamAuthorizationResponse>> getAuthToken(@NonNull String userName, @NonNull String password) throws IOException {
+        return restHelper.getAuthorizationTokenSync(userName, password, getDeviceId());
     }
 
-    public List<DocumentForList> groupDocByDate(List<Document> documentList) {
+    private String getDeviceId() {
+        return android.provider.Settings.Secure.getString(
+                context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+    }
+
+    public Deferred<Response<ParamTokenActivityCheckResponse>> tokenActivityCheck(@NonNull String token) throws IOException {
+        return restHelper.tokenActivityCheck(token);
+    }
+
+    public List<DocumentForList> groupDocByDate(Boolean needGroup, List<Document> documentList) {
         List<DocumentForList> result = new ArrayList<>();
         if (documentList != null) {
-            String lastDate = null;
+            String lastGroup = null;
             for (Document document : documentList) {
-                if (lastDate == null || !lastDate.equals(document.getDoc_date())) {
-                    lastDate = document.getDoc_date();
-                    result.add(new DocumentForList(document, true, lastDate));
+                if (needGroup) {
+                    String group = document.getGroup() != null ? document.getGroup() : "";
+                    if (lastGroup == null || !lastGroup.equals(group)) {
+                        lastGroup = group;
+                        result.add(new DocumentForList(document, true, lastGroup));
+                    }
                 }
                 result.add(new DocumentForList(document, false, null));
             }
@@ -94,46 +98,36 @@ public class Session {
     }
 
 
-    public Deferred<Response<ParamDocumentsResponse>> getDocuments(int size, int from, ProcessType processType, FilterData[] filterData) {
-        return restHelper.getDocumentsSync(getToken(), size, from, processType, filterData);
+    public Deferred<Response<ParamDocumentsResponse>> getDocuments(int from, ProcessType processType, @NonNull List<FilterData> filterData) throws IOException {
+        return restHelper.getDocumentsSync(getToken(), docSize, from, processType, filterData);
     }
 
-    public Deferred<Response<ParamFilterSettingsResponse>> getFilterSettings() {
+    public Deferred<Response<ParamFilterSettingsResponse>> getFilterSettings() throws IOException {
         return restHelper.getFilterSettings(getToken());
     }
 
-    public Deferred<Response<ParamDocumentDetailsResponse>> getDocumentDetail(int docId) {
+    public Deferred<Response<ParamDocumentDetailsResponse>> getDocumentDetail(int docId) throws IOException {
         return restHelper.getDocumentDetailsSync(getToken(), docId);
     }
 
-    public byte[] getFile(int fileId) {
-        try {
-            ParamGetFileRequest request = new ParamGetFileRequest(getToken(), fileId);
-            return restHelper.getFile(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Deferred<Response<ParamGetFileResponse>> getFile(int fileId) throws IOException {
+        ParamGetFileRequest request = new ParamGetFileRequest(getToken(), fileId);
+        return restHelper.getFile(request);
     }
 
-    public ParamSaveFileSignResponse saveFileSign(FileSign[] signs) {
-        try {
-            ParamSaveFileSignRequest request = new ParamSaveFileSignRequest(getToken(), signs);
-            return restHelper.saveFileSign(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Deferred<Response<ParamSaveFileSignResponse>> saveFileSign(List<FileSign> signs) throws IOException {
+        ParamSaveFileSignRequest request = new ParamSaveFileSignRequest(getToken(), signs);
+        return restHelper.saveFileSign(request);
     }
 
-    public ParamExecDocumentResponse execDocument(int docId, String docType, String action, String comment) {
-        try {
-            ParamExecDocumentRequest request = new ParamExecDocumentRequest(getToken(), docId, docType, action, comment);
-            return restHelper.execDocument(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Deferred<Response<ParamExecDocumentResponse>> execDocument(int docId, String buttonType, String action, String comment) throws IOException {
+        ParamExecDocumentRequest request = new ParamExecDocumentRequest(getToken(), docId, buttonType, action, comment);
+        return restHelper.execDocument(request);
+    }
+
+    public Deferred<Response<ParamExecOperationResponse>> execOperation(String action) throws IOException {
+        ParamExecOperationRequest request = new ParamExecOperationRequest(getToken(), action);
+        return restHelper.execOperation(request);
     }
 
 
@@ -153,19 +147,40 @@ public class Session {
         this.currentDocumentItem = currentDocumentItem;
     }
 
-    public FilterData[] getFilterData() {
+    public @NonNull List<FilterData> getFilterData() {
         return filterData;
     }
 
-    public void setFilterData(FilterData[] filterData) {
+    public void setFilterData(@NonNull List<FilterData> filterData) {
         this.filterData = filterData;
     }
 
-    public String getToken() {
-        return Prefs.INSTANCE.getToken(context);
+    public @NonNull String getToken() {
+        ParamAuthorizationResponse auth = Prefs.INSTANCE.getLastAuth(context);
+        return  auth == null ? "" : auth.getAccess_token();
     }
 
-    public void setToken(String token) {
-        Prefs.INSTANCE.saveToken(context, token);
+    private ParamAuthorizationResponse lastAuth = null;
+
+    public void setLastAuth(ParamAuthorizationResponse auth) {
+        lastAuth = auth;
+        Prefs.INSTANCE.saveLastAuth(context, auth);
+    }
+
+    public @Nullable ParamAuthorizationResponse getLastAuth() {
+        if (lastAuth == null) {
+            lastAuth = Prefs.INSTANCE.getLastAuth(context);
+        }
+        return lastAuth;
+    }
+
+    private int docSize = 10;
+
+    public int getDocSize() {
+        return docSize;
+    }
+
+    public void setDocSize(int docSize) {
+        this.docSize = docSize;
     }
 }

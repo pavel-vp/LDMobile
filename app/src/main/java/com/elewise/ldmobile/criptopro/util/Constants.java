@@ -22,12 +22,7 @@ public interface Constants {
     /**
      * Тэг логгера приложения.
      */
-    String APP_LOGGER_TAG = "ACSPClientApp";
-
-    /**
-     * Сообщение для хеширования, подписи, зашифрования.
-     */
-    String MESSAGE = "Test message!";
+    String APP_LOGGER_TAG = "TagApp";
 
     /**
      * Кодировка по умолчанию для html-страниц в TLS-примерах.

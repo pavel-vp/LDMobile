@@ -3,6 +3,8 @@ package com.elewise.ldmobile.rest
 import android.util.Log
 import com.elewise.ldmobile.BuildConfig
 import com.elewise.ldmobile.api.*
+import com.elewise.ldmobile.api.ParamExecOperationResponse
+import com.elewise.ldmobile.api.ParamGetFileResponse
 import com.elewise.ldmobile.model.ProcessType
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -56,45 +58,48 @@ class RestHelper(baseUrl: String) {
     }
 
     @Throws(IOException::class)
-    fun getAuthorizationTokenSync(userName: String?, password: String?): ParamAuthorizationResponse? {
-        val callRes = restApi.getAuthorizationToken(ParamAuthorizationRequest(userName!!, password!!))
-        return callRes.execute().body()
+    fun getAuthorizationTokenSync(userName: String, password: String, deviceId: String): Deferred<Response<ParamAuthorizationResponse?>> {
+        return restApi.getAuthorizationToken(ParamAuthorizationRequest(userName, password, deviceId))
     }
 
     @Throws(IOException::class)
-    fun tokenActivityCheck(token: String?): ParamTokenActivityCheckResponse? {
-        val callRes = restApi.tokenActivityCheck(ParamTokenActivityCheckRequest(token!!))
-        return callRes.execute().body()
+    fun tokenActivityCheck(token: String): Deferred<Response<ParamTokenActivityCheckResponse?>> {
+        return restApi.tokenActivityCheck(ParamTokenActivityCheckRequest(token))
     }
 
-    fun getDocumentsSync(token: String, size: Int, from: Int, processType: ProcessType, filterData: Array<FilterData>?): Deferred<Response<ParamDocumentsResponse>> {
+    @Throws(IOException::class)
+    fun getDocumentsSync(token: String, size: Int, from: Int, processType: ProcessType, filterData: List<FilterData>): Deferred<Response<ParamDocumentsResponse>> {
         return restApi.getDocuments(ParamDocumentsRequest(token, size, from, processType.type, filterData))
     }
 
+    @Throws(IOException::class)
     fun getDocumentDetailsSync(token: String, doc_id: Int): Deferred<Response<ParamDocumentDetailsResponse>> {
         return restApi.getDocumentDetails(ParamDocumentDetailsRequest(token, doc_id))
     }
 
-    fun getFilterSettings(token: String?): Deferred<Response<ParamFilterSettingsResponse>> {
-        return restApi.getFilterSettings(ParamFilterSettingsRequest(token!!))
+    @Throws(IOException::class)
+    fun getFilterSettings(token: String): Deferred<Response<ParamFilterSettingsResponse>> {
+        return restApi.getFilterSettings(ParamFilterSettingsRequest(token))
     }
 
     @Throws(IOException::class)
-    fun getFile(request: ParamGetFileRequest?): ByteArray? {
-        val callRes = restApi.getFile(request)
-        return callRes.execute().body()
+    fun getFile(request: ParamGetFileRequest?): Deferred<Response<ParamGetFileResponse?>> {
+        return restApi.getFile(request)
     }
 
     @Throws(IOException::class)
-    fun saveFileSign(request: ParamSaveFileSignRequest?): ParamSaveFileSignResponse? {
-        val callRes = restApi.saveFileSign(request)
-        return callRes.execute().body()
+    fun saveFileSign(request: ParamSaveFileSignRequest?): Deferred<Response<ParamSaveFileSignResponse?>> {
+        return restApi.saveFileSign(request)
     }
 
     @Throws(IOException::class)
-    fun execDocument(request: ParamExecDocumentRequest?): ParamExecDocumentResponse? {
-        val callRes = restApi.execDocument(request)
-        return callRes.execute().body()
+    fun execDocument(request: ParamExecDocumentRequest?): Deferred<Response<ParamExecDocumentResponse?>> {
+        return restApi.execDocument(request)
+    }
+
+    @Throws(IOException::class)
+    fun execOperation(request: ParamExecOperationRequest): Deferred<Response<ParamExecOperationResponse?>> {
+        return restApi.execOperation(request)
     }
 
     companion object {

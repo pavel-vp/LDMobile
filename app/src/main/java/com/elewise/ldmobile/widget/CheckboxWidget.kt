@@ -4,13 +4,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import com.elewise.ldmobile.R
 import com.elewise.ldmobile.api.FilterElement
+import com.elewise.ldmobile.ui.FilterActivity
 import kotlinx.android.synthetic.main.checkbox_widget.view.*
 
-class CheckboxWidget(context: Context, val descrView: FilterElement): BaseWidget(context) {
+class CheckboxWidget(activity: FilterActivity, val descrView: FilterElement): BaseWidget(activity) {
 
     init {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.checkbox_widget, this)
+        checkbox.setOnClickListener { activity.hideKeyboard() }
         checkbox.text = descrView.desc
         descrView.last_value?.let {
             setValue1(it)

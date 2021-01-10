@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ParamDocumentsRequest (
    val access_token: String,
-   val size: Int = 9999,
-   val from: Int = 0,
+   val size: Int,
+   val from: Int,
    val direction: String,
-   val filters: Array<FilterData>?
+   val filters: List<FilterData>
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -11,71 +11,93 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginEnd="46dp"
-                android:layout_marginTop="48dp"
-                android:layout_marginBottom="48dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_avatar_background"/>
-
-                <TextView
-                    android:id="@+id/tvAvatar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textSize="24sp"
-                    android:textColor="@android:color/white"
-                    tools:text="M"
-                    />
-
-            </RelativeLayout>
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="34dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginEnd="24dp"
-                android:orientation="vertical">
+                android:background="@android:color/white"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:text="@string/drawer_menu_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/tvLogin"
+                <RelativeLayout
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="46dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginBottom="48dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_avatar_background"/>
+
+                    <TextView
+                        android:id="@+id/tvAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="24sp"
+                        android:textColor="@android:color/white"
+                        tools:text="M"
+                        />
+
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:text="mdUser123"/>
+                    android:layout_marginTop="34dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginEnd="24dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:text="@string/drawer_menu_role"
-                    android:layout_marginTop="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/tvRole"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:text="Администратор"/>
+                    <TextView
+                        android:text="@string/drawer_menu_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tvLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimary"
+                        android:text="mdUser123"/>
+
+                    <TextView
+                        android:text="@string/drawer_menu_role"
+                        android:layout_marginTop="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tvRole"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimary"
+                        android:text="Администратор"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llExit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                style="@style/SelectableItem"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/ivExit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_exit_to_app"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/llDocuments"
@@ -95,7 +117,7 @@
                 android:src="@drawable/ic_document"/>
 
             <TextView
-                android:layout_margin="8dp"
+                android:layout_marginEnd="24dp"
                 android:text="@string/drawir_munu_documents"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
@@ -122,7 +144,7 @@
                 android:src="@drawable/ic_settings"/>
 
             <TextView
-                android:layout_margin="8dp"
+                android:layout_marginEnd="24dp"
                 android:text="@string/drawer_menu_settings"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
@@ -149,7 +171,7 @@
                 android:src="@drawable/ic_bookmark"/>
 
             <TextView
-                android:layout_margin="8dp"
+                android:layout_marginEnd="24dp"
                 android:text="@string/drawer_menu_about"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"

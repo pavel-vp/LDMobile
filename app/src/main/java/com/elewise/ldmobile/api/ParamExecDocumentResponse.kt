@@ -6,5 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 data class ParamExecDocumentResponse (
     val status: String,
     val message: String?,
-    val file_ids: Array<Int>?
+    val server_datetime: String,
+    val file_ids: List<Int>?
 )

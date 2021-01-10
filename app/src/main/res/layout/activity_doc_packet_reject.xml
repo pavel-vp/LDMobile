@@ -22,7 +22,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 tools:text="@string/dialog_reject_doc_packet_title"
@@ -32,7 +32,7 @@
                 android:id="@+id/tvText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:layout_marginTop="16dp"
                 android:textColor="@android:color/black"
                 android:text="@string/dialog_reject_doc_packet_message" />
@@ -45,7 +45,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:layout_marginTop="8dp"
                     android:text="@string/dialog_reject_doc_packet_comment" />
 
