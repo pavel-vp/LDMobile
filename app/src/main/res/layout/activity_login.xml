@@ -34,7 +34,7 @@
             android:drawableStart="@drawable/ic_user"
             android:drawablePadding="8dip"
             android:hint="@string/activity_login_hint_login"
-            android:inputType="text"
+            android:inputType="textVisiblePassword"
             android:paddingStart="8dp"/>
 
         <EditText
