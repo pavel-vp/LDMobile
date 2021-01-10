@@ -40,11 +40,6 @@ import ru.CryptoPro.JCSP.support.BKSTrustStore;
 
 public class Session {
 
-    // Путь к хранилищу доверенных сертификатов для установки сертификатов.
-    public final String TRUST_STORE_PATH = MainApp.getApplcationContext().getApplicationInfo().dataDir +
-            File.separator + BKSTrustStore.STORAGE_DIRECTORY + File.separator +
-            BKSTrustStore.STORAGE_FILE_TRUST;
-
     private static Session session;
 
     public static @NonNull Session getInstance() {

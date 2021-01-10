@@ -34,6 +34,9 @@ import ru.CryptoPro.JCSP.CSPConfig
 import ru.CryptoPro.JCSP.support.BKSTrustStore
 import ru.cprocsp.ACSP.tools.common.CSPLicenseConstants
 import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DocActionActivity : AppCompatActivity() {
     private var viewModelJob = Job()
@@ -41,6 +44,8 @@ class DocActionActivity : AppCompatActivity() {
 
     private var dialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
+
+    private val sdf = SimpleDateFormat("dd.MM.yyyy hh:mm:ss")
 
     private lateinit var buttonDesc: ButtonDesc
     private val session = Session.getInstance()
@@ -96,7 +101,7 @@ class DocActionActivity : AppCompatActivity() {
                 response?.let {
                     if (it.status == ResponseStatusType.S.name) {
                         if (it.file_ids != null && it.file_ids.isNotEmpty()) {
-                            xmlSigner = XmlSigner(it.file_ids)
+                            xmlSigner = XmlSigner(it.file_ids, sdf.parse(it.server_datetime)!!)
                         } else {
                             errodMessage = getString(R.string.not_find_doc_id)
                         }
@@ -122,7 +127,7 @@ class DocActionActivity : AppCompatActivity() {
     }
 
 
-    private inner class XmlSigner(idxList: List<Int>) {
+    private inner class XmlSigner(idxList: List<Int>, val date: Date) {
 
         private val listFilesData: ArrayList<FileSign> = ArrayList()
         private lateinit var signData: FileSign
@@ -157,7 +162,7 @@ class DocActionActivity : AppCompatActivity() {
                         response?.let {
                             if (response.status == ResponseStatusType.S.name && response.base64?.isNotEmpty() == true) {
                                 bytesData = it.base64!!.toByteArray()
-                                sign()
+                                sign(date)
                             } else {
                                 errodMessage = "ошибка получения файла"
                             }
@@ -218,7 +223,7 @@ class DocActionActivity : AppCompatActivity() {
                     response?.let {
                         if (it.status == ResponseStatusType.S.name) {
                             if (it.file_ids != null && it.file_ids.isNotEmpty()) {
-                                xmlSigner = XmlSigner(it.file_ids)
+                                xmlSigner = XmlSigner(it.file_ids, sdf.parse(it.server_datetime)!!)
                             } else {
                                 // все готово
                                 setResult(PARAM_RESULT_OK)
@@ -281,7 +286,7 @@ class DocActionActivity : AppCompatActivity() {
         }
     }
 
-    private fun sign() {
+    private fun sign(date: Date) {
 //        try {
         // Сборка универсального ContainerAdapter.
 
@@ -305,7 +310,7 @@ class DocActionActivity : AppCompatActivity() {
         adapter.trustStoreStream = FileInputStream(SettingsCriptoProActivity.TRUST_STORE_PATH)
         adapter.trustStorePassword = BKSTrustStore.STORAGE_PASSWORD
 
-        val example = CAdESSignVerifyExample(adapter, CAdESType.CAdES_BES, bytesData,
+        val example = CAdESSignVerifyExample(adapter, CAdESType.CAdES_BES, bytesData, date,
                 object : OnSignedResult {
                     override fun signedResult(result: SignedResult) {
                         Log.e("signedResult", result.toString())

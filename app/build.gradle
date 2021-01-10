@@ -65,10 +65,6 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-        }
-        release {
-            // shrinkResources true
-            minifyEnabled false
 
             if (file("../internal/proguard/ACSPInClientApp.pro").exists()) {
                 proguardFiles '../internal/proguard/ACSPInClientApp.pro'
@@ -80,7 +76,20 @@ android {
             if (file("../internal/android/key/key.store").exists()) {
                 signingConfig signingConfigs.release
             }
+        }
+        release {
+            minifyEnabled true
 
+            if (file("../internal/proguard/ACSPInClientApp.pro").exists()) {
+                proguardFiles '../internal/proguard/ACSPInClientApp.pro'
+            }
+            else {
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+
+            if (file("../internal/android/key/key.store").exists()) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
@@ -143,7 +152,7 @@ task copySharedLibrary (type: Copy) {
 
 repositories {
     // -PuseMavenLocal означает использование локального maven-репозитория.
-    if (project.hasProperty('useMavenLocal')) { // && project.getProperty('useMavenLocal') == 'true') {
+    if (project.hasProperty('useMavenLocal')) {
         repositories {
             mavenLocal()
         }

@@ -63,6 +63,8 @@ public class CAdESSignVerifyExample extends SignData {
     // Данные для подписи
     private byte[] dataToSign;
 
+    private Date signDate;
+
     // Объект для передачи обратного вызова
     private OnSignedResult callback;
 
@@ -72,11 +74,12 @@ public class CAdESSignVerifyExample extends SignData {
      * @param adapter Настройки примера.
      * @param type Тип подписи.
      */
-    public CAdESSignVerifyExample(ContainerAdapter adapter, Integer type, byte[] dataToSign, OnSignedResult callback) {
+    public CAdESSignVerifyExample(ContainerAdapter adapter, Integer type, byte[] dataToSign, Date signDate, OnSignedResult callback) {
         super(adapter, false);
         cAdESType = type;
         this.dataToSign = dataToSign;
         this.callback = callback;
+        this.signDate = signDate;
     }
 
     @Override
@@ -143,9 +146,8 @@ public class CAdESSignVerifyExample extends SignData {
 
                 if (cAdESType.equals(CAdESType.CAdES_BES)) {
                     final Hashtable table = new Hashtable();
-                    // todo date sign!!!
                     Attribute attr = new Attribute(CMSAttributes.signingTime,
-                            new DERSet(new Time(new Date()))); // устанавливаем время подписи
+                            new DERSet(new Time(signDate))); // устанавливаем время подписи
                     table.put(attr.getAttrType(), attr);
                     AttributeTable attrTable = new AttributeTable(table);
 
