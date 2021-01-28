@@ -78,7 +78,7 @@ class DocsFragment : Fragment() {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                     if (lvDocs.getLastVisiblePosition() - lvDocs.getHeaderViewsCount() -
-                        lvDocs.getFooterViewsCount() >= lvDocs.adapter.getCount() - 1) {
+                            lvDocs.getFooterViewsCount() >= lvDocs.adapter.getCount() - 1) {
                         getDocuments(TYPE_LOAD_DATA.INCR)
                     }
 
@@ -116,10 +116,10 @@ class DocsFragment : Fragment() {
                 }
 
                 // определяем параметры загрузки
-                val tempDocsList = arrayListOf<DocumentForList>()
+                var tempDocsList:List<DocumentForList> = listOf()
                 val from = when (typeLoadData) {
                     TYPE_LOAD_DATA.INCR -> {
-                        tempDocsList.addAll(adapter.list)
+                        tempDocsList = adapter.list
                         currrentDocFrom += session.docSize
                         currrentDocFrom
                     }
@@ -143,12 +143,17 @@ class DocsFragment : Fragment() {
                 lastFilterData = session.filterData
 
                 // запросим документы
-                val request = session.getDocuments(from, processType, lastFilterData)
+                val request = session.getDocuments(from+1, processType, lastFilterData)
                 val response = request.await().body()
 
                 if (response != null) {
                     if (response.status == ResponseStatusType.S.name) {
-                        tempDocsList.addAll(session.groupDocByDate(response.group_flag, response.contents))
+                        val allDocuments = arrayListOf<Document>()
+                                .apply {
+                                    addAll(getLastDocumentFromTemp(tempDocsList))
+                                    response.contents?.let { addAll(it) }
+                                }
+                        tempDocsList = session.groupDocByDate(response.group_flag, allDocuments)
                         if (tempDocsList.isNotEmpty()) {
                             adapter.setItemsList(tempDocsList)
                             if (typeLoadData == TYPE_LOAD_DATA.INCR && adapter.list.size - 1 > lvDocs.lastVisiblePosition) {
@@ -181,6 +186,12 @@ class DocsFragment : Fragment() {
 
             showProgressBar(false)
         }
+    }
+
+    private fun getLastDocumentFromTemp(tempList: List<DocumentForList>): List<Document> {
+        val res = arrayListOf<Document>()
+        tempList.forEach { it.document?.let { res.add(it) } }
+        return res
     }
 
     private fun showProgressBar(isVisible: Boolean) {
@@ -301,7 +312,7 @@ class DocsFragment : Fragment() {
                 val imgDocType = view.findViewById<ImageView>(R.id.imgDocType)
                 val imgAttache = view.findViewById<ImageView>(R.id.imgAttache)
                 val imgAction = view.findViewById<ImageView>(R.id.imgAction)
-                val document = list[position].document
+                val document = list[position].document!!
                 tvDocTitle.text = document.contractor
                 tvDocBody.text = document.doc_name
                 if (document.attach_flag == true) {

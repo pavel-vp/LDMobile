@@ -99,7 +99,7 @@ public class Session {
                     String group = document.getGroup() != null ? document.getGroup() : "";
                     if (lastGroup == null || !lastGroup.equals(group)) {
                         lastGroup = group;
-                        result.add(new DocumentForList(document, true, lastGroup));
+                        result.add(new DocumentForList(null, true, lastGroup));
                     }
                 }
                 result.add(new DocumentForList(document, false, null));
@@ -107,7 +107,6 @@ public class Session {
         }
         return result;
     }
-
 
     public Deferred<Response<ParamDocumentsResponse>> getDocuments(int from, ProcessType processType, @NonNull List<FilterData> filterData) throws IOException {
         return restHelper.getDocumentsSync(getToken(), docSize, from, processType, filterData);

@@ -150,7 +150,7 @@ class DocFragment : Fragment() {
                 val response = Session.getInstance().getFile(file_id).await().body()
                 response?.let {
                     if (response.status == ResponseStatusType.S.name && response.base64?.isNotEmpty() == true) {
-                        saveFile(response.base64)?.let { file ->
+                        saveFile(response.base64, response.file_name)?.let { file ->
 //                startActivity(Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
                             // Get URI and MIME type of file
                             val uri = FileProvider.getUriForFile(activity!!, BuildConfig.APPLICATION_ID + ".fileprovider", file)
@@ -250,6 +250,10 @@ class DocFragment : Fragment() {
             if (resultCode == DocActionActivity.PARAM_RESULT_OK) {
                 Toast.makeText(context, R.string.action_exec_success, Toast.LENGTH_LONG).show()
                 activity!!.finish()
+            } else {
+                data?.extras?.getString(DocActionActivity.PARAM_RESULT_MESSAGE)?.let {
+                    showError(it)
+                }
             }
         }
     }
@@ -261,7 +265,7 @@ class DocFragment : Fragment() {
         dialog?.dismiss()
     }
 
-    private fun saveFile(imageData: String?): File? {
+    private fun saveFile(imageData: String, fileName: String): File? {
         val imgBytesData = Base64.decode(imageData,
                 Base64.DEFAULT)
 
@@ -271,7 +275,7 @@ class DocFragment : Fragment() {
             fileDir.mkdir()
         }
 
-        val file = File(fileDir, "filename.xml")
+        val file = File(fileDir, fileName)
         val fileOutputStream: FileOutputStream
         try {
             fileOutputStream = FileOutputStream(file)

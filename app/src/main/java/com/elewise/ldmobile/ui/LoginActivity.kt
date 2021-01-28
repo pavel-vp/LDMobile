@@ -128,6 +128,10 @@ class LoginActivity : AppCompatActivity() {
             if (response != null) {
                 if (response.status == AuthStatusType.S.name) {
                     // успешно
+                    if (response.docs_size != null) {
+                        session.docSize = response.docs_size
+                    }
+
                     session.lastAuth = response
                     Prefs.saveLastLogin(this@LoginActivity, etLogin.text.toString())
                     openDocsActivity()

@@ -2,6 +2,7 @@ package com.elewise.ldmobile.ui
 
 import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Base64
@@ -49,7 +50,6 @@ class DocActionActivity : AppCompatActivity() {
 
     private lateinit var buttonDesc: ButtonDesc
     private val session = Session.getInstance()
-    private lateinit var bytesData: ByteArray
     private var documentDetail = Session.getInstance().currentDocumentDetail
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -161,8 +161,8 @@ class DocActionActivity : AppCompatActivity() {
                         val response = Session.getInstance().getFile(signData.file_id).await().body()
                         response?.let {
                             if (response.status == ResponseStatusType.S.name && response.base64?.isNotEmpty() == true) {
-                                bytesData = it.base64!!.toByteArray()
-                                sign(date)
+                                val bytesData = Base64.decode(it.base64, Base64.DEFAULT)
+                                sign(bytesData, date)
                             } else {
                                 errodMessage = "ошибка получения файла"
                             }
@@ -218,7 +218,7 @@ class DocActionActivity : AppCompatActivity() {
                     }
                 }
                 if (errodMessage == null) {
-                    val request = session.execDocument(documentDetail.doc_id, buttonDesc.type, "after", null).await()
+                    val request = session.execDocument(documentDetail.doc_id, buttonDesc.type, "after", edComment.text.toString()).await()
                     val response = request.body()
                     response?.let {
                         if (it.status == ResponseStatusType.S.name) {
@@ -286,7 +286,7 @@ class DocActionActivity : AppCompatActivity() {
         }
     }
 
-    private fun sign(date: Date) {
+    private fun sign(bytesData: ByteArray, date: Date) {
 //        try {
         // Сборка универсального ContainerAdapter.
 
@@ -315,7 +315,9 @@ class DocActionActivity : AppCompatActivity() {
                     override fun signedResult(result: SignedResult) {
                         Log.e("signedResult", result.toString())
                         if (!result.succes) {
-                            setResult(PARAM_RESULT_NOT)
+                            val intent = Intent()
+                            intent.putExtra(PARAM_RESULT_MESSAGE, result.message)
+                            setResult(PARAM_RESULT_NOT, intent)
                             finish()
                         } else {
                             xmlSigner?.next(result.signature)
@@ -328,6 +330,7 @@ class DocActionActivity : AppCompatActivity() {
     companion object {
         const val PARAM_RESULT_NOT = 3
         const val PARAM_RESULT_OK = 2
+        const val PARAM_RESULT_MESSAGE = "param_result_message"
         const val PARAM_IN_DOC_DETAIL = "param_in_doc_detail"
     }
 }

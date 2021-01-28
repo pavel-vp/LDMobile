@@ -18,7 +18,8 @@ data class FilterElement(val name: String,
                          val last_value2: String?,
                          val list: List<FilterElementListItem>?,
                          val disabled: Boolean,
-                         val required: Boolean)
+                         val required: Boolean
+)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FilterElementListItem(val code: String,

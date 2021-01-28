@@ -30,8 +30,8 @@ android {
         targetSdkVersion 29
         multiDexEnabled true
         signingConfig signingConfigs.debug
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "3.0.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 

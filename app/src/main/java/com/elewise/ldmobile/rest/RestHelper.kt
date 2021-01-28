@@ -32,16 +32,16 @@ class RestHelper(baseUrl: String) {
     private fun createOkHttpClient(): OkHttpClient {
         return if (BuildConfig.DEBUG) {
             OkHttpClient().newBuilder()
-                    .connectTimeout(20, TimeUnit.SECONDS)
-                    .writeTimeout(20, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(180, TimeUnit.SECONDS)
+                    .writeTimeout(180, TimeUnit.SECONDS)
+                    .readTimeout(180, TimeUnit.SECONDS)
                     .addInterceptor(createHttpLoggingInterceptor())
                     .build()
         } else {
             OkHttpClient().newBuilder()
-                    .connectTimeout(20, TimeUnit.SECONDS)
-                    .writeTimeout(20, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(180, TimeUnit.SECONDS)
+                    .writeTimeout(180, TimeUnit.SECONDS)
+                    .readTimeout(180, TimeUnit.SECONDS)
                     .addInterceptor(createHttpLoggingInterceptor())
                     .build()
         }

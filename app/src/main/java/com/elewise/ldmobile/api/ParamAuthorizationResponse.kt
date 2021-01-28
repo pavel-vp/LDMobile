@@ -8,7 +8,8 @@ data class ParamAuthorizationResponse (
         val message: String?,
         val access_token: String,
         val role: String?,
-        val certificate_status: String?
+        val certificate_status: String?,
+        val docs_size: Int?
 )
 
 enum class AuthStatusType {S, E}
